@@ -14,3 +14,5 @@ docs/db.json
 docs/.deploy_git
 docs/node_modules
 pom.xml.versionsBackup
+
+*.pyc

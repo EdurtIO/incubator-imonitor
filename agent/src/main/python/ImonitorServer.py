@@ -215,5 +215,6 @@ class MonitorServer:
             # print '{}_info'.format(self.points[n])
             threading.Thread(target=self.points[n], args=self).start()
 
+
 if __name__ == '__main__':
     MonitorServer().task()

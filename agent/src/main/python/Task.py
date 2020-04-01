@@ -4,8 +4,9 @@
 # @Desc    : 任务
 # @File    : Task.py
 import threading
-import time
+
 import ImonitorServer
+
 
 class TaskThread(threading.Thread):  # 继承父类threading.Thread
 
