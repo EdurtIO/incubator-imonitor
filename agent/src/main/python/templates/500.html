@@ -15,21 +15,13 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-{% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
-{% block title %}首页{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
 
-{% block page_content %}
-<div class="page-header">
-    {% if name %}
-    <h1>Hello, {{ name }}!</h1>
-    {% else %}
-    <h1>Hello,Stranger!</h1>
-    {% endif %}
-</div>
-{{ wtf.quick_form(form) }}
-
-{#<p>{{ moment(current_time).format('LLL') }}</p>#}
-{#<p>{{ moment(current_time).fromNow(refresh=True) }}</p>#}
-
-{% endblock %}
+</body>
+</html>

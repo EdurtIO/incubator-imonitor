@@ -26,3 +26,11 @@
 .down_background {
     background-color: aquamarine;
 }
+
+.right {
+    float: right;
+}
+
+.mt10 {
+    margin-top: 10px;
+}
