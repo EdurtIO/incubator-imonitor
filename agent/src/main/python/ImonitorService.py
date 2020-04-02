@@ -5,11 +5,11 @@
 # @File    : ImonitorService.py
 
 import calendar
-import json
 import time
 
 import RemoteCommand
 from Config import ConfigUtils
+from Utils import NumberUtils
 
 
 class MonitorService:
@@ -18,6 +18,7 @@ class MonitorService:
         self.config = ConfigUtils().build_agent_configs()
 
     def service_info(self):
+        heartbeats = []
         """
         获取服务信息
         :return: 服务信息
@@ -44,10 +45,14 @@ class MonitorService:
                     heartbeat['service_host'] = host.host
                     heartbeat['service_timestamp'] = calendar.timegm(time.gmtime())
                     service_status = 'DOWN'
-                    if service_heartbeat[1] > 0:
+                    if NumberUtils().is_number(service_heartbeat[1]):
                         service_status = 'UP'
+                    else:
+                        heartbeat['service_pid'] = '-'
+                        heartbeat['message'] = buffer.before
                     heartbeat['service_status'] = service_status
-                    print json.dumps(heartbeat)
+                    heartbeats.append(heartbeat)
+        return heartbeats
 
 
 if __name__ == '__main__':

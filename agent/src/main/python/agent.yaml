@@ -37,6 +37,11 @@ rules:
         username: root
         password:
         command:
+      host4:
+        host: c1-dsj-flink094.bj
+        username: root
+        password:
+        command:
     message: History数据查询节点宕机，请相关人员检查
   service_point_broker_rule:
     name: druid1
