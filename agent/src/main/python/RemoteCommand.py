@@ -17,7 +17,14 @@ def command_ssh_remote(user, host, password, command):
     :param command: 需要执行的命令
     :return: 命令执行结果
     """
+    buffer = None
     logging.debug('开始登录服务器:%s 登录用户：%s 执行命令：%s', host, user, command)
-    # print command
-    child = pexpect.spawn("ssh -l %s %s '%s'" % (user, host, command))
-    return child
+    child = pexpect.spawn("ssh -o stricthostkeychecking=no -l %s %s '%s'" % (user, host, command))
+    child.expect(pexpect.EOF)
+    buffer = child
+    child.close()
+    return buffer
+
+
+if __name__ == '__main__':
+    command_ssh_remote('root', 'localhost', '', 'df -h')

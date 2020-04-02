@@ -217,4 +217,4 @@ class MonitorServer:
 
 
 if __name__ == '__main__':
-    MonitorServer().task()
+    MonitorServer().memory()

@@ -1,0 +1,23 @@
+service_druid_io:
+  name: druid
+  type: io
+  commands:
+    command_historical:
+      name: historical
+      command: ps -ef|grep "io.druid.cli.Main server historical" | grep -v grep
+    command_broker:
+      name: broker
+      command: ps -ef|grep "io.druid.cli.Main server broker" | grep -v grep
+    command_overload:
+      name: overload
+      command: ps -ef|grep "io.druid.cli.Main server overload" | grep -v grep
+    command_coordinator:
+      name: coordinator
+      command: ps -ef|grep "io.druid.cli.Main server coordinator" | grep -v grep
+    command_middleManager:
+      name: middleManager
+      command: ps -ef|grep "io.druid.cli.Main server middleManager" | grep -v grep
+service_druid_apache:
+  name: druid
+  type: apache
+  commands:

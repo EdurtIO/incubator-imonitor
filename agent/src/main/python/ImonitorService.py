@@ -4,11 +4,6 @@
 # @Desc    : 服务器应用进程监控脚本
 # @File    : ImonitorService.py
 
-import getpass
-import pexpect
-import socket
-import yaml
-
 import RemoteCommand
 from Config import ConfigUtils
 
@@ -16,32 +11,22 @@ from Config import ConfigUtils
 class MonitorService:
 
     def __init__(self):
-        f = open('agent.yaml')
-        content = yaml.load(f, Loader=yaml.FullLoader)
-        self.hostname = content['application']['remote']['hostname']
-        if self.hostname is None:
-            self.hostname = socket.gethostname()
-        self.username = content['application']['remote']['username']
-        if self.username is None:
-            self.username = getpass.getuser()
-        self.password = content['application']['remote']['password']
-        self.interval = content['application']['interval']
-        self.points = content['application']['points']
-        self.services = content['application']['services']
-        if self.services is None:
-            self.services = []
-        f.close()
-        print self.services
+        self.config = ConfigUtils().build_agent_configs()
 
     def validate_service_status(self):
-        child = RemoteCommand.command_ssh_remote(user=self.username,
-                                                 host=self.hostname,
-                                                 password=self.password,
-                                                 command='ls -l')
-        child.expect(pexpect.EOF)
-        # print child
+        for monitor in self.config:
+            print monitor.id
+            for host in monitor.hosts:
+                if host.command is None:
+                    host.command = 'ls -l'
+                buffer = RemoteCommand.command_ssh_remote(user=host.username,
+                                                          host=host.host,
+                                                          password=host.password,
+                                                          command=host.command)
+                print buffer.before
+                print '-------------------华丽的分割线---------------------'
+                print buffer.before.split()
 
 
 if __name__ == '__main__':
-    # MonitorService().validate_service_status();
-    print ConfigUtils().build_configs()
+    MonitorService().validate_service_status()
