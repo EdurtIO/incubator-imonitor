@@ -42,15 +42,21 @@
 #     app.run(host='0.0.0.0', port=5000, debug=True)
 
 
-# -*- coding: utf-8 -*-
-_author_ = 'Pylar'
 from flask import Flask, render_template, session, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
 # from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import Required
+
+from form.Host import HostAddForm
+from controller.Host import HostController
+
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'haha'
@@ -87,6 +93,7 @@ class User(db.Model):
 
 class NameForm(FlaskForm):
     name = StringField('What is your name?', validators=[Required()])
+    password = PasswordField(u'密码', validators=[Required(message=u'密码不能为空')])
     submit = SubmitField('Submit')
 
 
@@ -110,7 +117,12 @@ def index():
             flash('Looks like you have changed your name!')
         session['name'] = form.name.data
         return redirect(url_for('index'))
-    return render_template('index.html.bak', form=form, name=session.get('name'))
+    return render_template('index.html', form=form, name=session.get('name'))
+
+
+@app.route('/host', methods=['GET'])
+def host():
+    return HostController().hostAddForm()
 
 
 @app.route('/user/<name>')
@@ -119,4 +131,4 @@ def user(name):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

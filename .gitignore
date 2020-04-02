@@ -16,3 +16,4 @@ docs/node_modules
 pom.xml.versionsBackup
 
 *.pyc
+venv
