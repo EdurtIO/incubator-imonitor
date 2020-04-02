@@ -15,7 +15,7 @@ application:
     password:
 # 监控服务配置
 rules:
-  service_point_history_rule:
+  service_point_historical_rule:
     # 服务名称
     name: druid
     # 服务类型,暂时支持io.druid，org.apache.druid
