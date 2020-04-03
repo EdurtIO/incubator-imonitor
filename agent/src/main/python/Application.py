@@ -3,7 +3,6 @@
 # @Time    : 2020-04-02 14:25:25
 # @Desc    : web程序入口脚本
 # @File    : Application.py
-import datetime
 import sys
 from flask import Flask, render_template, session, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
@@ -12,7 +11,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import Required
-from apscheduler.schedulers.blocking import BlockingScheduler
 
 from ImonitorService import MonitorService
 from controller.Host import HostController
@@ -20,7 +18,34 @@ from controller.Host import HostController
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+from flask_apscheduler import APScheduler
+
 app = Flask(__name__)
+
+
+class SchedulerConfig(object):
+    JOBS = [
+        {
+            'id': 'monitor_service_heartbeat',
+            'func': '__main__:monitor_service_heartbeat',
+            # 'args': (1, 2),
+            'trigger': 'interval',
+            'seconds': 10,
+            'max_instances': 1
+        }
+    ]
+
+
+app.config.from_object(SchedulerConfig())
+
+import datetime
+
+
+def monitor_service_heartbeat():
+    now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print MonitorService().service_info()
+
+
 app.config['SECRET_KEY'] = 'haha'
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = 'mysql://root:123456@localhost:3306/test'  # 这里登陆的是root用户，要填上自己的密码，MySQL的默认端口是3306，填上之前创建的数据库名text1
@@ -28,10 +53,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True  # 设置这一项是每次�
 
 bootstrap = Bootstrap(app)
 moment = Moment(app)
-db = SQLAlchemy(app)  # 实例化
+db = SQLAlchemy(app)
 
-
-# manager = Manager(app)
 
 class Role(db.Model):
     __tablename__ = 'roles'
@@ -93,23 +116,8 @@ def user(name):
     return render_template('user.html', name=name)
 
 
-@app.route('/job/monitor')
-def job_monitor():
-    delayrun()
-    return render_template('user.html')
-
-
-
-def delayrun():
-    now = datetime.datetime.now()
-    ts = now.strftime('%Y-%m-%d %H:%M:%S')
-    print ts
-    # 创建调度器：BlockingScheduler
-    scheduler = BlockingScheduler()
-    # 添加任务,时间间隔2S
-    scheduler.add_job(delayrun, 'interval', seconds=2, id='test_job1')
-    scheduler.start()
-
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    scheduler = APScheduler()
+    scheduler.init_app(app)
+    scheduler.start()
+    app.run(host='0.0.0.0', port=5000, debug=False)

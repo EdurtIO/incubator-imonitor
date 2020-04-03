@@ -52,6 +52,9 @@ class MonitorService:
                         heartbeat['message'] = buffer.before
                         if buffer.before == '{}@{}\'s password: '.format(host.username, host.host):
                             heartbeat['message'] = '服务器授权失败，请开启免密登录或设置登录密码'
+                        if buffer.before.find(
+                                'Someone could be eavesdropping on you right now (man-in-the-middle attack)!') >= 0:
+                            heartbeat['message'] = '系统多次授权密钥导致密钥无法识别，请修改可正常统计服务状态'
                         heartbeat['service_username'] = '-'
                     heartbeat['service_status'] = service_status
                     heartbeats.append(heartbeat)
