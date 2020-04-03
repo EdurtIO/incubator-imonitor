@@ -3,6 +3,7 @@
 # @Time    : 2020-04-02 14:25:25
 # @Desc    : web程序入口脚本
 # @File    : Application.py
+import json
 import sys
 from flask import Flask, render_template, session, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
@@ -14,6 +15,7 @@ from wtforms.validators import Required
 
 from ImonitorService import MonitorService
 from controller.Host import HostController
+from push import FaIconPush
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -30,7 +32,7 @@ class SchedulerConfig(object):
             'func': '__main__:monitor_service_heartbeat',
             # 'args': (1, 2),
             'trigger': 'interval',
-            'seconds': 10,
+            'seconds': 60,
             'max_instances': 1
         }
     ]
@@ -43,7 +45,8 @@ import datetime
 
 def monitor_service_heartbeat():
     now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print MonitorService().service_info()
+    print 'push time {}, push response {}'.format(now,
+                                                  FaIconPush.FaIcon().push(json.dumps(MonitorService().service_info())))
 
 
 app.config['SECRET_KEY'] = 'haha'

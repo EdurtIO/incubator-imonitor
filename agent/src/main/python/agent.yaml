@@ -27,71 +27,13 @@ rules:
         username: root
         password:
         command: ps -ef|grep "io.druid.cli.Main server historical" | grep -v grep
-#      host2:
-#        host: c1-dsj-flink091.bj
-#        username: root
-#        password:
-#        command:
-#      host3:
-#        host: c1-dsj-flink092.bj
-#        username: root
-#        password:
-#        command:
-#      host4:
-#        host: c1-dsj-flink093.bj
-#        username: root
-#        password:
-#        command:
-#      host5:
-#        host: c2-dsj-hadoop184.bj
-#        username: root
-#        password:
-#        command:
-#      host6:
-#        host: c2-dsj-hadoop185.bj
-#        username: root
-#        password:
-#        command:
-#      host7:
-#        host: c1-dsj-hadoop145.bj
-#        username: root
-#        password:
-#        command:
-#      host8:
-#        host: c1-dsj-druid024.bj
-#        username: root
-#        password:
-#        command:
-#      host9:
-#        host: ali-e-data-druid02.bj
-#        username: root
-#        password:
-#        command:
-#      host10:
-#        host: ali-e-data-druid01.bj
-#        username: root
-#        password:
-#        command:
-#      host11:
-#        host: c1-dsj-hadoop144.bj
-#        username: root
-#        password:
-#        command:
     message: History数据查询节点宕机，请相关人员检查
   service_point_broker_rule:
-    name: druid1
+    name: druid
     type: io
     hosts:
       host1:
         host: c1-dsj-flink091.bj
-        username: root
-        password:
-      host2:
-        host: c1-dsj-flink092.bj
-        username: root
-        password:
-      host3:
-        host: c1-dsj-flink093.bj
         username: root
         password:
     message: Broker数据查询节点宕机，请相关人员检查
