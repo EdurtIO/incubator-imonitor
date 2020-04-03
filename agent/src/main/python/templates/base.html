@@ -16,15 +16,15 @@
   limitations under the License.
 -->
 {% extends "bootstrap/base.html" %}
-
-{% block title %}Flasky{% endblock %}
-
+{% block title %}iMonitor{% endblock %}
 {% block head %}
 {{ super() }}
 <link rel="shortcut icon" href="{{ url_for('static', filename = 'favicon.ico') }}"
       type="image/x-icon">
 <link rel="icon" href="{{ url_for('static', filename = 'favicon.ico') }}"
       type="image/x-icon">
+<link href="https://cdn.bootcss.com/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+<link href="/static/style.css" rel="stylesheet">
 {% endblock %}
 
 {% block navbar %}
@@ -43,7 +43,9 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a href="/">主页</a></li>
+                <li><a href="/">服务监控</a></li>
                 <li><a href="/host">主机管理</a></li>
+                <li><a href="/job/monitor">启动定时任务</a></li>
             </ul>
         </div>
     </div>
@@ -56,8 +58,12 @@
 </div>
 {% endblock %}
 
-
-{#{% block scripts %}#}
-{#{{  super() }}#}
-{#{{ moment.include_moment() }}#}
-{#{% endblock %}#}
+{% block scripts %}
+{{ super() }}
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+{{ moment.include_moment() }}
+{% endblock %}

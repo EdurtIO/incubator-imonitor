@@ -18,11 +18,16 @@ def command_ssh_remote(user, host, password, command):
     :return: 命令执行结果
     """
     buffer = None
-    logging.debug('开始登录服务器:%s 登录用户：%s 执行命令：%s', host, user, command)
-    child = pexpect.spawn("ssh -o stricthostkeychecking=no -l %s %s '%s'" % (user, host, command))
-    child.expect(pexpect.EOF)
-    buffer = child
-    child.close()
+    try:
+        logging.debug('开始登录服务器:%s 登录用户：%s 执行命令：%s', host, user, command)
+        child = pexpect.spawn("ssh -o stricthostkeychecking=no -l %s %s '%s'" % (user, host, command), timeout=5)
+        buffer = child
+        child.expect(pattern=pexpect.EOF, timeout=10)
+        buffer = child
+    except Exception:
+        print buffer
+    finally:
+        child.close()
     return buffer
 
 

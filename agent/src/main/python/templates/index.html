@@ -24,10 +24,60 @@
     {% if name %}
     <h1>Hello, {{ name }}!</h1>
     {% else %}
-    <h1>Hello,Stranger!</h1>
+    <h1>Hello, iMonitor!</h1>
     {% endif %}
 </div>
 {{ wtf.quick_form(form) }}
+<!-- 监控数据 -->
+<div class="card mt10">
+    <h5 class="card-header">
+        <button class="btn btn-sm btn-primary right" type="button">刷新</button>
+    </h5>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>名称</th>
+                <th>状态</th>
+                <th>启动用户</th>
+                <th>上报时间</th>
+                <th>进程ID</th>
+                <th>主机地址</th>
+                <th>错误信息</th>
+                <th>节点操作</th>
+            </tr>
+            </thead>
+            <!-- 监控数据信息 -->
+            <tbody>
+            {% for heartbeat in heartbeats %}
+            <tr class="{% if heartbeat.service_status == 'DOWN' %}down_background{% endif %}">
+                <td>{{heartbeat['service_name']}}</td>
+                <td>
+                    <i class="fa {% if heartbeat.service_status == 'UP' %}fa-thumbs-up up {% else %}fa-thumbs-down down{% endif %}"
+                       data-toggle="tooltip" data-placement="top"
+                       title="{% if heartbeat.service_status == 'UP' %}当前服务运行正常{% else %}当前服务已宕机{% endif %}"></i>
+                </td>
+                <td>{{heartbeat['service_username']}}</td>
+                <td>{{heartbeat['service_timestamp']}}</td>
+                <td>{{heartbeat['service_pid']}}</td>
+                <td>{{heartbeat['service_host']}}</td>
+                <td>
+                    {% if heartbeat.message %}
+                    <i class="fa fa-exclamation-triangle" data-toggle="tooltip" data-placement="top"
+                       title="{{heartbeat['message']}}"></i>
+                    {% endif %}
+                </td>
+                <td>
+                    <i class="fa {% if heartbeat.service_status == 'UP' %}fa-stop down{% else %}fa-play up{% endif %}"
+                       data-toggle="tooltip" data-placement="top"
+                       title="{% if heartbeat.service_status == 'UP' %}下线节点{% else %}启动服务{% endif %}"></i>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {#<p>{{ moment(current_time).format('LLL') }}</p>#}
 {#<p>{{ moment(current_time).fromNow(refresh=True) }}</p>#}
