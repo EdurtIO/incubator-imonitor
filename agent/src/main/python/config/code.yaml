@@ -1,0 +1,18 @@
+# 全局编码配置文件
+status:
+  status_up:
+    name: up
+    code: 2000
+    message: 在线
+  status_down:
+    name: down
+    code: 4000
+    message: 宕机
+  status_error-password:
+    name: error_password
+    code: 3000
+    message: 授权密码错误
+  status_error-host:
+    name: error_host
+    code: 30001
+    message: 无效主机
