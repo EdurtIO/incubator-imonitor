@@ -32,8 +32,8 @@ class CommonCodes:
         status = []
         for s in self.codes:
             status_temp = DirctoryUtils().get_attr_by_key(self.codes, s)
-            for s in status_temp:
-                source = DirctoryUtils().get_attr_by_key(status_temp, s)
+            for s2 in status_temp:
+                source = DirctoryUtils().get_attr_by_key(status_temp, s2)
                 temp = {}
                 temp['name'] = DirctoryUtils().get_attr_by_key(source, 'name')
                 temp['code'] = DirctoryUtils().get_attr_by_key(source, 'code')

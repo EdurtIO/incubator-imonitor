@@ -17,9 +17,10 @@
 -->
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-{% block title %}首页{% endblock %}
+{% block title %}主机列表{% endblock %}
 
 {% block page_content %}
+
 <!-- 监控数据 -->
 <div class="card mt10">
     <h5 class="card-header">
@@ -29,8 +30,8 @@
         <table class="table">
             <thead>
             <tr>
-                <th>名称</th>
-                <th>状态</th>
+                <th>编码</th>
+                <th>主机名</th>
                 <th>启动用户</th>
                 <th>上报时间</th>
                 <th>进程ID</th>
@@ -42,30 +43,11 @@
             </thead>
             <!-- 监控数据信息 -->
             <tbody>
-            {% for heartbeat in heartbeats %}
-            <tr class="{% if heartbeat.service_status == 'DOWN' %}down_background{% endif %}">
-                <td>{{heartbeat['service_name']}}</td>
-                <td>
-                    <i class="fa {% if heartbeat.service_status == 'UP' %}fa-thumbs-up up {% else %}fa-thumbs-down down{% endif %}"
-                       data-toggle="tooltip" data-placement="top"
-                       title="{% if heartbeat.service_status == 'UP' %}当前服务运行正常{% else %}当前服务已宕机{% endif %}"></i>
-                </td>
-                <td>{{heartbeat['service_username']}}</td>
-                <td>{{heartbeat['service_timestamp']}}</td>
-                <td>{{heartbeat['service_pid']}}</td>
-                <td>{{heartbeat['service_host']}}</td>
-                <td>{{heartbeat['service_code']}}</td>
-                <td>
-                    {% if heartbeat.service_message %}
-                    <i class="fa fa-exclamation-triangle" data-toggle="tooltip" data-placement="top"
-                       title="{{heartbeat['service_message']}}"></i>
-                    {% endif %}
-                </td>
-                <td>
-                    <i class="fa {% if heartbeat.service_status == 'UP' %}fa-stop down{% else %}fa-play up{% endif %}"
-                       data-toggle="tooltip" data-placement="top"
-                       title="{% if heartbeat.service_status == 'UP' %}下线节点{% else %}启动服务{% endif %}"></i>
-                </td>
+            {% for host in hosts %}
+            <tr>
+                <td>{{host.id}}</td>
+                <td>{{host.hostname}}</td>
+                <td>{{host.username}}</td>
             </tr>
             {% endfor %}
             </tbody>
