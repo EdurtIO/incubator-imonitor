@@ -6,6 +6,8 @@
 
 from db.models import Host
 
+from application_config import db
+
 
 class HostService:
 
@@ -15,3 +17,17 @@ class HostService:
         :return: 数据集合
         """
         return Host().query.all()
+
+    def add(self, host=Host):
+        """
+        添加数据
+        :param host: 主机数据
+        :return: 添加状态
+        """
+        try:
+            db.session.add(host)
+            db.session.commit()
+            return True
+        except Exception, ex:
+            print ex
+            return False

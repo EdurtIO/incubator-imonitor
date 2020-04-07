@@ -44,5 +44,5 @@ if __name__ == '__main__':
     scheduler = APScheduler()
     scheduler.init_app(app)
     scheduler.start()
-    print(app.url_map)
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    print app.url_map
+    app.run(host='0.0.0.0', port=5000, debug=True)

@@ -3,6 +3,7 @@
 # @Time    : 2020-04-07 18:09:04
 # @Desc    : 实体类
 # @File    : Models.py
+import datetime
 from application_config import db
 
 
@@ -32,9 +33,14 @@ class Host(db.Model):
     hostname = db.Column(db.String(100), nullable=False)
     username = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    command = db.Column(db.String(100), nullable=False)
-    message = db.Column(db.String(100), nullable=False)
-    active = db.Column(db.Boolean, nullable=False, server_default=True, comment='激活状态，默认为激活（True）')
+    command = db.Column(db.String(255), nullable=False)
+    command_start = db.Column(db.String(255), nullable=False)
+    command_stop = db.Column(db.String(255), nullable=False)
+    command_restart = db.Column(db.String(255), nullable=False)
+    message = db.Column(db.String(255), nullable=True)
+    active = db.Column(db.Boolean, nullable=False)
+    create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
+    # active = db.Column(db.Boolean, nullable=False, server_default=True, comment='激活状态，默认为激活（True）')
 
 
 db.create_all()
