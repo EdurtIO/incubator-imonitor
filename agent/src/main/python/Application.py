@@ -17,6 +17,8 @@ from ImonitorService import MonitorService
 from controller.Host import HostController
 from push import FaIconPush
 
+from controller.Config import ConfigController
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -118,6 +120,10 @@ def host():
 def user(name):
     return render_template('user.html', name=name)
 
+
+@app.route('/config/default', methods=['GET'])
+def get_default_config():
+    return ConfigController().get_all_default_config()
 
 if __name__ == '__main__':
     scheduler = APScheduler()
