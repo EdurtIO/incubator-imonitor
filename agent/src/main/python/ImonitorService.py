@@ -56,6 +56,8 @@ class MonitorService:
                         if message is not None and len(message) > 0:
                             heartbeat['service_message'] = message[0]['message'].encode('utf-8')
                             heartbeat['service_code'] = str(message[0]['code'])
+                        else:
+                            heartbeat['service_code'] = 2000
                         heartbeat['service_username'] = '-'
                     heartbeat['service_status'] = service_status
                     print heartbeat
