@@ -23,8 +23,8 @@ status:
     operation:
   status_error-host:
     name: error_host
-    context: 'Host key verification failed'
-    code: 30001
+    context: 'nodename nor servname provided, or not known'
+    code: 3001
     message: 无法获取服务状态：无效主机
     type: text
     operation: has|nohas
