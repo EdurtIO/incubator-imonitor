@@ -43,6 +43,7 @@
                 <th>上报时间</th>
                 <th>进程ID</th>
                 <th>主机地址</th>
+                <th>错误编码</th>
                 <th>错误信息</th>
                 <th>节点操作</th>
             </tr>
@@ -61,10 +62,11 @@
                 <td>{{heartbeat['service_timestamp']}}</td>
                 <td>{{heartbeat['service_pid']}}</td>
                 <td>{{heartbeat['service_host']}}</td>
+                <td>{{heartbeat['service_code']}}</td>
                 <td>
-                    {% if heartbeat.message %}
+                    {% if heartbeat.service_message %}
                     <i class="fa fa-exclamation-triangle" data-toggle="tooltip" data-placement="top"
-                       title="{{heartbeat['message']}}"></i>
+                       title="{{heartbeat['service_message']}}"></i>
                     {% endif %}
                 </td>
                 <td>

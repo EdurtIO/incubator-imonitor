@@ -31,10 +31,7 @@ class FaIcon:
         for temp in json_data:
             model = {}
             model['endpoint'] = temp['service_host']
-            if temp['service_status'] == 'UP':
-                model['value'] = 0
-            else:
-                model['value'] = 1
+            model['value'] = temp['service_code']
             model['metric'] = 'idc.druid.{}'.format(temp['service_name'])
             model['tags'] = 'idc=idc,project=druid_{}_status'.format(temp['service_name'])
             model['step'] = 60

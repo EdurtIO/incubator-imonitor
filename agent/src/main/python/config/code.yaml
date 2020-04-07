@@ -2,17 +2,37 @@
 status:
   status_up:
     name: up
+    context:
     code: 2000
+    type: text
     message: 在线
+    operation:
   status_down:
     name: down
+    context:
     code: 4000
     message: 宕机
+    type: text
+    operation:
   status_error-password:
     name: error_password
+    context: 's password'
     code: 3000
-    message: 授权密码错误
+    message: 无法获取服务状态：服务器授权失败，请开启免密登录或设置登录密码
+    type: format
+    operation:
   status_error-host:
     name: error_host
+    context: hostname
     code: 30001
-    message: 无效主机
+    message: 无法获取服务状态：无效主机
+    type: text
+    operation: has|nohas
+ssh:
+  ssh_repeat_keys:
+    name: repeat_keys
+    context: 'Host key verification failed'
+    code: 5000
+    message: 无法获取服务状态：无效的授权密钥无法识别
+    type: text
+    operation: has|nohas

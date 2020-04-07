@@ -10,7 +10,7 @@ import yaml
 from Utils import DirctoryUtils
 
 
-class StatusCode:
+class CommonCodes:
 
     def __init__(self):
         file_name = 'code.yaml'
@@ -26,37 +26,29 @@ class StatusCode:
 
     def load_config(self):
         """
-
-        :return:
+        加载系统配置文件
+        :return: 配置信息
         """
         status = []
-        status_temp = DirctoryUtils().get_attr_by_key(self.codes, 'status')
-        print status_temp
-        for s in status_temp:
-            source = DirctoryUtils().get_attr_by_key(status_temp, s)
-            temp = {}
-            temp['name'] = DirctoryUtils().get_attr_by_key(source, 'name')
-            temp['code'] = DirctoryUtils().get_attr_by_key(source, 'code')
-            temp['message'] = DirctoryUtils().get_attr_by_key(source, 'message')
-            status.append(temp)
+        for s in self.codes:
+            status_temp = DirctoryUtils().get_attr_by_key(self.codes, s)
+            for s in status_temp:
+                source = DirctoryUtils().get_attr_by_key(status_temp, s)
+                temp = {}
+                temp['name'] = DirctoryUtils().get_attr_by_key(source, 'name')
+                temp['code'] = DirctoryUtils().get_attr_by_key(source, 'code')
+                temp['message'] = DirctoryUtils().get_attr_by_key(source, 'message')
+                temp['context'] = DirctoryUtils().get_attr_by_key(source, 'context')
+                temp['operation'] = DirctoryUtils().get_attr_by_key(source, 'operation')
+                temp['type'] = DirctoryUtils().get_attr_by_key(source, 'type')
+                temp['parent'] = s
+                status.append(temp)
         return status
-
-    def get_codes(self):
-        print self.codes
-        return self.codes
-
-    def get_code(self, key):
-        """
-        根据编码key获取编码
-        :param key: 编码标志
-        :return: 编码
-        """
-        try:
-            return self.codes['status'][str(key).strip().lower()]
-        except:
-            return None
 
 
 if __name__ == '__main__':
-    StatusCode()
-    # print StatusCode().get_codes()
+    codes = CommonCodes().load_config()
+    for s in codes:
+        print s['message']
+    # 列表解析
+    print [val for val in codes if val['message'].encode('utf-8') == '宕机'][0]['message']

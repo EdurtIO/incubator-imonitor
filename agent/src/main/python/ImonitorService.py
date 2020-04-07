@@ -10,19 +10,21 @@ import time
 import RemoteCommand
 from Config import ConfigUtils
 from Utils import NumberUtils
+from common.Code import CommonCodes
 
 
 class MonitorService:
 
     def __init__(self):
         self.config = ConfigUtils().build_agent_configs()
+        self.messages = CommonCodes().load_config()
 
     def service_info(self):
-        heartbeats = []
         """
         获取服务信息
         :return: 服务信息
         """
+        heartbeats = []
         for monitor in self.config:
             service_names = monitor.id.split('_')
             for host in monitor.hosts:
@@ -49,17 +51,17 @@ class MonitorService:
                         service_status = 'UP'
                     else:
                         heartbeat['service_pid'] = '-'
-                        heartbeat['message'] = buffer.before
-                        if buffer.before == '{}@{}\'s password: '.format(host.username, host.host):
-                            heartbeat['message'] = '服务器授权失败，请开启免密登录或设置登录密码'
-                        if buffer.before.find(
-                                'Someone could be eavesdropping on you right now (man-in-the-middle attack)!') >= 0:
-                            heartbeat['message'] = '系统多次授权密钥导致密钥无法识别，请修改可正常统计服务状态'
+                        heartbeat['service_context'] = buffer.before
+                        message = [v for v in self.messages if buffer.before.find(str(v['context'])) >= 0]
+                        if message is not None and len(message) > 0:
+                            heartbeat['service_message'] = message[0]['message'].encode('utf-8')
+                            heartbeat['service_code'] = str(message[0]['code'])
                         heartbeat['service_username'] = '-'
                     heartbeat['service_status'] = service_status
+                    print heartbeat
                     heartbeats.append(heartbeat)
         return heartbeats
 
 
 if __name__ == '__main__':
-    MonitorService().service_info()
+    print MonitorService().service_info()
