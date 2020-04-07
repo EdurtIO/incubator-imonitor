@@ -33,7 +33,7 @@ class FaIcon:
             model['endpoint'] = temp['service_host']
             model['value'] = temp['service_code']
             model['metric'] = 'idc.druid.{}'.format(temp['service_name'])
-            model['tags'] = 'idc=idc,project=druid_{}_status'.format(temp['service_name'])
+            model['tags'] = 'idc=idc,project=druid_{}_heartbeat'.format(temp['service_name'])
             model['step'] = 60
             model['timestamp'] = calendar.timegm(time.gmtime())
             model['counterType'] = 'GAUGE'

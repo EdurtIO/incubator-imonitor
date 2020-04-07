@@ -6,6 +6,7 @@
 
 import calendar
 import time
+import json
 
 import RemoteCommand
 from Config import ConfigUtils
@@ -49,6 +50,7 @@ class MonitorService:
                     service_status = 'DOWN'
                     if NumberUtils().is_number(service_heartbeat[1]):
                         service_status = 'UP'
+                        heartbeat['service_code'] = '2000'
                     else:
                         heartbeat['service_pid'] = '-'
                         heartbeat['service_context'] = buffer.before
@@ -57,13 +59,12 @@ class MonitorService:
                             heartbeat['service_message'] = message[0]['message'].encode('utf-8')
                             heartbeat['service_code'] = str(message[0]['code'])
                         else:
-                            heartbeat['service_code'] = 2000
+                            heartbeat['service_code'] = '2000'
                         heartbeat['service_username'] = '-'
                     heartbeat['service_status'] = service_status
-                    print heartbeat
                     heartbeats.append(heartbeat)
         return heartbeats
 
 
 if __name__ == '__main__':
-    print MonitorService().service_info()
+    print json.dumps(MonitorService().service_info())
