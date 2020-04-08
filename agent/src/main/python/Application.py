@@ -14,9 +14,10 @@ from push import FaIconPush
 from services.service_host import HostService
 # 注册自定义视图
 from views.view_host import host_view
+from views.view_auth import auth_view
 
 app.register_blueprint(host_view, url_prefix='/host')
-
+app.register_blueprint(auth_view, url_prefix='/auth')
 
 class SchedulerConfig(object):
     JOBS = [
@@ -49,6 +50,11 @@ def index():
 @app.errorhandler(404)
 def handle_404_error(err_msg):
     return render_template('404.html', error=err_msg)
+
+
+@app.errorhandler(500)
+def handle_404_error(err_msg):
+    return render_template('500.html', error=err_msg)
 
 
 if __name__ == '__main__':

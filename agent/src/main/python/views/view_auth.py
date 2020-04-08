@@ -1,87 +1,51 @@
-"""Routes for user authentication."""
-from application_config import app
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Time    : 2020-04-08 16:40:20
+# @Desc    : 授权配置
+# @File    : view_auth.py
 from flask import redirect, render_template, flash, Blueprint, request, url_for
-from flask_login import current_user, login_user
+from flask_login import login_user, current_user
 
+from application_config import db, app
 from application_config import login_manager
-# from .assets import compile_auth_assets
-# from .forms import LoginForm, SignupForm
-from .models import db, User
+from bin.assets import compile_auth_assets
+from db.models import User
+from form.form_auth import AuthSignin
 
-# Blueprint Configuration
-auth_bp = Blueprint('auth_bp', __name__,
-                    template_folder='templates',
-                    static_folder='static')
-# compile_auth_assets(app)
+auth_view = Blueprint('auth_view', __name__, template_folder='templates', static_folder='static')
 
+compile_auth_assets(app)
 
-@auth_bp.route('/signup', methods=['GET', 'POST'])
-def signup():
+@auth_view.route('/signin', methods=['GET', 'POST'])
+def signin():
     """
-    User sign-up page.
-    GET: Serve sign-up page.
-    POST: If submitted credentials are valid, redirect user to the logged-in homepage.
-    """
-    signup_form = SignupForm()
-    if request.method == 'POST':
-        if signup_form.validate_on_submit():
-            name = signup_form.get('name')
-            email = signup_form.get('email')
-            password = signup_form.get('password')
-            website = signup_form.get('website')
-            existing_user = User.query.filter_by(email=email).first()  # Check if user exists
-            if existing_user is None:
-                user = User(name=name,
-                            email=email,
-                            website=website)
-                user.set_password(password)
-                db.session.add(user)
-                db.session.commit()  # Create new user
-                login_user(user)  # Log in as newly created user
-                return redirect(url_for('main_bp.dashboard'), code=400)
-            flash('A user already exists with that email address.')
-            return redirect(url_for('auth_bp.signup'))
-
-    return render_template('signup.jinja2',
-                           title='Create an Account.',
-                           form=signup_form,
-                           template='signup-page',
-                           body="Sign up for a user account.")
-
-
-@auth_bp.route('/login', methods=['GET', 'POST'])
-def login():
-    """
-    User login page.
-    GET: Serve Log-in page.
-    POST: If form is valid and new user creation succeeds, redirect user to the logged-in homepage.
+    登录视图
     """
     if current_user.is_authenticated:
-        return redirect(url_for('main_bp.dashboard'))  # Bypass if user is logged in
+        return redirect(url_for('main_bp.dashboard'))
 
-    login_form = LoginForm()
+    login_form = AuthSignin()
     if request.method == 'POST':
         if login_form.validate_on_submit():
             email = login_form.get('email')
             password = login_form.get('password')
-            user = User.query.filter_by(email=email).first()  # Validate Login Attempt
+            user = User.query.filter_by(email=email).first()
             if user and user.check_password(password=password):
                 login_user(user)
                 next_page = request.args.get('next')
-                return redirect(next_page or url_for('main_bp.dashboard'))
-        flash('Invalid username/password combination')
-        return redirect(url_for('auth_bp.login'))
-
-    return render_template('login.jinja2',
-                           form=login_form,
-                           title='Log in.',
-                           template='login-page',
-                           body="Log in with your User account.")
+                return redirect(next_page or url_for('main_view.dashboard'))
+        flash('无效的账号/密码')
+        return redirect(url_for('auth_view.signin'))
+    return render_template('auth/signin.html', form=login_form, title='用户登录')
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    """Check if user is logged-in on every page load."""
+    """
+    检查用户是否登录
+    :param user_id: 用户ID
+    :return: 登录状态
+    """
     if user_id is not None:
         return User.query.get(user_id)
     return None
@@ -89,6 +53,9 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized():
-    """Redirect unauthorized users to Login page."""
-    flash('You must be logged in to view that page.')
-    return redirect(url_for('auth_bp.login'))
+    """
+    将未经授权的用户重定向到503界面
+    :return: 重定向
+    """
+    flash('您没有权限访问当前页面，请登录。')
+    return redirect(url_for('auth_view.signin'))
