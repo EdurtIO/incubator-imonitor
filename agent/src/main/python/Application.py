@@ -38,7 +38,7 @@ app.config.from_object(SchedulerConfig())
 def monitor_service_heartbeat():
     now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     print 'push time {}, push response {}'.format(now,
-                                                  FaIconPush.FaIcon().push(json.dumps(MonitorService().service_info())))
+                                                  FaIconPush.FaIcon().push(json.dumps(MonitorService().service_info(HostService().find_all()))))
 
 
 @app.route('/', methods=['GET', 'POST'])
