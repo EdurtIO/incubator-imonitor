@@ -62,7 +62,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(100), nullable=False, unique=False)
     email = db.Column(db.String(40), unique=True, nullable=False)
     password = db.Column(db.String(200), primary_key=False, unique=False, nullable=False)
-    create_time = db.Column(db.DateTime, index=False, unique=False, nullable=True)
+    create_time = db.Column(db.DateTime, index=False, unique=False, nullable=True, default=datetime.datetime.now())
     last_login_time = db.Column(db.DateTime, index=False, unique=False, nullable=True)
 
     def set_password(self, password):
@@ -72,7 +72,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password, password)
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return '<User {}>'.format(self.name)
 
 
 db.create_all()
