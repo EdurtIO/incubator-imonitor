@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2020-04-03 18:14:14
 # @Desc    : 全局编码脚本
-# @File    : Code.py
+# @File    : code.py
 
 import os
 import yaml
 
-from Utils import DirctoryUtils
+from common.utils import DirctoryUtils
 
 
 class CommonCodes:

@@ -1,6 +1,6 @@
 from Application import db
 
-from common.Code import CommonCodes
+from common.code import CommonCodes
 
 db.create_all()
 

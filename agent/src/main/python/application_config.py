@@ -23,7 +23,4 @@ bootstrap = Bootstrap(app)
 moment = Moment(app)
 db = SQLAlchemy(app)
 
-# 注册自定义视图
-from views.view_host import host_view
 
-app.register_blueprint(host_view, url_prefix='/host')

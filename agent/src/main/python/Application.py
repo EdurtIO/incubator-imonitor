@@ -11,6 +11,12 @@ from flask_apscheduler import APScheduler
 from ImonitorService import MonitorService
 from application_config import app
 from push import FaIconPush
+from services.service_host import HostService
+
+# 注册自定义视图
+from views.view_host import host_view
+
+app.register_blueprint(host_view, url_prefix='/host')
 
 
 class SchedulerConfig(object):
@@ -37,7 +43,7 @@ def monitor_service_heartbeat():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    return render_template('index.html', heartbeats=MonitorService().service_info(HostService().find_all()))
 
 
 if __name__ == '__main__':

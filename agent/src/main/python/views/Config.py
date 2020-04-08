@@ -1,6 +1,6 @@
 from flask import jsonify
 
-from common.Code import CommonCodes
+from common.code import CommonCodes
 
 class ConfigController:
 

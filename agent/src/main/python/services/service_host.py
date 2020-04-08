@@ -4,9 +4,10 @@
 # @Desc    : host数据服务
 # @File    : service_host.py
 
-from db.models import Host
+from sqlalchemy import desc
 
 from application_config import db
+from db.models import Host
 
 
 class HostService:
@@ -17,6 +18,9 @@ class HostService:
         :return: 数据集合
         """
         return Host().query.all()
+
+    def find_all_order_by_create_time_desc(self):
+        return Host().query.order_by(desc(Host.create_time)).all()
 
     def add(self, host=Host):
         """

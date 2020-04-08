@@ -4,6 +4,7 @@
 # @Desc    : 实体类
 # @File    : Models.py
 import datetime
+
 from application_config import db
 
 
@@ -33,13 +34,17 @@ class Host(db.Model):
     hostname = db.Column(db.String(100), nullable=False)
     username = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    command = db.Column(db.String(255), nullable=False)
-    command_start = db.Column(db.String(255), nullable=False)
-    command_stop = db.Column(db.String(255), nullable=False)
-    command_restart = db.Column(db.String(255), nullable=False)
+    server_name = db.Column(db.String(100), nullable=False)
+    server_type = db.Column(db.String(100), nullable=False)
+    server = db.Column(db.String(100), nullable=False)
+    command = db.Column(db.String(255), nullable=True)
+    command_start = db.Column(db.String(255), nullable=True)
+    command_stop = db.Column(db.String(255), nullable=True)
+    command_restart = db.Column(db.String(255), nullable=True)
     message = db.Column(db.String(255), nullable=True)
-    active = db.Column(db.Boolean, nullable=False)
+    active = db.Column(db.Boolean, nullable=False, default=True)
     create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
+
     # active = db.Column(db.Boolean, nullable=False, server_default=True, comment='激活状态，默认为激活（True）')
 
 
