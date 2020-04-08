@@ -48,4 +48,31 @@ class Host(db.Model):
     # active = db.Column(db.Boolean, nullable=False, server_default=True, comment='激活状态，默认为激活（True）')
 
 
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
+
+
+class User(UserMixin, db.Model):
+    """
+    用户模型
+    """
+    __tablename__ = 'user'
+    __table_args__ = {"extend_existing": True}
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), nullable=False, unique=False)
+    email = db.Column(db.String(40), unique=True, nullable=False)
+    password = db.Column(db.String(200), primary_key=False, unique=False, nullable=False)
+    create_time = db.Column(db.DateTime, index=False, unique=False, nullable=True, default=datetime.datetime.now())
+    last_login_time = db.Column(db.DateTime, index=False, unique=False, nullable=True)
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password, method='sha256')
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+
+    def __repr__(self):
+        return '<User {}>'.format(self.name)
+
+
 db.create_all()

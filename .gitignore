@@ -17,3 +17,5 @@ pom.xml.versionsBackup
 
 *.pyc
 venv
+.webassets-cache/
+

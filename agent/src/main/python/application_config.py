@@ -23,4 +23,8 @@ bootstrap = Bootstrap(app)
 moment = Moment(app)
 db = SQLAlchemy(app)
 
+## 启用权限框架
+from flask_login import LoginManager
 
+login_manager = LoginManager()
+login_manager.init_app(app)

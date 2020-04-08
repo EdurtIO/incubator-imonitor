@@ -20,7 +20,12 @@
 {% block title %}新建主机{% endblock %}
 
 {% block page_content %}
-{{ wtf.quick_form(form) }}
+<div class="row">
+    <div class="col-md-4 col-md-offset-4 col-lg-offset-4col-xl-offset-4">
+        {{ wtf.quick_form(form) }}
+    </div>
+</div>
+<!--{{ wtf.quick_form(form) }}-->
 
 {#<p>{{ moment(current_time).format('LLL') }}</p>#}
 {#<p>{{ moment(current_time).fromNow(refresh=True) }}</p>#}

@@ -9,3 +9,5 @@ flask-wtf==0.14.3
 pymysql==0.9.3
 requests==2.23.0
 Flask-MySQL==1.5.1
+Flask-Login==0.5.0
+flask-assets==2.0
