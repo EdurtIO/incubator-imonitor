@@ -12,7 +12,6 @@ from ImonitorService import MonitorService
 from application_config import app
 from push import FaIconPush
 from services.service_host import HostService
-
 # 注册自定义视图
 from views.view_host import host_view
 
@@ -38,12 +37,18 @@ app.config.from_object(SchedulerConfig())
 def monitor_service_heartbeat():
     now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     print 'push time {}, push response {}'.format(now,
-                                                  FaIconPush.FaIcon().push(json.dumps(MonitorService().service_info(HostService().find_all()))))
+                                                  FaIconPush.FaIcon().push(json.dumps(
+                                                      MonitorService().service_info(HostService().find_all()))))
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('index.html', heartbeats=MonitorService().service_info(HostService().find_all()))
+
+
+@app.errorhandler(404)
+def handle_404_error(err_msg):
+    return render_template('404.html', error=err_msg)
 
 
 if __name__ == '__main__':
