@@ -36,3 +36,10 @@ ssh:
     message: 无法获取服务状态：无效的授权密钥无法识别|授权密钥与当前登录主机不一致
     type: text
     operation: has|nohas
+  ssh_connection_refused:
+    name: connection_refused
+    context: 'ssh: connect to host localhost port'
+    code: 5001
+    message: 无法获取服务状态：SSH服务无法连接，请检查配置或修改配置
+    type: text
+    operation: has|nohas

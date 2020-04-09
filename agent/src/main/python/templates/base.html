@@ -43,11 +43,17 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active">
-                    <a href="/">主页 <span class="sr-only">(current)</span></a></li>
+                <li>
+                    <a href="/">主页 <span class="sr-only">(current)</span></a>
+                </li>
+                {% if current_user and current_user.is_authenticated %}
+                <li>
+                    <a href="/dashboard">仪表盘</a>
+                </li>
                 <li>
                     <a href="/host">主机管理</a>
                 </li>
+                {% endif %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">其他 <span class="caret"></span></a>
@@ -97,5 +103,7 @@
         $('[data-toggle="tooltip"]').tooltip()
     })
 </script>
-{{ moment.include_moment() }}
+
+{{ moment.include_moment(local_js="https://cdn.bootcss.com/moment.js/2.22.1/moment.min.js") }}
+
 {% endblock %}

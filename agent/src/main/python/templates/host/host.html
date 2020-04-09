@@ -1,0 +1,236 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %} {{title}} {% endblock %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-md-4 col-md-offset-4 col-lg-offset-4col-xl-offset-4">
+        <form method="POST" class="form-horizontal">
+
+            {{ form.csrf_token }}
+
+            {% for message in get_flashed_messages() %}
+            <div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+            {% endfor %}
+
+            <h3>{{title}}</h3>
+            <hr/>
+
+            {% if host %}
+            {{ form.id(class='form-control', placeholder='请输入服务名称', value=host.id) }}
+            {% endif %}
+
+            <div class="form-group {% if form.server_name.errors %} has-error {% endif %}">
+                {{ form.server_name.label(class='col-sm-3 control-label') }}
+                <div class="col-sm-9">
+                    {% if host %}
+                    {{ form.server_name(class='form-control', placeholder='请输入服务名称', value=host.server_name) }}
+                    {% else %}
+                    {{ form.server_name(class='form-control', placeholder='请输入服务名称') }}
+                    {% endif %}
+                    {% if form.server_name.errors %}
+                    <ul class="errors">
+                        {% for error in form.server_name.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group {% if form.server_type.errors %} has-error {% endif %}">
+                {{ form.server_type.label(class='col-sm-3 control-label') }}
+                <div class="col-sm-9">
+                    {% if host %}
+                    {{ form.server_type(class='form-control', placeholder='请输入服务名称', value=host.server_type) }}
+                    {% else %}
+                    {{ form.server_type(class='form-control', placeholder='请输入服务名称') }}
+                    {% endif %}
+                    {% if form.server_type.errors %}
+                    <ul class="errors">
+                        {% for error in form.server_type.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group {% if form.server.errors %} has-error {% endif %}">
+                {{ form.server.label(class='col-sm-3 control-label') }}
+                <div class="col-sm-9">
+                    {% if host %}
+                    {{ form.server(class='form-control', placeholder='请输入服务名称', value=host.server) }}
+                    {% else %}
+                    {{ form.server(class='form-control', placeholder='请输入服务名称') }}
+                    {% endif %}
+                    {% if form.server.errors %}
+                    <ul class="errors">
+                        {% for error in form.server.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group {% if form.hostname.errors %} has-error {% endif %}">
+                {{ form.hostname.label(class='col-sm-3 control-label') }}
+                <div class="col-sm-9">
+                    {% if host %}
+                    {{ form.hostname(class='form-control', placeholder='请输入服务名称', value=host.hostname) }}
+                    {% else %}
+                    {{ form.hostname(class='form-control', placeholder='请输入服务名称') }}
+                    {% endif %}
+                    {% if form.hostname.errors %}
+                    <ul class="errors">
+                        {% for error in form.hostname.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group {% if form.username.errors %} has-error {% endif %}">
+                {{ form.username.label(class='col-sm-3 control-label') }}
+                <div class="col-sm-9">
+                    {% if host %}
+                    {{ form.username(class='form-control', placeholder='请输入服务名称', value=host.username) }}
+                    {% else %}
+                    {{ form.username(class='form-control', placeholder='请输入服务名称') }}
+                    {% endif %}
+                    {% if form.username.errors %}
+                    <ul class="errors">
+                        {% for error in form.username.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group {% if form.password.errors %} has-error {% endif %}">
+                {{ form.password.label(class='col-sm-3 control-label') }}
+                <div class="col-sm-9">
+                    {% if host %}
+                    {{ form.password(class='form-control', placeholder='请输入服务名称', value=host.password) }}
+                    {% else %}
+                    {{ form.password(class='form-control', placeholder='请输入服务名称') }}
+                    {% endif %}
+                    {% if form.password.errors %}
+                    <ul class="errors">
+                        {% for error in form.password.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group {% if form.command.errors %} has-error {% endif %}">
+                {{ form.command.label(class='col-sm-3 control-label') }}
+                <div class="col-sm-9">
+                    {% if host %}
+                    {{ form.command(class='form-control', placeholder='请输入服务名称', value=host.command) }}
+                    {% else %}
+                    {{ form.command(class='form-control', placeholder='请输入服务名称') }}
+                    {% endif %}
+                    {% if form.command.errors %}
+                    <ul class="errors">
+                        {% for error in form.command.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group {% if form.command_start.errors %} has-error {% endif %}">
+                {{ form.command_start.label(class='col-sm-3 control-label') }}
+                <div class="col-sm-9">
+                    {% if host %}
+                    {{ form.command_start(class='form-control', placeholder='请输入服务名称', value=host.command_start) }}
+                    {% else %}
+                    {{ form.command_start(class='form-control', placeholder='请输入服务名称') }}
+                    {% endif %}
+                    {% if form.command_start.errors %}
+                    <ul class="errors">
+                        {% for error in form.command_start.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group {% if form.command_stop.errors %} has-error {% endif %}">
+                {{ form.command_stop.label(class='col-sm-3 control-label') }}
+                <div class="col-sm-9">
+                    {% if host %}
+                    {{ form.command_stop(class='form-control', placeholder='请输入服务名称', value=host.command_stop) }}
+                    {% else %}
+                    {{ form.command_stop(class='form-control', placeholder='请输入服务名称') }}
+                    {% endif %}
+                    {% if form.command_stop.errors %}
+                    <ul class="errors">
+                        {% for error in form.command_stop.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group {% if form.command_restart.errors %} has-error {% endif %}">
+                {{ form.command_restart.label(class='col-sm-3 control-label') }}
+                <div class="col-sm-9">
+                    {% if host %}
+                    {{ form.command_restart(class='form-control', placeholder='请输入服务名称', value=host.command_restart) }}
+                    {% else %}
+                    {{ form.command_restart(class='form-control', placeholder='请输入服务名称') }}
+                    {% endif %}
+                    {% if form.command_restart.errors %}
+                    <ul class="errors">
+                        {% for error in form.command_restart.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                    {{ form.submit(value=title) }}
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+{#<p>{{ moment(current_time).format('LLL') }}</p>#}
+{#<p>{{ moment(current_time).fromNow(refresh=True) }}</p>#}
+
+{% endblock %}
