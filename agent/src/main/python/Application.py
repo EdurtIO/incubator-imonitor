@@ -5,21 +5,23 @@
 # @File    : Application.py
 import datetime
 import json
+
 from flask import render_template
 from flask_apscheduler import APScheduler
 
 from ImonitorService import MonitorService
-from application_config import app
+from application_config import app, codes
 from push import FaIconPush
 from services.service_host import HostService
-# 注册自定义视图
-from views.view_host import host_view
 from views.view_auth import auth_view
 from views.view_dashboard import dashboard_view
+# 注册自定义视图
+from views.view_host import host_view
 
 app.register_blueprint(host_view, url_prefix='/host')
 app.register_blueprint(auth_view, url_prefix='/auth')
 app.register_blueprint(dashboard_view, url_prefix='/dashboard')
+
 
 class SchedulerConfig(object):
     JOBS = [
@@ -64,4 +66,4 @@ if __name__ == '__main__':
     scheduler.init_app(app)
     scheduler.start()
     print app.url_map
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=codes['server']['port'], debug=True)
