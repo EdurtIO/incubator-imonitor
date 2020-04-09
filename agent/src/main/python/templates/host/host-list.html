@@ -24,7 +24,7 @@
 <!-- 监控数据 -->
 <div class="card mt10">
     <h5 class="card-header">
-        <a href="/host/create" class="btn btn-sm btn-primary right" type="button">添加主机</a>
+        <a href="/host/cmcd" class="btn btn-sm btn-primary right" type="button">添加主机</a>
     </h5>
     <div class="card-body">
         <table class="table">
@@ -48,6 +48,12 @@
                 <td>{{host.server}}</td>
                 <td>{{host.create_time}}</td>
                 <td>
+                    <a href="/host/cmcd/{{host.id}}?method=PUT" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top"
+                       title="修改主机"><i class="fa fa-edit"></i></a>
+                    <a href="/host/cmcd/{{host.id}}?type" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="top"
+                       title="复制主机"><i class="fa fa-copy"></i></a>
+<!--                    <a class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="删除主机"><i-->
+<!--                            class="fa fa-trash"></i></a>-->
                 </td>
             </tr>
             {% endfor %}

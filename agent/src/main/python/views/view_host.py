@@ -1,9 +1,14 @@
-from flask import Blueprint, render_template, redirect
-from flask_login import current_user
-from flask_login import login_required
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Time    : 2020-04-02 23:25:25
+# @Desc    : 主机视图脚本
+# @File    : view_host.py
 
 from db.models import Host
-from form.form_host import HostCreate
+from flask import Blueprint, render_template, redirect, request
+from flask_login import current_user
+from flask_login import login_required
+from form.form_host import host_create_form
 from services.service_host import HostService
 
 host_view = Blueprint('host_view', __name__, template_folder='templates')
@@ -20,7 +25,7 @@ def list():
 @host_view.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
-    form = HostCreate()
+    form = host_create_form()
     if form.validate_on_submit():
         host = Host()
         host.hostname = form.hostname.data
@@ -38,3 +43,42 @@ def create():
         if HostService().add(host):
             return redirect('/host')
     return render_template('host/host-create.html', form=form)
+
+
+@host_view.route('cmcd/', defaults={'host_id': 0}, methods=['GET', 'POST', 'PUT'])
+@host_view.route('cmcd/<int:host_id>', methods=['GET', 'POST', 'PUT'])
+@login_required
+def create_modfiy_copy_delete(host_id=int):
+    type = request.args.get('type')
+    method = request.args.get('method')
+    form = host_create_form()
+    host = HostService().find_one(id=host_id)
+    if (host_id <= 0) or host is None:
+        title = '新建主机'
+    else:
+        if (host_id > 0 and type is None):
+            title = '修改主机'
+        else:
+            title = '复制主机'
+    if form.validate_on_submit():
+        host = Host()
+        host.hostname = form.hostname.data
+        host.active = True
+        host.username = form.username.data
+        host.password = form.password.data
+        host.command = form.command.data
+        host.command_start = form.command_start.data
+        host.command_stop = form.command_stop.data
+        host.command_restart = form.command_restart.data
+        host.server_name = form.server_name.data
+        host.server_type = form.server_type.data
+        host.server = form.server.data
+        host.users = [current_user]
+        if method == 'PUT':
+            host.id = form.id.data
+            if HostService().update_one(host):
+                return redirect('/host')
+        elif request.method == 'POST':
+            if HostService().add(host):
+                return redirect('/host')
+    return render_template('host/host.html', form=form, host=host, title=title)
