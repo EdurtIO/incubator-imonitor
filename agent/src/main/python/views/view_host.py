@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect
+from flask_login import current_user
 from flask_login import login_required
 
 from db.models import Host
@@ -12,7 +13,8 @@ host_view = Blueprint('host_view', __name__, template_folder='templates')
 @host_view.route('/list', methods=['GET'])
 @login_required
 def list():
-    return render_template('host/host-list.html', hosts=HostService().find_all_order_by_create_time_desc())
+    return render_template('host/host-list.html',
+                           hosts=HostService().find_all_order_by_create_time_desc_and_user(current_user))
 
 
 @host_view.route('/create', methods=['GET', 'POST'])
@@ -32,6 +34,7 @@ def create():
         host.server_name = form.server_name.data
         host.server_type = form.server_type.data
         host.server = form.server.data
+        host.users = [current_user]
         if HostService().add(host):
             return redirect('/host')
     return render_template('host/host-create.html', form=form)

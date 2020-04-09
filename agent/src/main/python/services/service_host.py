@@ -7,7 +7,7 @@
 from sqlalchemy import desc
 
 from application_config import db
-from db.models import Host
+from db.models import Host, User
 
 
 class HostService:
@@ -21,6 +21,9 @@ class HostService:
 
     def find_all_order_by_create_time_desc(self):
         return Host().query.order_by(desc(Host.create_time)).all()
+
+    def find_all_order_by_create_time_desc_and_user(self, user=User):
+        return Host().query.filter((Host.users.any(User.id == user.id))).order_by(desc(Host.create_time)).all()
 
     def add(self, host=Host):
         """

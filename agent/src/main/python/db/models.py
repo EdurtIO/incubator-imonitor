@@ -44,7 +44,8 @@ class Host(db.Model):
     message = db.Column(db.String(255), nullable=True)
     active = db.Column(db.Boolean, nullable=False, default=True)
     create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
-
+    users = db.relationship('User', secondary='user_host_relation',
+                            backref=db.backref('users', lazy='dynamic'), lazy='dynamic')
     # active = db.Column(db.Boolean, nullable=False, server_default=True, comment='激活状态，默认为激活（True）')
 
 
@@ -64,6 +65,8 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(200), primary_key=False, unique=False, nullable=False)
     create_time = db.Column(db.DateTime, index=False, unique=False, nullable=True, default=datetime.datetime.now())
     last_login_time = db.Column(db.DateTime, index=False, unique=False, nullable=True)
+    hosts = db.relationship('Host', secondary='user_host_relation',
+                            backref=db.backref('hosts', lazy='dynamic'), lazy='dynamic')
 
     def set_password(self, password):
         self.password = generate_password_hash(password, method='sha256')
@@ -74,5 +77,10 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.name)
 
+
+user_host_relation = db.Table('user_host_relation',
+                              db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                              db.Column('host_id', db.Integer, db.ForeignKey('host.id'))
+                              )
 
 db.create_all()
