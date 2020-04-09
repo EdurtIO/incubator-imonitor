@@ -4,10 +4,9 @@
 # @Desc    : host数据服务
 # @File    : service_host.py
 
-from sqlalchemy import desc
-
 from application_config import db
 from db.models import Host, User
+from sqlalchemy import desc
 
 
 class HostService:
@@ -56,3 +55,9 @@ class HostService:
         except Exception, ex:
             print ex
             return False
+
+    def delete_one(self, id=int):
+        host = Host().query.filter_by(id=id).first()
+        if host is not None:
+            db.session.delete(host)
+            db.session.commit()

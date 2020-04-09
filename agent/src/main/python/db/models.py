@@ -45,7 +45,8 @@ class Host(db.Model):
     active = db.Column(db.Boolean, nullable=False, default=True)
     create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
     users = db.relationship('User', secondary='user_host_relation',
-                            backref=db.backref('users', lazy='dynamic'), lazy='dynamic')
+                            backref=db.backref('users', lazy='dynamic'), lazy='dynamic',
+                            passive_deletes=True)
     # active = db.Column(db.Boolean, nullable=False, server_default=True, comment='激活状态，默认为激活（True）')
 
 
@@ -66,7 +67,8 @@ class User(UserMixin, db.Model):
     create_time = db.Column(db.DateTime, index=False, unique=False, nullable=True, default=datetime.datetime.now())
     last_login_time = db.Column(db.DateTime, index=False, unique=False, nullable=True)
     hosts = db.relationship('Host', secondary='user_host_relation',
-                            backref=db.backref('hosts', lazy='dynamic'), lazy='dynamic')
+                            backref=db.backref('hosts', lazy='dynamic'), lazy='dynamic',
+                            passive_deletes=True)
 
     def set_password(self, password):
         self.password = generate_password_hash(password, method='sha256')
@@ -79,8 +81,12 @@ class User(UserMixin, db.Model):
 
 
 user_host_relation = db.Table('user_host_relation',
-                              db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-                              db.Column('host_id', db.Integer, db.ForeignKey('host.id'))
+                              db.Column('user_id', db.Integer,
+                                        db.ForeignKey('user.id', ondelete='CASCADE', onupdate='CASCADE'),
+                                        primary_key=True),
+                              db.Column('host_id', db.Integer,
+                                        db.ForeignKey('host.id', ondelete='CASCADE', onupdate='CASCADE'),
+                                        primary_key=True)
                               )
 
 db.create_all()

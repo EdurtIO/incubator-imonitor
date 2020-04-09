@@ -3,5 +3,5 @@ server:
   secret: iMonitor
   db:
     uri: mysql+pymysql://root:123456@localhost:3306/test
-    print-sql: False
+    print-sql: True
     track: True
