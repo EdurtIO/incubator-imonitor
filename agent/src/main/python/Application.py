@@ -15,9 +15,11 @@ from services.service_host import HostService
 # 注册自定义视图
 from views.view_host import host_view
 from views.view_auth import auth_view
+from views.view_dashboard import dashboard_view
 
 app.register_blueprint(host_view, url_prefix='/host')
 app.register_blueprint(auth_view, url_prefix='/auth')
+app.register_blueprint(dashboard_view, url_prefix='/dashboard')
 
 class SchedulerConfig(object):
     JOBS = [

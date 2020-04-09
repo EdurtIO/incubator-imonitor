@@ -35,3 +35,6 @@ class HostService:
         except Exception, ex:
             print ex
             return False
+
+    def count(self):
+        return Host().query.count()

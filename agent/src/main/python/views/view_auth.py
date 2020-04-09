@@ -6,12 +6,11 @@
 from flask import redirect, render_template, flash, Blueprint, request, url_for
 from flask_login import login_user, current_user, logout_user
 
-from application_config import db, app
+from application_config import app
 from application_config import login_manager
 from bin.assets import compile_auth_assets
 from db.models import User
 from form.form_auth import AuthSignin, AuthSignup
-
 from services.service_user import UserService
 
 auth_view = Blueprint('auth_view', __name__, template_folder='templates', static_folder='static')
@@ -35,16 +34,18 @@ def signin():
             if user and user.check_password(password=password):
                 login_user(user)
                 next_page = request.args.get('next')
-                return redirect(next_page or url_for('host_view.list'))
+                return redirect(next_page or url_for('dashboard_view.index'))
         flash('无效的账号/密码')
         return redirect(url_for('auth_view.signin'))
     return render_template('auth/signin.html', form=login_form, title='用户登录')
+
 
 @auth_view.route('/sign_out')
 def logout():
     logout_user()
     flash(u'当前用户已经退出登录')
     return redirect(url_for('auth_view.signin'))
+
 
 @auth_view.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -66,7 +67,7 @@ def signup():
                 user = User(name=name, email=email, password=password)
                 if UserService().add(user=user):
                     login_user(user)
-                    return redirect(url_for('host_view.list'), code=400)
+                    return redirect(url_for('dashboard_view.index'), code=400)
             flash('该电子邮件地址已经被注册')
             return redirect(url_for('auth_view.signup'))
     return render_template('auth/signup.html', title='注册账号', form=signup_form)
