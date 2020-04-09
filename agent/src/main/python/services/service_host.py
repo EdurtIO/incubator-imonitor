@@ -41,3 +41,6 @@ class HostService:
 
     def count(self):
         return Host().query.count()
+
+    def count_by_user(self, user=User):
+        return Host().query.filter((Host.users.any(User.id == user.id))).count()

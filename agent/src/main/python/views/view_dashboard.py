@@ -14,5 +14,5 @@ dashboard_view = Blueprint('dashboard_view', __name__, template_folder='template
 @dashboard_view.route('/', methods=['GET'])
 @login_required
 def index():
-    count = HostService().count()
+    count = HostService().count_by_user()
     return render_template('dashboard/dashboard-index.html', title='仪表盘', count=count)
