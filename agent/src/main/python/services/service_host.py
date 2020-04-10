@@ -54,7 +54,7 @@ class HostService:
                   'server_name = :server_name, server_type = :server_type, server = :server, command = :command,' \
                   'command_start = :command_start, command_stop = :command_stop, command_restart = :command_restart,' \
                   'message = :message where id = :id'
-            print db.engine.execute(
+            db.engine.execute(
                 text(sql), {'hostname': host.hostname, 'username': host.username, 'password': host.password,
                             'server_name': host.server_name,
                             'server_type': host.server_type, 'server': host.server, 'command': host.command,

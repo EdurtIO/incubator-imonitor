@@ -4,8 +4,10 @@
 # @Desc    : 主机表单脚本
 # @File    : from_host.py
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, SelectField, HiddenField
+from wtforms import StringField, SubmitField, SelectField, HiddenField
 from wtforms.validators import Required
+
+from imforms.widgets.password_field import PasswordField
 
 
 class host_create_form(FlaskForm):
