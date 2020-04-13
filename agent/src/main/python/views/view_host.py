@@ -32,6 +32,9 @@ def create_modfiy_copy_delete(host_id=int):
     if (host_id <= 0) or host is None:
         title = '新建主机'
     else:
+        # 重新渲染表单支持select标签回显数据
+        form.server.default = host.server
+        form.process()
         if (host_id > 0 and type is None):
             title = '修改主机'
         else:

@@ -80,7 +80,7 @@
                 {{ form.server.label(class='col-sm-3 control-label') }}
                 <div class="col-sm-9">
                     {% if host %}
-                    {{ form.server(class='form-control', placeholder='请选择服务', data=host.server) }}
+                    {{ form.server(class='form-control', placeholder='请选择服务') }}
                     {% else %}
                     {{ form.server(class='form-control', placeholder='请选择服务') }}
                     {% endif %}
