@@ -49,6 +49,6 @@ class CommonCodes:
 if __name__ == '__main__':
     codes = CommonCodes().load_config()
     for s in codes:
-        print s['message']
+        print(s['message'])
     # 列表解析
-    print [val for val in codes if val['message'].encode('utf-8') == '宕机'][0]['message']
+    print([val for val in codes if val['message'].encode('utf-8') == '宕机'][0]['message'])

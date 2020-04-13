@@ -19,6 +19,6 @@ class UserService:
             db.session.add(user)
             db.session.commit()
             return True
-        except Exception, ex:
-            print ex
+        except Exception as ex:
+            print(ex)
             return False

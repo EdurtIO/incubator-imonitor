@@ -57,6 +57,10 @@
                     <a href="/host/delete/{{host.id}}" class="btn btn-danger btn-xs" data-toggle="tooltip"
                        data-placement="top" title="删除主机"><i
                             class="fa fa-trash"></i></a>
+                    <a href="/terminal/open/{{host.id}}" target="_blank" class="btn btn-default btn-xs btn-dark"
+                       data-toggle="tooltip"
+                       data-placement="top"
+                       title="连接终端"><i class="fa fa-terminal"></i></a>
                 </td>
             </tr>
             {% endfor %}

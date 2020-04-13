@@ -52,9 +52,9 @@ class MonitorService:
                 else:
                     heartbeat['service_pid'] = '-'
                     heartbeat['service_context'] = buffer.before
-                    message = [v for v in self.messages if buffer.before.find(str(v['context'])) >= 0]
+                    message = [v for v in self.messages if v['context'] is not None and buffer.before.find(v['context'].encode('utf-8')) >= 0]
                     if message is not None and len(message) > 0:
-                        heartbeat['service_message'] = message[0]['message'].encode('utf-8')
+                        heartbeat['service_message'] = message[0]['message']
                         heartbeat['service_code'] = str(message[0]['code'])
                     else:
                         heartbeat['service_code'] = '2000'
@@ -104,4 +104,4 @@ class MonitorService:
 
 
 if __name__ == '__main__':
-    print json.dumps(MonitorService().service_info())
+    print(json.dumps(MonitorService().service_info()))

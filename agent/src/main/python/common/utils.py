@@ -33,7 +33,7 @@ class DirctoryUtils:
         """
         value = None
         if key is '':
-            print '无效的主键'
+            print('无效的主键')
         else:
             try:
                 value = content[key]
@@ -65,11 +65,11 @@ class CommandUtils:
             child.expect(pattern=pexpect.EOF, timeout=10)
             buffer = child
         except Exception:
-            print buffer
+            print(buffer)
         finally:
             child.close()
         return buffer
 
 
 if __name__ == '__main__':
-    print NumberUtils().is_number('12123s')
+    print(NumberUtils().is_number('12123s'))

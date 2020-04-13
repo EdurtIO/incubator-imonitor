@@ -44,7 +44,7 @@ class FaIcon:
         push_data = self.build_data(source)
         headers = {"Content-Type": "application/json"}
         r = requests.post(self.remote, data=json.dumps(push_data), headers=headers)
-        print r
+        print(r)
 
 
 if __name__ == '__main__':

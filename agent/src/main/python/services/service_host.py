@@ -38,8 +38,8 @@ class HostService:
             db.session.add(host)
             db.session.commit()
             return True
-        except Exception, ex:
-            print ex
+        except Exception as ex:
+            print(ex)
             return False
 
     def count(self):
@@ -63,8 +63,8 @@ class HostService:
                             'message': host.message, 'id': host.id}
             )
             return True
-        except Exception, ex:
-            print ex
+        except Exception as ex:
+            print(ex)
             return False
 
     def delete_one(self, id=int):

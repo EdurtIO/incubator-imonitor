@@ -21,7 +21,7 @@ class ConfigHostModel:
         self.command = ''
 
     def print_json(self):
-        print json.dumps(self.__dict__)
+        print(json.dumps(self.__dict__))
 
 
 class ConfigModel:
@@ -37,7 +37,7 @@ class ConfigModel:
         self.message = ''  # 提示信息
 
     def print_json(self):
-        print json.dumps(self.__dict__)
+        print(json.dumps(self.__dict__))
 
 
 class ServiceCommandModel:
@@ -52,7 +52,7 @@ class ServiceCommandModel:
         self.commands = [ServiceCommandSimpleModel]  # 命令
 
     def print_json(self):
-        print json.dumps(self.__dict__)
+        print(json.dumps(self.__dict__))
 
 
 class ServiceCommandSimpleModel:
@@ -66,7 +66,7 @@ class ServiceCommandSimpleModel:
         self.command = []  # 命令
 
     def print_json(self):
-        print json.dumps(self.__dict__)
+        print(json.dumps(self.__dict__))
 
 
 def get_attr_by_key(content, key):
@@ -78,12 +78,12 @@ def get_attr_by_key(content, key):
     """
     value = None
     if key is '':
-        print '无效的主键'
+        print('无效的主键')
     else:
         try:
             value = content[key]
         except Exception:
-            # print '无效的主键数据设置为None'
+            # print('无效的主键数据设置为None')
             value = None
     return value
 
