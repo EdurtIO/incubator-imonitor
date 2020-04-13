@@ -66,4 +66,4 @@ if __name__ == '__main__':
     scheduler.init_app(app)
     scheduler.start()
     print app.url_map
-    app.run(host='0.0.0.0', port=codes['server']['port'], debug=False)
+    app.run(host='0.0.0.0', port=codes['server']['port'], debug=codes['server']['debug'])

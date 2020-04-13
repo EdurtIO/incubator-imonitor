@@ -4,10 +4,12 @@
 # @Desc    : 主机视图脚本
 # @File    : view_host.py
 
-from db.models import Host
-from flask import Blueprint, render_template, redirect, request, url_for
+from flask import Blueprint, render_template, redirect, request, url_for, flash
 from flask_login import current_user
 from flask_login import login_required
+
+from common.utils import CommandUtils
+from db.models import Host
 from form.form_host import host_create_form
 from services.service_host import HostService
 
@@ -20,6 +22,7 @@ host_view = Blueprint('host_view', __name__, template_folder='templates')
 def list():
     return render_template('host/host-list.html',
                            hosts=HostService().find_all_order_by_create_time_desc_and_user(current_user))
+
 
 @host_view.route('cmcd/', defaults={'host_id': 0}, methods=['GET', 'POST', 'PUT'])
 @host_view.route('cmcd/<int:host_id>', methods=['GET', 'POST', 'PUT'])
@@ -53,13 +56,19 @@ def create_modfiy_copy_delete(host_id=int):
         host.server_type = form.server_type.data
         host.server = form.server.data
         host.users = [current_user]
-        if method == 'PUT':
-            host.id = form.id.data
-            if HostService().update_one(host):
-                return redirect('/host')
-        elif request.method == 'POST':
-            if HostService().add(host):
-                return redirect('/host')
+        if form.submit.data:
+            if method == 'PUT':
+                host.id = form.id.data
+                if HostService().update_one(host):
+                    return redirect('/host')
+            elif request.method == 'POST':
+                if HostService().add(host):
+                    return redirect('/host')
+        if form.test_connection.data:
+            buffer = CommandUtils().command_ssh_remote(form.username, form.hostname, form.password, form.command)
+            flash('用户 <{}> 连接主机 <{}> 失败，错误如下\n：{}'.format(form.hostname.data, form.username.data,
+                  buffer.before))
+            return redirect(url_for('host_view.create_modfiy_copy_delete'))
     return render_template('host/host.html', form=form, host=host, title=title)
 
 
