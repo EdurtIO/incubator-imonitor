@@ -24,8 +24,8 @@ def list():
                            hosts=HostService().find_all_order_by_create_time_desc_and_user(current_user))
 
 
-@host_view.route('cmcd/', defaults={'host_id': 0}, methods=['GET', 'POST', 'PUT'])
-@host_view.route('cmcd/<int:host_id>', methods=['GET', 'POST', 'PUT'])
+@host_view.route('/cmcd/', defaults={'host_id': 0}, methods=['GET', 'POST', 'PUT'])
+@host_view.route('/cmcd/<int:host_id>', methods=['GET', 'POST', 'PUT'])
 @login_required
 def create_modfiy_copy_delete(host_id=int):
     type = request.args.get('type')
@@ -72,7 +72,7 @@ def create_modfiy_copy_delete(host_id=int):
     return render_template('host/host.html', form=form, host=host, title=title)
 
 
-@host_view.route('delete/<int:host_id>', methods=['GET'])
+@host_view.route('/delete/<int:host_id>', methods=['GET'])
 @login_required
 def delete(host_id=int):
     HostService().delete_one(host_id)
