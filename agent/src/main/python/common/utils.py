@@ -70,6 +70,39 @@ class CommandUtils:
             child.close()
         return buffer
 
+    def command_ssh_remote_password(self, user, host, password, command):
+        """
+        远程连接服务器
+        :param user: 服务器用户名称
+        :param host: 服务器主机地址
+        :param password: 服务器用户密码
+        :param command: 需要执行的命令
+        :return: 命令执行结果
+        """
+        buffer = None
+        try:
+            logging.debug('开始登录服务器:%s 登录用户：%s 执行命令：%s', host, user, command)
+            child = pexpect.spawn("ssh -o stricthostkeychecking=no -l %s %s '%s'" % (user, host, command), timeout=5)
+            try:
+                child_pw = child.expect(['password:', 'continue connecting (yes/no)?'], timeout=5)
+                if child_pw == 0:
+                    child.sendline(password)
+                elif child_pw == 1:
+                    child.sendline('yes\n')
+                    child.expect('password: ')
+                    child.sendline(password)
+                child.sendline(command)
+                child.expect(pattern=pexpect.EOF, timeout=10)
+                buffer = child
+            except pexpect.EOF:
+                child.close()
+            except pexpect.TIMEOUT:
+                child.close()
+        except Exception:
+            print(' ====== ')
+        return buffer
+
 
 if __name__ == '__main__':
+    CommandUtils().command_ssh_remote_password('root', '127.0.0.1', '123456', 'ls -l')
     print(NumberUtils().is_number('12123s'))
