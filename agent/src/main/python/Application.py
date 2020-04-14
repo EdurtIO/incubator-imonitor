@@ -53,18 +53,21 @@ class SchedulerConfig(object):
         }
     ]
 
-
 app.config.from_object(SchedulerConfig())
-
 
 from services.service_monitor_memory import MonitorMemoryService
 from common.monitor import MonitorUtils
 
+
+from services.service_host import HostService
+
 def monitor_service_heartbeat():
     now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     print(now)
-    memory = MonitorUtils().memory()
-    MonitorMemoryService().add(memory, 7)
+    for host in HostService().find_all():
+        memory = MonitorUtils().memory(host.username, host.hostname, host.password)
+        if memory is not None:
+            MonitorMemoryService().add(memory, host.id)
 
 
 @app.route('/', methods=['GET', 'POST'])
