@@ -92,10 +92,10 @@ class ConfigUtils:
 
     def __init__(self):
         file_agent = open('agent.yaml', 'r')
-        self.content_agent = yaml.load(file_agent, Loader=yaml.FullLoader)
+        self.content_agent = yaml.load(file_agent)
         file_agent.close()
         file_command = open('service_command.yaml', 'r')
-        self.content_command = yaml.load(file_command, Loader=yaml.FullLoader)
+        self.content_command = yaml.load(file_command)
         file_command.close()
 
     def build_agent_configs(self):

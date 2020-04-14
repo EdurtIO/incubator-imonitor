@@ -46,6 +46,16 @@ class HostService:
         return Host().query.count()
 
     def count_by_user(self, user=User):
+        # sql = 'select count(h.id) from host as h ' \
+        #       'left join user_host_relation as uhr on h.id = uhr.host_id ' \
+        #       'left join user as u on u.id = uhr.user_id ' \
+        #       'where u.id = :id'
+        # print(db.engine.execute(
+        #     text(sql), {'id': user.id}
+        # ))
+        # return db.engine.execute(
+        #     text(sql), {'id': user.id}
+        # )
         return Host().query.filter((Host.users.any(User.id == user.id))).count()
 
     def update_one(self, host=Host):
@@ -64,7 +74,6 @@ class HostService:
             )
             return True
         except Exception as ex:
-            print(ex)
             return False
 
     def delete_one(self, id=int):

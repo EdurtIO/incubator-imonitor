@@ -4,7 +4,7 @@
 # @Desc    : 仪表盘脚本
 # @File    : view_dashboard.py
 from flask import render_template, Blueprint
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 from services.service_host import HostService
 
@@ -14,5 +14,5 @@ dashboard_view = Blueprint('dashboard_view', __name__, template_folder='template
 @dashboard_view.route('/', methods=['GET'])
 @login_required
 def index():
-    count = HostService().count_by_user()
+    count = HostService().count_by_user(current_user)
     return render_template('dashboard/dashboard-index.html', title='仪表盘', count=count)

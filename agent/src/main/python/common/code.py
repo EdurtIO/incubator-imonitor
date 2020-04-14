@@ -18,7 +18,7 @@ class CommonCodes:
         file = None
         try:
             file = open(path, 'r')
-            self.codes = yaml.load(file, Loader=yaml.FullLoader)
+            self.codes = yaml.load(file)
             self.load_config()
         finally:
             if file is not None:

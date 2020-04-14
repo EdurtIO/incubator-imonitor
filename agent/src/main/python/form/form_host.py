@@ -34,3 +34,7 @@ class host_create_form(FlaskForm):
     command_restart = StringField(u'重启命令', render_kw={'placeholder': '请输入主机服务重启命令，可为空', 'size': 'mini'})
     submit = SubmitField(u'添加', render_kw={'class': 'btn btn-primary', 'size': 'mini'})
     test_connection = SubmitField(u'测试连接', render_kw={'class': 'btn btn-info', 'size': 'mini'})
+
+    # def reset(self):
+    #     blankData = MultiDict([ ('csrf', self.reset_csrf() ) ])
+    #     self.process(blankData)

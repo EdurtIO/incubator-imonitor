@@ -24,6 +24,7 @@
     <script src="{{ url_for('static', filename='dist/xterm.js') }}"></script>
     <script src="{{ url_for('static', filename='dist/addons/fullscreen/fullscreen.js') }}"></script>
     <script src="{{ url_for('static', filename='dist/addons/fit/fit.js') }}"></script>
+    <title>iMonitor Web Terminal</title>
 </head>
 
 <body>
@@ -35,29 +36,41 @@
     Terminal.applyAddon(fit);
     var cols = parseInt(document.documentElement.clientWidth / 9.5, 10)
     var rows = parseInt(document.documentElement.clientHeight / 18, 10)
-    var term = new Terminal({
+    var terminal = new Terminal({
             cols: cols,
             rows: rows
         }),
         protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://',
         socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + "/websocket/{{server_id}}";
-    sock = new WebSocket(socketURL);
-    sock.addEventListener('open', function () {
-        // term(sock);
-        sock.send("size:" + cols + "," + rows)
-        term.on('data', function (data) {
-            sock.send(data);
+    socket = new WebSocket(socketURL);
+
+    terminal.open(document.getElementById('terminal-container'));
+    terminal.writeln('欢迎使用iMonitor Web Terminal');
+
+    socket.addEventListener('open', function () {
+        // terminal(socket);
+        terminal.writeln('正在连接服务器...');
+        socket.send("size:" + cols + "," + rows)
+        terminal.on('data', function (data) {
+            socket.send(data);
         });
     });
 
-    sock.addEventListener("message", function (msg) {
-        console.log(msg);
-        term.write(msg.data)
+    socket.addEventListener("message", function (msg) {
+        terminal.write(msg.data)
     });
-    term.open(document.getElementById('terminal-container'));
-    // term.write("Hello");
-    term.fit();
-    // term.toggleFullScreen(true);
+
+    socket.addEventListener('error', function (err) {
+        terminal.writeln('1111')
+        socket.emit('{{server_id}}', '\r\n*** SSH CONNECTION ERROR: ' + err.message + ' ***\r\n');
+    });
+
+    socket.addEventListener('close', function (err) {
+        terminal.writeln('服务器连接已经关闭，请检查是否服务器配置出现问题！！！');
+    });
+
+    terminal.fit();
+    // terminal.toggleFullScreen(true);
 </script>
 </body>
 

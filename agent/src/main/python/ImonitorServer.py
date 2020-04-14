@@ -19,7 +19,7 @@ class MonitorServer:
 
     def __init__(self):
         f = open('agent.yaml')
-        content = yaml.load(f, Loader=yaml.FullLoader)
+        content = yaml.load(f)
         self.hostname = content['application']['remote']['hostname']
         if self.hostname is None:
             self.hostname = socket.gethostname()

@@ -17,9 +17,9 @@ class SshTerminalHandler(WebSocketHandler):
     def check_origin(self, origin):
         return True
 
-    # def initialize(self, *args,**kwargs):
-    #     print('----')
-    #     print(args, kwargs)
+    def initialize(self, *args, **kwargs):
+        print('Welcome To iMonitor Web Terminal')
+        print(args, kwargs)
 
     def _reading(self):
         asyncio.set_event_loop(asyncio.new_event_loop())
