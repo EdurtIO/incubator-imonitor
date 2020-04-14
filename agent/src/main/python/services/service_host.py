@@ -63,14 +63,14 @@ class HostService:
             sql = 'update `host` set hostname = :hostname, username = :username, password = :password,' \
                   'server_name = :server_name, server_type = :server_type, server = :server, command = :command,' \
                   'command_start = :command_start, command_stop = :command_stop, command_restart = :command_restart,' \
-                  'message = :message where id = :id'
+                  'message = :message, ssh_port = :ssh_port where id = :id'
             db.engine.execute(
                 text(sql), {'hostname': host.hostname, 'username': host.username, 'password': host.password,
                             'server_name': host.server_name,
                             'server_type': host.server_type, 'server': host.server, 'command': host.command,
                             'command_start': host.command_start,
                             'command_stop': host.command_stop, 'command_restart': host.command_restart,
-                            'message': host.message, 'id': host.id}
+                            'message': host.message, 'id': host.id, 'ssh_port': host.ssh_port}
             )
             return True
         except Exception as ex:

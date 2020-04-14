@@ -32,18 +32,19 @@
             <tr>
                 <th>编码</th>
                 <th>主机名</th>
-                <th>启动用户</th>
+                <th>SSH端口</th>
+                <th>用户名</th>
                 <th>服务</th>
                 <th>创建时间</th>
                 <th>节点操作</th>
             </tr>
             </thead>
-            <!-- 监控数据信息 -->
             <tbody>
             {% for host in hosts %}
             <tr>
                 <td>{{host.id}}</td>
                 <td>{{host.hostname}}</td>
+                <td>{{host.ssh_port}}</td>
                 <td>{{host.username}}</td>
                 <td>{{host.server}}</td>
                 <td>{{host.create_time}}</td>

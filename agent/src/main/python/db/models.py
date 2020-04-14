@@ -32,6 +32,7 @@ class Host(db.Model):
     __table_args__ = {"extend_existing": True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     hostname = db.Column(db.String(100), nullable=False)
+    ssh_port = db.Column(db.Integer, nullable=False)
     username = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
     server_name = db.Column(db.String(100), nullable=False)

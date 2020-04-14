@@ -56,6 +56,7 @@ def create_modfiy_copy_delete(host_id=int):
         host.server_type = form.server_type.data
         host.server = form.server.data
         host.users = [current_user]
+        host.ssh_port = form.ssh_port.data
         if form.submit.data:
             if method == 'PUT':
                 host.id = form.id.data
@@ -67,7 +68,7 @@ def create_modfiy_copy_delete(host_id=int):
         if form.test_connection.data:
             buffer = CommandUtils().command_ssh_remote(form.username, form.hostname, form.password, form.command)
             flash('用户 <{}> 连接主机 <{}> 失败，错误如下\n：{}'.format(form.hostname.data, form.username.data,
-                  buffer.before))
+                                                          buffer.before))
             return redirect(url_for('host_view.create_modfiy_copy_delete'))
     return render_template('host/host.html', form=form, host=host, title=title)
 

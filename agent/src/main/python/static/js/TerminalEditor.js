@@ -36,7 +36,7 @@ var TerminalEditor = function () {
 
         if (options.show_banner) {
             TERMINAL.open(document.getElementById(options.id));
-            TERMINAL.writeln('欢迎使用iMonitor Web TerminalEditor');
+            TERMINAL.writeln('欢迎使用iMonitor Web Terminal');
         }
 
         SOCKRT.addEventListener('open', function () {
@@ -44,6 +44,7 @@ var TerminalEditor = function () {
             TERMINAL.writeln('正在连接服务器...');
             SOCKRT.send("size:" + cols + "," + rows);
             TERMINAL.on('data', function (data) {
+                console.log(data)
                 SOCKRT.send(data);
             });
         });
@@ -62,18 +63,15 @@ var TerminalEditor = function () {
         });
 
         TERMINAL.fit();
+
         // terminal.toggleFullScreen(true);
     }
 
     var close = function (socket) {
         if (!socket) {
-            socket.onclose = () => {
-                console.log("close socket");
-            }
+            socket.close()
         } else {
-            SOCKRT.onclose = () => {
-                console.log("close socket");
-            }
+            SOCKRT.close()
         }
     }
 

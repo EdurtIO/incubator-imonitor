@@ -4,7 +4,7 @@
 # @Desc    : 主机表单脚本
 # @File    : from_host.py
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, HiddenField
+from wtforms import StringField, SubmitField, SelectField, HiddenField, IntegerField
 from wtforms.validators import Required
 
 from imforms.widgets.password_field import PasswordField
@@ -25,6 +25,8 @@ class host_create_form(FlaskForm):
     ])
     hostname = StringField(u'主机名称', validators=[Required(message=u'主机名称不能为空')],
                            render_kw={'placeholder': '请输入主机名称', 'size': 'mini'})
+    ssh_port = IntegerField(u'SSH端口', validators=[Required(message=u'无效的SSH端口,只能是数值类型')],
+                            render_kw={'placeholder': '请输入主机SSH端口', 'size': 'mini'})
     username = StringField(u'主机账号', validators=[Required(message=u'主机账号不能为空')],
                            render_kw={'placeholder': '请输入主机账号', 'size': 'mini', 'value': 'root'})
     password = PasswordField(u'主机密码', render_kw={'placeholder': '请输入主机密码，可为空', 'size': 'mini'})
