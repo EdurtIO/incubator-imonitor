@@ -15,63 +15,58 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<html>
+{% extends "terminal/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %} {{title}} {% endblock %}
 
-<head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='dist/xterm.css') }}"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='dist/addons/fullscreen/fullscreen.css') }}"/>
-    <!-- <link rel="stylesheet" href="/dist/style.css" /> -->
-    <script src="{{ url_for('static', filename='dist/xterm.js') }}"></script>
-    <script src="{{ url_for('static', filename='dist/addons/fullscreen/fullscreen.js') }}"></script>
-    <script src="{{ url_for('static', filename='dist/addons/fit/fit.js') }}"></script>
-    <title>iMonitor Web Terminal</title>
-</head>
+{% block navbar %}
+<nav class="navbar navbar-inverse" style="margin-bottom: 0px; border-radius: 0px;">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">iMonitor Web Terminal</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li ><a id="terminalStatus"></a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
 
-<body>
-<div class="container">
+{% block page_content %}
+<div class="container-fluid" style="padding-right: 0px; padding-left: 0px;">
     <div id="terminal-container"></div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/TerminalEditor.js') }}"></script>
 <script>
-    // terminado.apply(Terminal);
-    Terminal.applyAddon(fit);
-    var cols = parseInt(document.documentElement.clientWidth / 9.5, 10)
-    var rows = parseInt(document.documentElement.clientHeight / 18, 10)
-    var terminal = new Terminal({
-            cols: cols,
-            rows: rows
-        }),
-        protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://',
-        socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + "/websocket/{{server_id}}";
-    socket = new WebSocket(socketURL);
+    options = {
+        id: 'terminal-container',
+        show_banner: true,
+        data: {{server_id}}
+    }
+    TerminalEditor.init(options);
 
-    terminal.open(document.getElementById('terminal-container'));
-    terminal.writeln('欢迎使用iMonitor Web Terminal');
-
-    socket.addEventListener('open', function () {
-        // terminal(socket);
-        terminal.writeln('正在连接服务器...');
-        socket.send("size:" + cols + "," + rows)
-        terminal.on('data', function (data) {
-            socket.send(data);
-        });
-    });
-
-    socket.addEventListener("message", function (msg) {
-        terminal.write(msg.data)
-    });
-
-    socket.addEventListener('error', function (err) {
-        terminal.writeln('1111')
-        socket.emit('{{server_id}}', '\r\n*** SSH CONNECTION ERROR: ' + err.message + ' ***\r\n');
-    });
-
-    socket.addEventListener('close', function (err) {
-        terminal.writeln('服务器连接已经关闭，请检查是否服务器配置出现问题！！！');
-    });
-
-    terminal.fit();
-    // terminal.toggleFullScreen(true);
+    // 每1秒检查连接
+    window.setInterval(function(){
+        if (TerminalEditor.status() == 'false' || TerminalEditor.status() == false) {
+            document.getElementById('terminalStatus').innerHTML = '无法连接';
+        } else {
+            document.getElementById('terminalStatus').innerHTML = '已连接';
+        }
+    }, 1000);
 </script>
-</body>
-
-</html>
+{% endblock %}
