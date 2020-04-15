@@ -31,68 +31,6 @@ class MonitorServer:
         self.points = content['application']['points']
         f.close()
 
-    def memory(self):
-        """
-        统计当前节点服务器内存状态
-        :return: 内存详细信息
-        """
-        child = CommandUtils().command_ssh_remote_password(self.username, self.hostname, self.password, "cat /proc/meminfo")
-        # child.expect(pexpect.EOF)
-        memory = str(child.before)
-        memory_values = re.findall("(\d+)\ kB", memory)
-        memory_total = memory_values[0]
-        memory_free = memory_values[1]
-        memory_buffers = memory_values[2]
-        memory_cached = memory_values[3]
-        memory_swap_cached = memory_values[4]
-        memory_swap_total = memory_values[13]
-        memory_swap_free = memory_values[14]
-        print( '******************************内存监控*********************************')
-        print( "*******************时间：", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), "******************")
-        print ("总内存：", memory_total)
-        print ("空闲内存：", memory_free)
-        print ("给文件的缓冲大小:", memory_buffers)
-        print ("高速缓冲存储器使用的大小:", memory_cached)
-        print ("被高速缓冲存储用的交换空间大小:", memory_swap_cached)
-        print ("给文件的缓冲大小:", memory_buffers)
-        if 0 == int(memory_swap_total):
-            print( u"交换内存总共为：0")
-        else:
-            memory_swap_rate = 100 - 100 * int(memory_swap_free) / float(memory_swap_total)
-            print(u"交换内存利用率：", memory_swap_rate)
-        memory_free_temp = int(memory_free) + int(memory_buffers) + int(memory_cached)
-        memory_used_temp = int(memory_total) - memory_free_temp
-        memory_rate = 100 * memory_used_temp / float(memory_total)
-        print(u"内存利用率：", str("%.2f" % memory_rate), "%")
-
-    def cpu(self):
-        """
-        统计当前节点服务器CPU信息
-        :return: CPU信息
-        """
-        child = RemoteCommand.command_ssh_remote(self.username, self.hostname, self.password,
-                                                 'cat /proc/stat | grep "cpu "')
-        child.expect(pexpect.EOF)
-        child1 = RemoteCommand.command_ssh_remote(self.username, self.hostname, self.password,
-                                                  'cat /proc/stat | grep "cpu "')
-        child1.expect(pexpect.EOF)
-        cpus = child.before.strip().split()
-        cpus1 = child1.before.strip().split()
-        print ('************************cpu使用情况****************************')
-        print ("*******************时间：", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), "******************")
-        T1 = int(cpus[1]) + int(cpus[2]) + int(cpus[3]) + int(cpus[4]) + int(cpus[5]) + int(cpus[6]) + int(
-            cpus[8]) + int(
-            cpus[9])
-        T2 = int(cpus1[1]) + int(cpus1[2]) + int(cpus1[3]) + int(cpus1[4]) + int(cpus1[5]) + int(cpus1[6]) + int(
-            cpus1[8]) + int(cpus1[9])
-        Tol = T2 - T1
-        Idle = int(cpus1[4]) - int(cpus[4])
-        print ('总的cpu时间1:', T1)
-        print ('总的cpu时间2:', T2)
-        print ('时间间隔内的所有时间片:', Tol)
-        print ('计算空闲时间idle:', Idle)
-        print ("计算cpu使用率：", 100 * (Tol - Idle) / Tol, "%")
-
     def vm_stat(self):
         """
          统计当前节点服务器内核线程、虚拟内存、磁盘、陷阱和 CPU 活动的统计信息

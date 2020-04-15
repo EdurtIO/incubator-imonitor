@@ -4,21 +4,17 @@
 # @Desc    : web程序入口脚本
 # @File    : Application.py
 import datetime
-import json
-
 from flask import render_template
 from flask_apscheduler import APScheduler
 
 from ImonitorService import MonitorService
 from application_config import app, codes
-from push import FaIconPush
 # 注册自定义视图
-from services.service_host import HostService
 from views.view_auth import auth_view
-from views.view_dashboard import dashboard_view
-from views.view_terminal import terminal_view
-from views.view_host import host_view
 from views.view_chart import chart_view
+from views.view_dashboard import dashboard_view
+from views.view_host import host_view
+from views.view_terminal import terminal_view
 
 app.register_blueprint(host_view, url_prefix='/host')
 app.register_blueprint(auth_view, url_prefix='/auth')
@@ -27,9 +23,11 @@ app.register_blueprint(terminal_view, url_prefix='/terminal')
 app.register_blueprint(chart_view, url_prefix='/chart')
 
 from api.api_chart import chart_api
+
 app.register_blueprint(chart_api, url_prefix='/api/chart')
 
 from data.data_chart_host import chart_host_data
+
 app.register_blueprint(chart_host_data, url_prefix='/data/chart')
 
 ## 启用websocket服务
@@ -47,6 +45,7 @@ handlers = [
 
 application = Application(handlers, debug=True)
 
+
 class SchedulerConfig(object):
     JOBS = [
         {
@@ -59,13 +58,15 @@ class SchedulerConfig(object):
         }
     ]
 
+
 app.config.from_object(SchedulerConfig())
 
 from services.service_monitor_memory import MonitorMemoryService
+from services.service_monitor_cpu import MonitorCpuService
 from common.monitor import MonitorUtils
 
-
 from services.service_host import HostService
+
 
 def monitor_service_heartbeat():
     now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -74,11 +75,15 @@ def monitor_service_heartbeat():
         memory = MonitorUtils().memory(host.username, host.hostname, host.password)
         if memory is not None:
             MonitorMemoryService().add(memory, host.id)
+        cpu = MonitorUtils().cpu(host.username, host.hostname, host.password)
+        if cpu is not None:
+            MonitorCpuService().add(monitor_cpu=cpu, host_id=host.id)
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('index.html', heartbeats=MonitorService().service_info(HostService().find_all()))
+
 
 @app.errorhandler(404)
 def handle_404_error(err_msg):

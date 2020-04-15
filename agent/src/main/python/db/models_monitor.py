@@ -4,9 +4,9 @@
 # @Desc    : 实体类
 # @File    : models_monitor.py
 import datetime
+from sqlalchemy.dialects.mysql import DOUBLE
 
 from application_config import db
-from sqlalchemy.dialects.mysql import DOUBLE
 
 
 class MonitorMemory(db.Model):
@@ -23,5 +23,17 @@ class MonitorMemory(db.Model):
     swap_rate = db.Column(db.String(100), nullable=False, comment='交换空间利用率')
     rate = db.Column(DOUBLE(10, 4), nullable=False, comment='内存利用率')
     create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
+
+
+class MonitorCpu(db.Model):
+    __tablename__ = 'monitor_cpu'
+    __table_args__ = {"extend_existing": True}
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    cpu_time_1 = db.Column(db.BigInteger, nullable=False, comment='总CPU时间1')
+    cpu_time_2 = db.Column(db.BigInteger, nullable=False, comment='总CPU时间2')
+    idle = db.Column(db.String(20), nullable=False, comment='计算空闲时间')
+    rate = db.Column(DOUBLE(10, 4), nullable=False, comment='利用率')
+    create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
+
 
 db.create_all()

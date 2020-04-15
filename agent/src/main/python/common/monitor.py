@@ -6,7 +6,7 @@
 
 import re
 
-from db.models_monitor import MonitorMemory
+from db.models_monitor import MonitorMemory, MonitorCpu
 from .utils import CommandUtils
 
 
@@ -58,6 +58,35 @@ class MonitorUtils:
             memory.rate = round(memory_rate, 4)
             # print(u"内存利用率：", str("%.2f" % memory_rate), "%")
             return memory
+        except Exception as ex:
+            print (ex)
+            return None
+
+    def cpu(self, username, hostname, password):
+        """
+        统计当前节点服务器CPU信息
+        :return: CPU信息
+        """
+        try:
+            cpu = MonitorCpu()
+            child = CommandUtils().command_ssh_remote_password(username, hostname, password,
+                                                               'cat /proc/stat | grep "cpu "')
+            child1 = CommandUtils().command_ssh_remote_password(username, hostname, password,
+                                                                'cat /proc/stat | grep "cpu "')
+            cpus = child.before.strip().split()
+            cpus1 = child1.before.strip().split()
+            T1 = int(cpus[1]) + int(cpus[2]) + int(cpus[3]) + int(cpus[4]) + int(cpus[5]) + int(cpus[6]) + int(
+                cpus[8]) + int(
+                cpus[9])
+            T2 = int(cpus1[1]) + int(cpus1[2]) + int(cpus1[3]) + int(cpus1[4]) + int(cpus1[5]) + int(cpus1[6]) + int(
+                cpus1[8]) + int(cpus1[9])
+            Tol = T2 - T1
+            Idle = int(cpus1[4]) - int(cpus[4])
+            cpu.cpu_time_1 = T1
+            cpu.cpu_time_2 = T2
+            cpu.idle = Idle
+            cpu.rate = round((Tol - Idle) / Tol, 4)
+            return cpu
         except Exception as ex:
             print (ex)
             return None

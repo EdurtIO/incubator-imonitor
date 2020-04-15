@@ -30,14 +30,37 @@
         <div class="panel panel-default text-center">
             <div class="panel-heading">内存使用情况(单位%间隔时间5秒)</div>
             <div class="panel-body">
-                <div id="bar" class="row" style="height: 300px;"></div>
+                <div id="memory_line" class="row" style="height: 300px;"></div>
                 <script>
                     $(
                         function () {
-                            var chart = echarts.init(document.getElementById('bar'), 'white', {renderer: 'canvas'});
+                            var chart = echarts.init(document.getElementById('memory_line'), 'white', {renderer: 'canvas'});
                             $.ajax({
                                 type: "GET",
                                 url: "/data/chart/host/{{host_id}}/memory/rate",
+                                dataType: 'json',
+                                success: function (result) {
+                                    chart.setOption(result);
+                                }
+                            });
+                        }
+                    )
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default text-center">
+            <div class="panel-heading">CPU使用情况(单位%间隔时间5秒)</div>
+            <div class="panel-body">
+                <div id="cpu_line" class="row" style="height: 300px;"></div>
+                <script>
+                    $(
+                        function () {
+                            var chart = echarts.init(document.getElementById('cpu_line'), 'white', {renderer: 'canvas'});
+                            $.ajax({
+                                type: "GET",
+                                url: "/data/chart/host/{{host_id}}/cpu/rate",
                                 dataType: 'json',
                                 success: function (result) {
                                     chart.setOption(result);

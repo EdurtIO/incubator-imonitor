@@ -19,7 +19,7 @@ class MonitorMemoryService:
         return MonitorMemory().query.filter_by(id=id).first()
 
     def find_all_order_by_create_time_desc(self):
-        return MonitorMemory().query.order_by(desc(Host.create_time)).all()
+        return MonitorMemory().query.order_by(desc(MonitorMemory.create_time)).all()
 
     def add(self, monitor_memory=MonitorMemory, host_id=int):
         try:
