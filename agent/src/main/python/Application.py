@@ -53,7 +53,7 @@ class SchedulerConfig(object):
             'func': '__main__:monitor_service_heartbeat',
             # 'args': (1, 2),
             'trigger': 'interval',
-            'seconds': 5,
+            'seconds': 60,
             'max_instances': 1
         }
     ]
