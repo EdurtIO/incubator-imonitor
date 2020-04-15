@@ -1,17 +1,27 @@
 # iMonitor
 
-iMonitor是一套服务监控系统，目前还在孵化中。。。
+iMonitor是一套服务，资源监控系统。
 
-#### 贡献者
+#### 技术架构
 
 ---
 
-- [qinamoQ](https://github.com/qianmoQ)
+- Python3
+- Flask
+- Echarts
+- Web Terminal
+
+#### 支持服务
+
+---
+
+- Apache Druid监控
+- System Memory
+- System CPU
 
 #### Contact us
 
 ---
-
 
 #### 二次开发
 
@@ -38,6 +48,12 @@ git clone https://github.com/EdurtIO/incubator-imonitor.git
 ```bash
 cd incubator-imonitor
 pip install -r agent/src/main/python/requirements.txt
+```
+
+- 构建数据表关系（登录至MySQL服务器中执行）
+
+```bash
+source agent/src/main/python/sql/init.sql
 ```
 
 - 启动服务

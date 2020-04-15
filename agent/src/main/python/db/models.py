@@ -32,6 +32,7 @@ class Host(db.Model):
     __table_args__ = {"extend_existing": True}
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     hostname = db.Column(db.String(100), nullable=False)
+    ssh_port = db.Column(db.Integer, nullable=False)
     username = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
     server_name = db.Column(db.String(100), nullable=False)
@@ -43,7 +44,7 @@ class Host(db.Model):
     command_restart = db.Column(db.String(255), nullable=True)
     message = db.Column(db.String(255), nullable=True)
     active = db.Column(db.Boolean, nullable=False, default=True)
-    create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
+    create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
     users = db.relationship('User', secondary='user_host_relation',
                             backref=db.backref('users', lazy='dynamic'), lazy='dynamic',
                             passive_deletes=True)
@@ -64,7 +65,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String(100), nullable=False, unique=False)
     email = db.Column(db.String(40), unique=True, nullable=False)
     password = db.Column(db.String(200), primary_key=False, unique=False, nullable=False)
-    create_time = db.Column(db.DateTime, index=False, unique=False, nullable=True, default=datetime.datetime.now())
+    create_time = db.Column(db.DateTime, index=False, unique=False, nullable=True, default=datetime.datetime.now)
     last_login_time = db.Column(db.DateTime, index=False, unique=False, nullable=True)
     hosts = db.relationship('Host', secondary='user_host_relation',
                             backref=db.backref('hosts', lazy='dynamic'), lazy='dynamic',

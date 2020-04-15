@@ -25,7 +25,7 @@ def command_ssh_remote(user, host, password, command):
         child.expect(pattern=pexpect.EOF, timeout=10)
         buffer = child
     except Exception:
-        print buffer
+        print (buffer)
     finally:
         child.close()
     return buffer

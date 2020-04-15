@@ -12,8 +12,8 @@ from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+# reload(sys)
+# sys.setdefaultencoding('utf-8')
 
 config_name = 'config.yaml'
 
@@ -21,7 +21,7 @@ path = os.path.join(os.path.dirname(__file__), 'config', config_name)
 file = None
 try:
     file = open(path, 'r')
-    codes = yaml.load(file, Loader=yaml.FullLoader)
+    codes = yaml.load(file)
 finally:
     if file is not None:
         file.close()

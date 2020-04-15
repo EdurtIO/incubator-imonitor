@@ -32,31 +32,58 @@
             <tr>
                 <th>编码</th>
                 <th>主机名</th>
-                <th>启动用户</th>
+                <th>SSH端口</th>
+                <th>用户名</th>
                 <th>服务</th>
                 <th>创建时间</th>
                 <th>节点操作</th>
             </tr>
             </thead>
-            <!-- 监控数据信息 -->
             <tbody>
             {% for host in hosts %}
             <tr>
                 <td>{{host.id}}</td>
                 <td>{{host.hostname}}</td>
+                <td>{{host.ssh_port}}</td>
                 <td>{{host.username}}</td>
                 <td>{{host.server}}</td>
                 <td>{{host.create_time}}</td>
                 <td>
-                    <a href="/host/cmcd/{{host.id}}?method=PUT" class="btn btn-default btn-xs" data-toggle="tooltip"
-                       data-placement="top"
-                       title="修改主机"><i class="fa fa-edit"></i></a>
-                    <a href="/host/cmcd/{{host.id}}?type" class="btn btn-info btn-xs" data-toggle="tooltip"
-                       data-placement="top"
-                       title="复制主机"><i class="fa fa-copy"></i></a>
-                    <a href="/host/delete/{{host.id}}" class="btn btn-danger btn-xs" data-toggle="tooltip"
-                       data-placement="top" title="删除主机"><i
-                            class="fa fa-trash"></i></a>
+                    <a href="/host/cmcd/{{host.id}}?method=PUT" data-toggle="tooltip" data-placement="top" title="修改主机"
+                       style="text-decoration:none; color:Mediumslateblue;">
+                        <span class="fa-stack">
+                          <i class="fas fa-square fa-stack-2x"></i>
+                          <i class="fas fa-edit fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                    <a href="/host/cmcd/{{host.id}}?type" data-toggle="tooltip" data-placement="top" title="复制主机"
+                       style="text-decoration:none; color:Dodgerblue;">
+                        <span class="fa-stack">
+                          <i class="fas fa-square fa-stack-2x"></i>
+                          <i class="fas fa-copy fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                    <a href="/host/delete/{{host.id}}" data-toggle="tooltip" data-placement="top" title="删除主机"
+                       style="text-decoration:none; color:Tomato;">
+                        <span class="fa-stack">
+                          <i class="fas fa-square fa-stack-2x"></i>
+                          <i class="fas fa-trash-alt fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                    <a href="/chart/host/{{host.id}}/report" target="_blank" data-toggle="tooltip" data-placement="top"
+                       title="监控报表" style="text-decoration:none; color: #17a2b8;">
+                        <span class="fa-stack">
+                          <i class="fas fa-square fa-stack-2x"></i>
+                          <i class="fas fa fa-chart-line fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
+                    <a href="/terminal/open/{{host.id}}" target="_blank" data-toggle="tooltip" data-placement="top"
+                       title="连接终端" style="text-decoration:none; color:black;">
+                        <span class="fa-stack">
+                          <i class="fas fa-square fa-stack-2x"></i>
+                          <i class="fas fa-terminal fa-stack-1x fa-inverse"></i>
+                        </span>
+                    </a>
                 </td>
             </tr>
             {% endfor %}

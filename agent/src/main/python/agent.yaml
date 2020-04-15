@@ -10,9 +10,9 @@ application:
     - vm_stat
     - cpu
   remote:
-    hostname: c1-dsj-flink090.bj
+    hostname: 47.96.181.89
     username: root
-    password:
+    password: shiCheng-1989
 # 监控服务配置
 rules:
   service_point_historical_rule:

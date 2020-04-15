@@ -4,9 +4,10 @@
 # @Desc    : host数据服务
 # @File    : service_host.py
 
+from sqlalchemy import desc, text
+
 from application_config import db
 from db.models import Host, User
-from sqlalchemy import desc
 
 
 class HostService:
@@ -19,7 +20,7 @@ class HostService:
         return Host().query.all()
 
     def find_one(self, id=int):
-        return Host().query.filter_by(id = id).first()
+        return Host().query.filter_by(id=id).first()
 
     def find_all_order_by_create_time_desc(self):
         return Host().query.order_by(desc(Host.create_time)).all()
@@ -37,23 +38,42 @@ class HostService:
             db.session.add(host)
             db.session.commit()
             return True
-        except Exception, ex:
-            print ex
+        except Exception as ex:
+            print(ex)
             return False
 
     def count(self):
         return Host().query.count()
 
     def count_by_user(self, user=User):
+        # sql = 'select count(h.id) from host as h ' \
+        #       'left join user_host_relation as uhr on h.id = uhr.host_id ' \
+        #       'left join user as u on u.id = uhr.user_id ' \
+        #       'where u.id = :id'
+        # print(db.engine.execute(
+        #     text(sql), {'id': user.id}
+        # ))
+        # return db.engine.execute(
+        #     text(sql), {'id': user.id}
+        # )
         return Host().query.filter((Host.users.any(User.id == user.id))).count()
 
     def update_one(self, host=Host):
         try:
-            db.session.query(Host).filter(Host.id == host).update(host)
-            db.session.commit()
+            sql = 'update `host` set hostname = :hostname, username = :username, password = :password,' \
+                  'server_name = :server_name, server_type = :server_type, server = :server, command = :command,' \
+                  'command_start = :command_start, command_stop = :command_stop, command_restart = :command_restart,' \
+                  'message = :message, ssh_port = :ssh_port where id = :id'
+            db.engine.execute(
+                text(sql), {'hostname': host.hostname, 'username': host.username, 'password': host.password,
+                            'server_name': host.server_name,
+                            'server_type': host.server_type, 'server': host.server, 'command': host.command,
+                            'command_start': host.command_start,
+                            'command_stop': host.command_stop, 'command_restart': host.command_restart,
+                            'message': host.message, 'id': host.id, 'ssh_port': host.ssh_port}
+            )
             return True
-        except Exception, ex:
-            print ex
+        except Exception as ex:
             return False
 
     def delete_one(self, id=int):

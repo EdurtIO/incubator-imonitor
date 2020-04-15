@@ -4,10 +4,12 @@
 # @Desc    : 主机视图脚本
 # @File    : view_host.py
 
-from db.models import Host
-from flask import Blueprint, render_template, redirect, request, url_for
+from flask import Blueprint, render_template, redirect, request, url_for, flash
 from flask_login import current_user
 from flask_login import login_required
+
+from common.utils import CommandUtils
+from db.models import Host
 from form.form_host import host_create_form
 from services.service_host import HostService
 
@@ -21,8 +23,9 @@ def list():
     return render_template('host/host-list.html',
                            hosts=HostService().find_all_order_by_create_time_desc_and_user(current_user))
 
-@host_view.route('cmcd/', defaults={'host_id': 0}, methods=['GET', 'POST', 'PUT'])
-@host_view.route('cmcd/<int:host_id>', methods=['GET', 'POST', 'PUT'])
+
+@host_view.route('/cmcd/', defaults={'host_id': 0}, methods=['GET', 'POST', 'PUT'])
+@host_view.route('/cmcd/<int:host_id>', methods=['GET', 'POST', 'PUT'])
 @login_required
 def create_modfiy_copy_delete(host_id=int):
     type = request.args.get('type')
@@ -32,6 +35,9 @@ def create_modfiy_copy_delete(host_id=int):
     if (host_id <= 0) or host is None:
         title = '新建主机'
     else:
+        # # 重新渲染表单支持select标签回显数据
+        form.server.default = host.server
+        # form.process(form)
         if (host_id > 0 and type is None):
             title = '修改主机'
         else:
@@ -50,17 +56,24 @@ def create_modfiy_copy_delete(host_id=int):
         host.server_type = form.server_type.data
         host.server = form.server.data
         host.users = [current_user]
-        if method == 'PUT':
-            host.id = form.id.data
-            if HostService().update_one(host):
-                return redirect('/host')
-        elif request.method == 'POST':
-            if HostService().add(host):
-                return redirect('/host')
+        host.ssh_port = form.ssh_port.data
+        if form.submit.data:
+            if method == 'PUT':
+                host.id = form.id.data
+                if HostService().update_one(host):
+                    return redirect('/host')
+            elif request.method == 'POST':
+                if HostService().add(host):
+                    return redirect('/host')
+        if form.test_connection.data:
+            buffer = CommandUtils().command_ssh_remote(form.username, form.hostname, form.password, form.command)
+            flash('用户 <{}> 连接主机 <{}> 失败，错误如下\n：{}'.format(form.hostname.data, form.username.data,
+                                                          buffer.before))
+            return redirect(url_for('host_view.create_modfiy_copy_delete'))
     return render_template('host/host.html', form=form, host=host, title=title)
 
 
-@host_view.route('delete/<int:host_id>', methods=['GET'])
+@host_view.route('/delete/<int:host_id>', methods=['GET'])
 @login_required
 def delete(host_id=int):
     HostService().delete_one(host_id)

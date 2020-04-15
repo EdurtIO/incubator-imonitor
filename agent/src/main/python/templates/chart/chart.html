@@ -1,0 +1,80 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %} {{title}} {% endblock %}
+
+{% block page_styles %}
+<script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+{% endblock %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default text-center">
+            <div class="panel-heading">内存使用情况(单位%间隔时间60秒)</div>
+            <div class="panel-body">
+                <div id="memory_line" class="row" style="height: 300px;"></div>
+                <script>
+                    $(
+                        function () {
+                            var chart = echarts.init(document.getElementById('memory_line'), 'white', {renderer: 'canvas'});
+                            $.ajax({
+                                type: "GET",
+                                url: "/data/chart/host/{{host_id}}/memory/rate",
+                                dataType: 'json',
+                                success: function (result) {
+                                    chart.setOption(result);
+                                }
+                            });
+                        }
+                    )
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default text-center">
+            <div class="panel-heading">CPU使用情况(单位%间隔时间60秒)</div>
+            <div class="panel-body">
+                <div id="cpu_line" class="row" style="height: 300px;"></div>
+                <script>
+                    $(
+                        function () {
+                            var chart = echarts.init(document.getElementById('cpu_line'), 'white', {renderer: 'canvas'});
+                            $.ajax({
+                                type: "GET",
+                                url: "/data/chart/host/{{host_id}}/cpu/rate",
+                                dataType: 'json',
+                                success: function (result) {
+                                    chart.setOption(result);
+                                }
+                            });
+                        }
+                    )
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+{#<p>{{ moment(current_time).format('LLL') }}</p>#}
+{#<p>{{ moment(current_time).fromNow(refresh=True) }}</p>#}
+
+{% endblock %}

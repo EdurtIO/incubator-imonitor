@@ -56,7 +56,6 @@ def signup():
     """
     signup_form = AuthSignup()
     if request.method == 'POST':
-        print signup_form.validate_on_submit()
         if signup_form.validate_on_submit():
             name = signup_form.name.data
             email = signup_form.email.data

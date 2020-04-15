@@ -62,9 +62,9 @@
                 {{ form.server_type.label(class='col-sm-3 control-label') }}
                 <div class="col-sm-9">
                     {% if host %}
-                    {{ form.server_type(class='form-control', placeholder='请输入服务名称', value=host.server_type) }}
+                    {{ form.server_type(class='form-control', placeholder='请输入服务类型', value=host.server_type) }}
                     {% else %}
-                    {{ form.server_type(class='form-control', placeholder='请输入服务名称') }}
+                    {{ form.server_type(class='form-control', placeholder='请输入服务类型') }}
                     {% endif %}
                     {% if form.server_type.errors %}
                     <ul class="errors">
@@ -80,9 +80,9 @@
                 {{ form.server.label(class='col-sm-3 control-label') }}
                 <div class="col-sm-9">
                     {% if host %}
-                    {{ form.server(class='form-control', placeholder='请输入服务名称', value=host.server) }}
+                    {{ form.server(class='form-control', placeholder='请选择服务') }}
                     {% else %}
-                    {{ form.server(class='form-control', placeholder='请输入服务名称') }}
+                    {{ form.server(class='form-control', placeholder='请选择服务') }}
                     {% endif %}
                     {% if form.server.errors %}
                     <ul class="errors">
@@ -98,9 +98,9 @@
                 {{ form.hostname.label(class='col-sm-3 control-label') }}
                 <div class="col-sm-9">
                     {% if host %}
-                    {{ form.hostname(class='form-control', placeholder='请输入服务名称', value=host.hostname) }}
+                    {{ form.hostname(class='form-control', placeholder='请输入主机名称', value=host.hostname) }}
                     {% else %}
-                    {{ form.hostname(class='form-control', placeholder='请输入服务名称') }}
+                    {{ form.hostname(class='form-control', placeholder='请输入主机名称') }}
                     {% endif %}
                     {% if form.hostname.errors %}
                     <ul class="errors">
@@ -112,13 +112,31 @@
                 </div>
             </div>
 
+            <div class="form-group {% if form.ssh_port.errors %} has-error {% endif %}">
+                {{ form.ssh_port.label(class='col-sm-3 control-label') }}
+                <div class="col-sm-9">
+                    {% if host %}
+                    {{ form.ssh_port(class='form-control', placeholder='请输入主机SSH端口', value=host.ssh_port) }}
+                    {% else %}
+                    {{ form.ssh_port(class='form-control', placeholder='请输入主机SSH端口') }}
+                    {% endif %}
+                    {% if form.ssh_port.errors %}
+                    <ul class="errors">
+                        {% for error in form.ssh_port.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
             <div class="form-group {% if form.username.errors %} has-error {% endif %}">
                 {{ form.username.label(class='col-sm-3 control-label') }}
                 <div class="col-sm-9">
                     {% if host %}
-                    {{ form.username(class='form-control', placeholder='请输入服务名称', value=host.username) }}
+                    {{ form.username(class='form-control', placeholder='请输入用户名', value=host.username) }}
                     {% else %}
-                    {{ form.username(class='form-control', placeholder='请输入服务名称') }}
+                    {{ form.username(class='form-control', placeholder='请输入用户名') }}
                     {% endif %}
                     {% if form.username.errors %}
                     <ul class="errors">
@@ -134,9 +152,9 @@
                 {{ form.password.label(class='col-sm-3 control-label') }}
                 <div class="col-sm-9">
                     {% if host %}
-                    {{ form.password(class='form-control', placeholder='请输入服务名称', value=host.password) }}
+                    {{ form.password(class='form-control', placeholder='请输入服务器密码', value=host.password) }}
                     {% else %}
-                    {{ form.password(class='form-control', placeholder='请输入服务名称') }}
+                    {{ form.password(class='form-control', placeholder='请输入服务器密码') }}
                     {% endif %}
                     {% if form.password.errors %}
                     <ul class="errors">
@@ -152,9 +170,9 @@
                 {{ form.command.label(class='col-sm-3 control-label') }}
                 <div class="col-sm-9">
                     {% if host %}
-                    {{ form.command(class='form-control', placeholder='请输入服务名称', value=host.command) }}
+                    {{ form.command(class='form-control', placeholder='请输入命令', value=host.command) }}
                     {% else %}
-                    {{ form.command(class='form-control', placeholder='请输入服务名称') }}
+                    {{ form.command(class='form-control', placeholder='请输入命令') }}
                     {% endif %}
                     {% if form.command.errors %}
                     <ul class="errors">
@@ -170,9 +188,9 @@
                 {{ form.command_start.label(class='col-sm-3 control-label') }}
                 <div class="col-sm-9">
                     {% if host %}
-                    {{ form.command_start(class='form-control', placeholder='请输入服务名称', value=host.command_start) }}
+                    {{ form.command_start(class='form-control', placeholder='请输入启动命令', value=host.command_start) }}
                     {% else %}
-                    {{ form.command_start(class='form-control', placeholder='请输入服务名称') }}
+                    {{ form.command_start(class='form-control', placeholder='请输入启动命令') }}
                     {% endif %}
                     {% if form.command_start.errors %}
                     <ul class="errors">
@@ -188,9 +206,9 @@
                 {{ form.command_stop.label(class='col-sm-3 control-label') }}
                 <div class="col-sm-9">
                     {% if host %}
-                    {{ form.command_stop(class='form-control', placeholder='请输入服务名称', value=host.command_stop) }}
+                    {{ form.command_stop(class='form-control', placeholder='请输入停止命令', value=host.command_stop) }}
                     {% else %}
-                    {{ form.command_stop(class='form-control', placeholder='请输入服务名称') }}
+                    {{ form.command_stop(class='form-control', placeholder='请输入停止命令') }}
                     {% endif %}
                     {% if form.command_stop.errors %}
                     <ul class="errors">
@@ -206,9 +224,9 @@
                 {{ form.command_restart.label(class='col-sm-3 control-label') }}
                 <div class="col-sm-9">
                     {% if host %}
-                    {{ form.command_restart(class='form-control', placeholder='请输入服务名称', value=host.command_restart) }}
+                    {{ form.command_restart(class='form-control', placeholder='请输入重启命令', value=host.command_restart) }}
                     {% else %}
-                    {{ form.command_restart(class='form-control', placeholder='请输入服务名称') }}
+                    {{ form.command_restart(class='form-control', placeholder='请输入重启命令') }}
                     {% endif %}
                     {% if form.command_restart.errors %}
                     <ul class="errors">
@@ -223,6 +241,7 @@
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-9">
                     {{ form.submit(value=title) }}
+                    {{ form.test_connection }}
                 </div>
             </div>
 

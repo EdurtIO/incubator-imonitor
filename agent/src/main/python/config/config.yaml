@@ -1,7 +1,8 @@
 server:
   port: 5000
   secret: iMonitor
+  debug: True
   db:
     uri: mysql+pymysql://root:123456@localhost:3306/test
-    print-sql: True
+    print-sql: False
     track: True
