@@ -42,6 +42,7 @@ class MonitorMemoryService:
                   'left join monitor_memory_host_relation as mmhr on mm.id = mmhr.monitor_memory_id ' \
                   'left join host as h on h.id = mmhr.host_id ' \
                   'where h.id = :host_id ' \
+                  'order by mm.create_time desc ' \
                   'limit 15'
             result = db.engine.execute(
                 text(sql), {'host_id': host_id}
@@ -50,3 +51,20 @@ class MonitorMemoryService:
             return names
         except Exception as ex:
             return None
+
+    def find_top_rate(self, host_id=int, limit=int):
+        try:
+            sql = 'select mm.rate as rate, mm.create_time as create_time from monitor_memory as mm ' \
+                  'left join monitor_memory_host_relation as mmhr on mm.id = mmhr.monitor_memory_id ' \
+                  'left join host as h on h.id = mmhr.host_id ' \
+                  'where h.id = :host_id ' \
+                  'order by mm.create_time desc ' \
+                  'limit :limit'
+            result = db.engine.execute(
+                text(sql), {'host_id': host_id, 'limit': limit}
+            )
+            names = [row for row in result]
+            return names
+        except Exception as ex:
+            return None
+

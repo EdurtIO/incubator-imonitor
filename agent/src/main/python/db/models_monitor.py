@@ -6,6 +6,7 @@
 import datetime
 
 from application_config import db
+from sqlalchemy.dialects.mysql import DOUBLE
 
 
 class MonitorMemory(db.Model):
@@ -20,7 +21,7 @@ class MonitorMemory(db.Model):
     swap_total = db.Column(db.Integer, nullable=False, comment='交换空间总大小')
     swap_free = db.Column(db.Integer, nullable=False, comment='交换空间空闲总大小')
     swap_rate = db.Column(db.String(100), nullable=False, comment='交换空间利用率')
-    rate = db.Column(db.Integer, nullable=False, comment='内存利用率')
-    create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now())
+    rate = db.Column(DOUBLE(10, 4), nullable=False, comment='内存利用率')
+    create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
 
 db.create_all()

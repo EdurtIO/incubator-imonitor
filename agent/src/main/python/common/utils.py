@@ -82,8 +82,8 @@ class CommandUtils:
         buffer = None
         try:
             logging.debug('开始登录服务器:%s 登录用户：%s 执行命令：%s', host, user, command)
-            child = pexpect.spawn("ssh -o stricthostkeychecking=no -l %s %s '%s'" % (user, host, command), timeout=5)
             try:
+                child = pexpect.spawn("ssh -o stricthostkeychecking=no -l %s %s '%s'" % (user, host, command), timeout=5)
                 child_pw = child.expect(['password:', 'continue connecting (yes/no)?'], timeout=5)
                 if child_pw == 0:
                     child.sendline(password)
@@ -95,11 +95,13 @@ class CommandUtils:
                 child.expect(pattern=pexpect.EOF, timeout=10)
                 buffer = child
             except pexpect.EOF:
+                buffer = child
                 child.close()
             except pexpect.TIMEOUT:
+                buffer = child
                 child.close()
         except Exception:
-            print(' ====== ')
+            pass
         return buffer
 
 

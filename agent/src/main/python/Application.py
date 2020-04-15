@@ -26,6 +26,12 @@ app.register_blueprint(dashboard_view, url_prefix='/dashboard')
 app.register_blueprint(terminal_view, url_prefix='/terminal')
 app.register_blueprint(chart_view, url_prefix='/chart')
 
+from api.api_chart import chart_api
+app.register_blueprint(chart_api, url_prefix='/api/chart')
+
+from data.data_chart_host import chart_host_data
+app.register_blueprint(chart_host_data, url_prefix='/data/chart')
+
 ## 启用websocket服务
 from common.ssh_terminal import SshTerminalHandler
 from tornado.web import FallbackHandler, Application
@@ -48,7 +54,7 @@ class SchedulerConfig(object):
             'func': '__main__:monitor_service_heartbeat',
             # 'args': (1, 2),
             'trigger': 'interval',
-            'seconds': 300,
+            'seconds': 5,
             'max_instances': 1
         }
     ]

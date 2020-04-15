@@ -4,16 +4,11 @@
 # @Desc    : 服务器资源监控脚本
 # @File    : monitor.py
 
-import getpass
-import pexpect
 import re
-import socket
-import threading
-import time
-
-from .utils import CommandUtils
 
 from db.models_monitor import MonitorMemory
+from .utils import CommandUtils
+
 
 class MonitorUtils:
 
@@ -24,7 +19,7 @@ class MonitorUtils:
         """
         try:
             memory = MonitorMemory()
-            child = CommandUtils().command_ssh_remote_password(self.username, self.hostname, self.password, "cat /proc/meminfo")
+            child = CommandUtils().command_ssh_remote_password(username, hostname, password, "cat /proc/meminfo")
             # child.expect(pexpect.EOF)
             memory_values = re.findall("(\d+)\ kB", str(child.before))
             memory_total = memory_values[0]
@@ -59,9 +54,10 @@ class MonitorUtils:
                 memory.swap_rate = memory_swap_rate
             memory_free_temp = int(memory_free) + int(memory_buffers) + int(memory_cached)
             memory_used_temp = int(memory_total) - memory_free_temp
-            memory_rate = 100 * memory_used_temp / float(memory_total)
-            memory.rate = str("%.2f" % memory_rate)
+            memory_rate = memory_used_temp / float(memory_total)
+            memory.rate = round(memory_rate, 4)
             # print(u"内存利用率：", str("%.2f" % memory_rate), "%")
             return memory
         except Exception as ex:
+            print (ex)
             return None
