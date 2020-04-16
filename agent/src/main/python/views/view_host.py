@@ -4,13 +4,12 @@
 # @Desc    : 主机视图脚本
 # @File    : view_host.py
 
+from common.ssh import Ssh
+from db.models import Host
 from flask import Blueprint, render_template, redirect, request, url_for, flash
 from flask_login import current_user
 from flask_login import login_required
-
-from common.utils import CommandUtils
-from db.models import Host
-from form.form_host import host_create_form
+from form.form_host import HostForm, BuildModelToFrom
 from services.service_host import HostService
 
 host_view = Blueprint('host_view', __name__, template_folder='templates')
@@ -30,14 +29,15 @@ def list():
 def create_modfiy_copy_delete(host_id=int):
     type = request.args.get('type')
     method = request.args.get('method')
-    form = host_create_form()
+    form = HostForm()
     host = HostService().find_one(id=host_id)
     if (host_id <= 0) or host is None:
         title = '新建主机'
     else:
         # # 重新渲染表单支持select标签回显数据
         form.server.default = host.server
-        # form.process(form)
+
+        BuildModelToFrom(host=host, form=form)
         if (host_id > 0 and type is None):
             title = '修改主机'
         else:
@@ -67,9 +67,13 @@ def create_modfiy_copy_delete(host_id=int):
                 if HostService().add(host):
                     return redirect('/host')
         if form.test_connection.data:
-            buffer = CommandUtils().command_ssh_remote(form.username, form.hostname, form.password, form.command)
-            flash('用户 <{}> 连接主机 <{}> 失败，错误如下\n：{}'.format(form.hostname.data, form.username.data,
-                                                          buffer.before))
+            ssh_connect = Ssh(hostname=host.hostname, port=host.ssh_port, username=host.username,
+                              password=host.password,
+                              private_key=host.key)
+            if ssh_connect.check_connect() is False:
+                flash('用户 <{}> 连接主机 <{}> 失败，错误如下\n：{}'.format(host.hostname, host.username, ssh_connect.get_message()))
+            else:
+                flash('用户 <{}> 连接主机 <{}> 成功！'.format(host.hostname, host.username))
             return redirect(url_for('host_view.create_modfiy_copy_delete'))
     return render_template('host/host.html', form=form, host=host, title=title)
 

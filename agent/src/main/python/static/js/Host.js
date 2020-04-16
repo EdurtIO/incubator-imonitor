@@ -30,7 +30,7 @@ function security_show_hide(value) {
 }
 
 // 初始化判断主机登录模式
-security_show_hide($('input[name="security"]').val())
+security_show_hide($('input[name="security"]:checked').val())
 // 绑定登录模式事件
 $('input[name="security"]').change(function () {
     security_show_hide($(this).val())

@@ -6,9 +6,9 @@
 
 import asyncio
 import threading
+from services.service_host import HostService
 from tornado.websocket import WebSocketHandler
 
-from services.service_host import HostService
 from .ssh import Ssh
 
 
@@ -31,8 +31,8 @@ class SshTerminalHandler(WebSocketHandler):
         if args:
             server_id = int(args[0])
             host = HostService().find_one(server_id)
-            self.ssh = Ssh(host=host.hostname, port=22, user=host.username, password=host.password, key_file=None,
-                           passphrase=None)
+            self.ssh = Ssh(hostname=host.hostname, port=host.ssh_port, username=host.username, password=host.password,
+                           private_key=host.key)
             t = threading.Thread(target=self._reading)
             t.setDaemon(True)
             t.start()

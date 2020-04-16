@@ -4,28 +4,41 @@
 # @Desc    : 远程连接脚本
 # @File    : ssh.py
 
+import io
 import paramiko
-from StringIO import StringIO
+
+StringIO = io.StringIO
+from common.utils import StringUtils
 
 
 class Ssh(object):
 
-    def __init__(self, host, port, user, password=None, key_file=None, passphrase=None):
-        pass
-        self.host = host
+    def __init__(self, hostname='localhost', port=22, username='root', password=None, private_key=None):
+        self.hostname = hostname
         self.port = port
-        self.user = user
+        self.username = username
         self.password = password
-        self.key_file = key_file
-        self._ssh = paramiko.SSHClient()
-        self._ssh.load_system_host_keys()
-        self._ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        k = key_file and paramiko.RSAKey.from_private_key_file(
-            key_file, password=passphrase) or None
-        self._ssh.connect(hostname=host, port=port, username=user,
-                          password=password, pkey=k)
-        self._chanel = self._ssh.invoke_shell(
-            term='xterm')
+        self.private_key = private_key
+        try:
+            self._ssh = paramiko.SSHClient()
+            self._ssh.load_system_host_keys()
+            self._ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            if StringUtils().is_empty(source=self.password) and StringUtils().is_empty(source=self.private_key):
+                self._ssh.connect(hostname=self.hostname, port=self.port, username=self.username, password=None, pkey=None)
+            elif StringUtils().is_not_empty(source=self.password) and StringUtils().is_empty(source=self.private_key):
+                self._ssh.connect(hostname=self.hostname, port=self.port, username=self.username, password=self.password,
+                                  pkey=None)
+            else:
+                self.private_key_file = StringIO()
+                self.private_key_file.write(self.private_key)
+                self.private_key_file.seek(0)
+                self.key_file = self.private_key_file and paramiko.RSAKey.from_private_key(self.private_key_file) or None
+                self._ssh.connect(hostname=hostname, port=port, username=username, password=None, pkey=self.key_file)
+            self._chanel = self._ssh.invoke_shell(term='xterm')
+            self.connected = True
+        except Exception as ex:
+            self.message = ex
+            self.connected = False
 
     def connect(self, hostname, port, username):
         """
@@ -35,9 +48,9 @@ class Ssh(object):
         :param username: 用户名
         :return: SSH连接
         """
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        return ssh.connect(hostname=hostname, port=port, username=username, password=None, pkey=None)
+        self._ssh = paramiko.SSHClient()
+        self._ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self._ssh.connect(hostname=hostname, port=port, username=username, password=None, pkey=None)
 
     def connect_password(self, hostname, port, username, password):
         """
@@ -48,9 +61,9 @@ class Ssh(object):
         :param password: 登录密码
         :return: SSH连接
         """
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        return ssh.connect(hostname=hostname, port=port, username=username, password=password, pkey=None)
+        self._ssh = paramiko.SSHClient()
+        self._ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self._ssh.connect(hostname=hostname, port=port, username=username, password=password, pkey=None)
 
     def connect_rsa_key(self, hostname, port, username, private_key):
         """
@@ -61,14 +74,13 @@ class Ssh(object):
         :param private_key: 私钥
         :return: SSH连接
         """
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self._ssh = paramiko.SSHClient()
+        self._ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         private_key_file = StringIO()
         private_key_file.write(private_key)
         private_key_file.seek(0)
         key = paramiko.RSAKey.from_private_key(private_key_file)
-        # key = paramiko.RSAKey.from_private_key_file('/Users/shicheng/a.txt')
-        return ssh.connect(hostname=hostname, username=username, port=port, pkey=key)
+        self._ssh.connect(hostname=hostname, username=username, port=port, pkey=key)
 
     def resize(self, cols, rows):
         """
@@ -82,8 +94,22 @@ class Ssh(object):
     def read(self):
         return self._chanel.recv(10000)
 
+    def get_connect(self):
+        return self._ssh
+
+    def get_message(self):
+        return self.message
+
+    def check_connect(self):
+        if self.connected:
+            self._chanel.close()
+            self._ssh.close()
+            return True
+        else:
+            return False
 
 if __name__ == '__main__':
+    print(Ssh(hostname='localhost', port=22, username='root', password='123456', private_key=None))
     print('------ 使用免密方式登录服务器 ------')
     print(Ssh().connect('localhost', 22, 'root'))
     print('------ 使用密码方式登录服务器 ------')
