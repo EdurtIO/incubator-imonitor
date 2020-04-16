@@ -47,7 +47,7 @@ def create_modfiy_copy_delete(host_id=int):
         host.hostname = form.hostname.data
         host.active = True
         host.username = form.username.data
-        host.password = form.password.data
+        host.password = form.security_password.data
         host.command = form.command.data
         host.command_start = form.command_start.data
         host.command_stop = form.command_stop.data
@@ -57,6 +57,7 @@ def create_modfiy_copy_delete(host_id=int):
         host.server = form.server.data
         host.users = [current_user]
         host.ssh_port = form.ssh_port.data
+        host.key = form.security_key.data
         if form.submit.data:
             if method == 'PUT':
                 host.id = form.id.data

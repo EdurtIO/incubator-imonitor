@@ -174,17 +174,35 @@
                 </div>
             </div>
 
-            <div class="form-group {% if form.password.errors %} has-error {% endif %}">
-                {{ form.password.label(class='col-sm-3 control-label') }}
+            <div id="security-password" class="form-group {% if form.security_password.errors %} has-error {% endif %}">
+                {{ form.security_password.label(class='col-sm-3 control-label') }}
                 <div class="col-sm-9">
                     {% if host %}
-                    {{ form.password(class='form-control', placeholder='请输入服务器密码', value=host.password) }}
+                    {{ form.security_password(class='form-control', value=host.password) }}
                     {% else %}
-                    {{ form.password(class='form-control', placeholder='请输入服务器密码') }}
+                    {{ form.security_password(class='form-control') }}
                     {% endif %}
-                    {% if form.password.errors %}
+                    {% if form.security_password.errors %}
                     <ul class="errors">
-                        {% for error in form.password.errors %}
+                        {% for error in form.security_password.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div id="security-key" class="form-group {% if form.security_key.errors %} has-error {% endif %}">
+                {{ form.security_key.label(class='col-sm-3 control-label') }}
+                <div class="col-sm-9">
+                    {% if host %}
+                    {{ form.security_key(class='form-control', value=host.key) }}
+                    {% else %}
+                    {{ form.security_key(class='form-control') }}
+                    {% endif %}
+                    {% if form.security_key.errors %}
+                    <ul class="errors">
+                        {% for error in form.security_key.errors %}
                         <li>{{ error }}</li>
                         {% endfor %}
                     </ul>
@@ -281,9 +299,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
-    $('#security').change(function() {
-        alert($('#security').val())
-    });
-</script>
+<script src="{{ url_for('static', filename='js/Host.js') }}"></script>
 {% endblock %}
