@@ -19,9 +19,10 @@ host_view = Blueprint('host_view', __name__, template_folder='templates')
 @host_view.route('/', methods=['GET'])
 @host_view.route('/list', methods=['GET'])
 @login_required
-def list():
+def index():
     return render_template('host/host-list.html',
-                           hosts=HostService().find_all_order_by_create_time_desc_and_user(current_user))
+                           hosts=HostService().find_all_order_by_create_time_desc_and_user(current_user),
+                           active_menu='host')
 
 
 @host_view.route('/cmcd/', defaults={'host_id': 0}, methods=['GET', 'POST', 'PUT'])
@@ -77,11 +78,11 @@ def create_modfiy_copy_delete(host_id=int):
                     return redirect(url_for('host_view.create_modfiy_copy_delete', host_id=host_id, method=method))
                 else:
                     return redirect(url_for('host_view.create_modfiy_copy_delete', host_id=host_id))
-    return render_template('host/host.html', form=form, host=host, title=title)
+    return render_template('host/host.html', form=form, host=host, title=title, active_menu='host')
 
 
 @host_view.route('/delete/<int:host_id>', methods=['GET'])
 @login_required
 def delete(host_id=int):
     HostService().delete_one(host_id)
-    return redirect(url_for('host_view.list'))
+    return redirect(url_for('host_view.index', active_menu='host'))
