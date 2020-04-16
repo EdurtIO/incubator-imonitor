@@ -5,6 +5,7 @@
 # @File    : view_host.py
 
 from common.ssh import Ssh
+from common.utils import StringUtils
 from db.models import Host
 from flask import Blueprint, render_template, redirect, request, url_for, flash
 from flask_login import current_user
@@ -34,9 +35,7 @@ def create_modfiy_copy_delete(host_id=int):
     if (host_id <= 0) or host is None:
         title = '新建主机'
     else:
-        # # 重新渲染表单支持select标签回显数据
-        form.server.default = host.server
-
+        # 回显表单数据
         BuildModelToFrom(host=host, form=form)
         if (host_id > 0 and type is None):
             title = '修改主机'
@@ -74,7 +73,10 @@ def create_modfiy_copy_delete(host_id=int):
                 flash('用户 <{}> 连接主机 <{}> 失败，错误如下\n：{}'.format(host.hostname, host.username, ssh_connect.get_message()))
             else:
                 flash('用户 <{}> 连接主机 <{}> 成功！'.format(host.hostname, host.username))
-            return redirect(url_for('host_view.create_modfiy_copy_delete'))
+                if StringUtils().is_not_empty(method):
+                    return redirect(url_for('host_view.create_modfiy_copy_delete', host_id=host_id, method=method))
+                else:
+                    return redirect(url_for('host_view.create_modfiy_copy_delete', host_id=host_id))
     return render_template('host/host.html', form=form, host=host, title=title)
 
 
