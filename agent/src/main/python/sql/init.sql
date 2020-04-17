@@ -11,3 +11,8 @@ create table `monitor_cpu_host_relation` (
 alter table user add column website varchar(100) after password;
 alter table user add column description text after password;
 alter table user add column position varchar(100) after password;
+
+create table `user_logging_login_relation` (
+    `user_id` int comment '主机ID',
+    `logging_login_id` int comment '登录日志ID'
+) comment = '用户与登录日志关系表';
