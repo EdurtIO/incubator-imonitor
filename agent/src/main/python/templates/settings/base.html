@@ -26,6 +26,10 @@
 {% block page_content %}
 <div class="row">
 
+    <!-- 提示信息开始 -->
+    {% block alert %} {% endblock %}
+    <!-- 提示信息结束 -->
+
     <!-- 个人信息左侧菜单开始 -->
     <div class="col-lg-2 col-12 side-main offset">
         {% block settings_left_menu %}

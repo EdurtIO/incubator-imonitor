@@ -7,3 +7,7 @@ create table `monitor_cpu_host_relation` (
     `host_id` int comment '主机ID',
     `monitor_cpu_id` int comment 'CPU监控信息ID'
 ) comment = '主机与主机CPU监控关系表';
+
+alter table user add column website varchar(100) after password;
+alter table user add column description text after password;
+alter table user add column position varchar(100) after password;

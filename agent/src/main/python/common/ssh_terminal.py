@@ -6,10 +6,10 @@
 
 import asyncio
 import threading
-from tornado.websocket import WebSocketHandler
-
 from application_config import logger
 from services.service_host import HostService
+from tornado.websocket import WebSocketHandler
+
 from .ssh import Ssh
 
 
@@ -29,7 +29,7 @@ class SshTerminalHandler(WebSocketHandler):
                 data = self.ssh.read()
                 self.write_message(data)
             else:
-                logger.error('not connected from <%s> by <%s>', self.ssh.hostname, self.ssh.username)
+                logger.error('connected from <%s> by <%s> failure', self.ssh.hostname, self.ssh.username)
                 break
 
     def open(self, *args, **kwargs):
@@ -51,6 +51,7 @@ class SshTerminalHandler(WebSocketHandler):
                 self.ssh.send(message)
             else:
                 logger.error('not connected from <%s> by <%s>', self.ssh.hostname, self.ssh.username)
+                raise Exception('connected closed')
 
     def on_close(self):
         logger.info('socket closed from <%s> by <%s>', self.ssh.hostname, self.ssh.username)

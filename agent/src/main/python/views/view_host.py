@@ -16,7 +16,7 @@ from application_config import logger
 
 host_view = Blueprint('host_view', __name__, template_folder='templates')
 
-logger_type = 'host'
+logger_type = 'host_view'
 
 @host_view.route('/', methods=['GET'])
 @host_view.route('/list', methods=['GET'])
