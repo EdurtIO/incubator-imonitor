@@ -4,8 +4,10 @@
 # @Desc    : 远程连接脚本
 # @File    : ssh.py
 
-import io
 import paramiko
+
+import io
+from application_config import logger
 
 StringIO = io.StringIO
 from common.utils import StringUtils
@@ -24,19 +26,27 @@ class Ssh(object):
             self._ssh.load_system_host_keys()
             self._ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             if StringUtils().is_empty(source=self.password) and StringUtils().is_empty(source=self.private_key):
-                self._ssh.connect(hostname=self.hostname, port=self.port, username=self.username, password=None, pkey=None)
+                logger.info('connect <%s> from <%s> by open authorization', self.hostname, self.username)
+                self._ssh.connect(hostname=self.hostname, port=self.port, username=self.username, password=None,
+                                  pkey=None)
             elif StringUtils().is_not_empty(source=self.password) and StringUtils().is_empty(source=self.private_key):
-                self._ssh.connect(hostname=self.hostname, port=self.port, username=self.username, password=self.password,
+                logger.info('connect <%s> from <%s> by password authorization', self.hostname, self.username)
+                self._ssh.connect(hostname=self.hostname, port=self.port, username=self.username,
+                                  password=self.password,
                                   pkey=None)
             else:
+                logger.info('connect <%s> from <%s> by private key authorization', self.hostname, self.username)
                 self.private_key_file = StringIO()
                 self.private_key_file.write(self.private_key)
                 self.private_key_file.seek(0)
-                self.key_file = self.private_key_file and paramiko.RSAKey.from_private_key(self.private_key_file) or None
+                self.key_file = self.private_key_file and paramiko.RSAKey.from_private_key(
+                    self.private_key_file) or None
                 self._ssh.connect(hostname=hostname, port=port, username=username, password=None, pkey=self.key_file)
             self._chanel = self._ssh.invoke_shell(term='xterm')
             self.connected = True
+            logger.info('from <%s> by <%s> connected', self.hostname, self.username)
         except Exception as ex:
+            logger.error('connect <%s> from <%s> Authentication failed')
             self.message = ex
             self.connected = False
 
@@ -86,7 +96,10 @@ class Ssh(object):
         """
         重置窗口大小
         """
-        self._chanel.resize_pty(width=cols, height=rows)
+        if self.connected:
+            self._chanel.resize_pty(width=cols, height=rows)
+        else:
+            logger.error('not connected from <%s> by <%s>', self.hostname, self.username)
 
     def send(self, msg):
         self._chanel.send(msg)
@@ -107,6 +120,7 @@ class Ssh(object):
             return True
         else:
             return False
+
 
 if __name__ == '__main__':
     print(Ssh(hostname='localhost', port=22, username='root', password='123456', private_key=None))

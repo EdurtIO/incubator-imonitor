@@ -19,10 +19,6 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% block title %} {{title}} {% endblock %}
 
-{% block page_styles %}
-<script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
-{% endblock %}
-
 {% block page_content %}
 <div class="row">
     <div class="col-md-4 col-md-offset-4 col-lg-offset-4col-xl-offset-4">
@@ -247,5 +243,6 @@
 {% endblock %}
 
 {% block scripts %}
+{{ super() }}
 <script src="{{ url_for('static', filename='js/Host.js') }}"></script>
 {% endblock %}

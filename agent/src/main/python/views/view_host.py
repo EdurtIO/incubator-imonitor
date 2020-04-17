@@ -62,10 +62,11 @@ def create_modfiy_copy_delete(host_id=int):
             if method == 'PUT':
                 host.id = form.id.data
                 if HostService().update_one(host):
-                    return redirect('/host')
+                    print(1)
+                    return redirect(url_for('host_view.index'))
             elif request.method == 'POST':
                 if HostService().add(host):
-                    return redirect('/host')
+                    return redirect(url_for('host_view.index'))
         if form.test_connection.data:
             ssh_connect = Ssh(hostname=host.hostname, port=host.ssh_port, username=host.username,
                               password=host.password,

@@ -6,9 +6,10 @@
 
 import asyncio
 import threading
-from services.service_host import HostService
 from tornado.websocket import WebSocketHandler
 
+from application_config import logger
+from services.service_host import HostService
 from .ssh import Ssh
 
 
@@ -18,14 +19,18 @@ class SshTerminalHandler(WebSocketHandler):
         return True
 
     def initialize(self, *args, **kwargs):
-        print('Welcome To iMonitor Web Terminal')
-        print(args, kwargs)
+        logger.info('Welcome To iMonitor Web Terminal')
+        logger.info('login in params <%s>, kwargs <%s>', args, kwargs)
 
     def _reading(self):
         asyncio.set_event_loop(asyncio.new_event_loop())
         while True:
-            data = self.ssh.read()
-            self.write_message(data)
+            if self.ssh.connected:
+                data = self.ssh.read()
+                self.write_message(data)
+            else:
+                logger.error('not connected from <%s> by <%s>', self.ssh.hostname, self.ssh.username)
+                break
 
     def open(self, *args, **kwargs):
         if args:
@@ -42,7 +47,10 @@ class SshTerminalHandler(WebSocketHandler):
             cols, rows = message.split(':')[1].split(',')
             self.ssh.resize(int(cols), int(rows))
         else:
-            self.ssh.send(message)
+            if self.ssh.connected:
+                self.ssh.send(message)
+            else:
+                logger.error('not connected from <%s> by <%s>', self.ssh.hostname, self.ssh.username)
 
     def on_close(self):
-        print("WebSocket Closed")
+        logger.info('socket closed from <%s> by <%s>', self.ssh.hostname, self.ssh.username)
