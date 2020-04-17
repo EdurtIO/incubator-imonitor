@@ -35,3 +35,20 @@ class LoginLoggingService:
         except Exception as ex:
             logger.info('execute update %s starting primary key <%s> error, reason <%s>', logger_type, user_id, ex)
             return False
+
+    def find_all_order_by_user_and_login_time_desc(self, user_id=int):
+        try:
+            logger.info('execute select %s starting primary key <%s>', logger_type, user_id)
+            sql = 'select ll.id as id, ll.login_time as login_time, ll.position as position, ll.ip as ip, ' \
+                  'll.client as client, ll.status as status, ll.reason as reason, u.name as username from logging_login as ll ' \
+                  'left join user_logging_login_relation as ullr on ll.id = ullr.logging_login_id ' \
+                  'left join user as u on u.id = ullr.user_id ' \
+                  'where u.id = :user_id ' \
+                  'order by ll.login_time desc '
+            result = db.engine.execute(
+                text(sql), {'user_id': user_id}
+            )
+            return [dict(row) for row in result]
+        except Exception as ex:
+            logger.info('execute select %s starting primary key <%s> error, reason <%s>', logger_type, user_id, ex)
+            return None

@@ -41,6 +41,8 @@
                        class="list-group-item {% if active_menu == 'profile' %} active {% endif %}">资料</a>
                     <a href="{{ url_for('settings_view.security') }}"
                        class="list-group-item {% if active_menu == 'security' %} active {% endif %}">安全</a>
+                    <a href="{{ url_for('settings_view.logging_login') }}"
+                       class="list-group-item {% if active_menu == 'logging-login' %} active {% endif %}">登录日志</a>
                 </div>
             </div>
         </div>

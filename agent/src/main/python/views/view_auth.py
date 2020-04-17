@@ -45,9 +45,9 @@ def signin():
                 logging_login.status = True
                 LoginLoggingService().add(model=logging_login, user_id=current_user.id)
                 return redirect(next_page or url_for('dashboard_view.index'))
-        flash('无效的账号/密码')
+        flash('输入的密码错误')
         logging_login.status = False
-        logging_login.reason = '无效的账号/密码'
+        logging_login.reason = '输入的密码错误'
         LoginLoggingService().add(model=logging_login, user_id=user.id)
         return redirect(url_for('auth_view.signin'))
     return render_template('auth/signin.html', form=login_form, title='用户登录')

@@ -8,6 +8,7 @@ from db.models import User
 from flask import render_template, request, Blueprint, flash, redirect, url_for
 from flask_login import login_required, current_user
 from form.form_settings import SettingsProfileForm, BuildModelToFrom, SettingsSecurityForm
+from services.service_logging_login import LoginLoggingService
 from services.service_user import UserService
 
 logger_type = 'settings_view'
@@ -64,3 +65,11 @@ def security():
         alter_type = request.args.get('alert_type')
     return render_template('settings/settings-security.html', title='安全设置', active_menu='security', form=form,
                            alert_type=alter_type)
+
+
+@settings_view.route('/logging_login', methods=['GET'])
+@login_required
+def logging_login():
+    loggings = LoginLoggingService().find_all_order_by_user_and_login_time_desc(current_user.id)
+    return render_template('settings/settings-logging-login.html', title='登录日志', active_menu='logging-login',
+                           loggings=loggings)
