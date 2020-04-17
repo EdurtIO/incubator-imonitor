@@ -7,8 +7,7 @@ from application_config import logger
 from db.models import User
 from flask import render_template, request, Blueprint, flash, redirect, url_for
 from flask_login import login_required, current_user
-from form.form_settings import SettingsProfileForm, BuildModelToFrom
-
+from form.form_settings import SettingsProfileForm, BuildModelToFrom, SettingsSecurityForm
 from services.service_user import UserService
 
 logger_type = 'user_view'
@@ -42,3 +41,26 @@ def profile(user_id=int):
         alter_type = request.args.get('alert_type')
     return render_template('settings/settings-profile.html', user_id=user_id, title='个人资料', form_profile=form_profile,
                            active_menu='profile', user=user, alert_type=alter_type)
+
+
+@settings_view.route('/security', methods=['GET', 'POST'])
+@login_required
+def security():
+    form = SettingsSecurityForm()
+    if form.validate_on_submit():
+        old_password = request.form.get('old_password')
+        password = request.form.get('password')
+        if current_user.check_password(old_password):
+            current_user.password = password
+            if UserService().update_password(user=current_user):
+                flash('密码更新成功！')
+                return redirect(url_for('settings_view.security', alert_type='success'))
+        else:
+            flash('原密码输入错误')
+            return redirect(url_for('settings_view.security'))
+    if request.args.get('alert_type') is None:
+        alter_type = 'danger'
+    else:
+        alter_type = request.args.get('alert_type')
+    return render_template('settings/settings-security.html', title='安全设置', active_menu='security', form=form,
+                           alert_type=alter_type)

@@ -47,3 +47,19 @@ class UserService:
             logger.info('execute update %s starting primary key <%s> error, reason <%s>', logger_type, user.id, ex)
             flash('更新数据失败, 错误如下: \r\n{}'.format(ex))
             return False
+
+    def update_password(self, user=User):
+        try:
+            logger.info('execute update %s starting primary key <%s>', logger_type, user.id)
+            user.set_password(user.password)
+            sql = 'update user set password = :password where id = :id'
+            db.engine.execute(
+                text(sql),
+                {'password': user.password, 'id': user.id}
+            )
+            logger.info('execute update %s starting primary key <%s> success', logger_type, user.id)
+            return True
+        except Exception as ex:
+            logger.info('execute update %s starting primary key <%s> error, reason <%s>', logger_type, user.id, ex)
+            flash('更新数据失败, 错误如下: \r\n{}'.format(ex))
+            return False

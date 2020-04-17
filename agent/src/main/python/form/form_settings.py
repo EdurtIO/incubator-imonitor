@@ -6,7 +6,8 @@
 
 from db.models import User
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField
+from wtforms import StringField, SubmitField, TextAreaField, PasswordField
+from wtforms.validators import DataRequired, Length, EqualTo
 
 
 class SettingsProfileForm(FlaskForm):
@@ -26,3 +27,10 @@ class BuildModelToFrom:
         form.description.data = user.description
         form.position.data = user.position
         form.website.data = user.website
+
+
+class SettingsSecurityForm(FlaskForm):
+    old_password = StringField(u'旧密码')
+    password = PasswordField('密码', validators=[DataRequired(), Length(min=6, message='请输入有效的密码至少6位及以上')])
+    confirm_password = PasswordField('确认密码', validators=[DataRequired(), EqualTo('password', message='两次输入的密码不一致')])
+    submit = SubmitField(u'更新密码', render_kw={'class': 'btn btn-default', 'size': 'mini'})
