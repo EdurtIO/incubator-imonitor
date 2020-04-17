@@ -37,7 +37,7 @@
             <hr/>
 
             {% if host %}
-            {{ form.id(class='form-control', placeholder='请输入服务名称', value=host.id) }}
+            {{ form.id(class='form-control', value=host.id) }}
             {% endif %}
 
             <div class="form-group {% if form.server_name.errors %} has-error {% endif %}">

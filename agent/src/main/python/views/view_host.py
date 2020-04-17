@@ -12,9 +12,11 @@ from flask_login import current_user
 from flask_login import login_required
 from form.form_host import HostForm, BuildModelToFrom
 from services.service_host import HostService
+from application_config import logger
 
 host_view = Blueprint('host_view', __name__, template_folder='templates')
 
+logger_type = 'host'
 
 @host_view.route('/', methods=['GET'])
 @host_view.route('/list', methods=['GET'])
@@ -44,25 +46,29 @@ def create_modfiy_copy_delete(host_id=int):
             title = '复制主机'
     if form.validate_on_submit():
         host = Host()
-        host.hostname = form.hostname.data
+        host.hostname = request.form.get('hostname')
         host.active = True
-        host.username = form.username.data
-        host.password = form.security_password.data
-        host.command = form.command.data
-        host.command_start = form.command_start.data
-        host.command_stop = form.command_stop.data
-        host.command_restart = form.command_restart.data
-        host.server_name = form.server_name.data
-        host.server_type = form.server_type.data
-        host.server = form.server.data
+        host.username = request.form.get('username')
+        host.password = request.form.get('security_password')
+        host.command = request.form.get('command')
+        host.command_start = request.form.get('command_start')
+        host.command_stop = request.form.get('command_stop')
+        host.command_restart = request.form.get('command_restart')
+        host.server_name = request.form.get('server_name')
+        host.server_type = request.form.get('server_type')
+        host.server = request.form.get('server')
         host.users = [current_user]
-        host.ssh_port = form.ssh_port.data
+        host.ssh_port = request.form.get('ssh_port')
         host.key = form.security_key.data
         if form.submit.data:
             if method == 'PUT':
-                host.id = form.id.data
+                host.id = host_id
+                if request.form.get('security') == '1':
+                    host.key = None
+                else:
+                    host.password = None
+                logger.info('execute update operation type <%s> primary key <%s>', logger_type, host_id)
                 if HostService().update_one(host):
-                    print(1)
                     return redirect(url_for('host_view.index'))
             elif request.method == 'POST':
                 if HostService().add(host):
@@ -72,7 +78,7 @@ def create_modfiy_copy_delete(host_id=int):
                               password=host.password,
                               private_key=host.key)
             if ssh_connect.check_connect() is False:
-                flash('用户 <{}> 连接主机 <{}> 失败，错误如下\n：{}'.format(host.hostname, host.username, ssh_connect.get_message()))
+                flash('用户 <{}> 连接主机 <{}> 失败，错误如下：\r\n{}'.format(host.hostname, host.username, ssh_connect.get_message()))
             else:
                 flash('用户 <{}> 连接主机 <{}> 成功！'.format(host.hostname, host.username))
                 if StringUtils().is_not_empty(method):
