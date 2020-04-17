@@ -10,7 +10,7 @@ from flask_login import login_required, current_user
 from form.form_settings import SettingsProfileForm, BuildModelToFrom, SettingsSecurityForm
 from services.service_user import UserService
 
-logger_type = 'user_view'
+logger_type = 'settings_view'
 
 settings_view = Blueprint('settings_view', __name__, template_folder='templates')
 

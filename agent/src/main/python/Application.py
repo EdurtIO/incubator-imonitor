@@ -24,8 +24,11 @@ app.register_blueprint(chart_view, url_prefix='/chart')
 app.register_blueprint(settings_view, url_prefix='/settings')
 
 from api.api_chart import chart_api
+from api.api_monitor import monitor_api
 
 app.register_blueprint(chart_api, url_prefix='/api/chart')
+app.register_blueprint(monitor_api, url_prefix='/api/monitor')
+
 
 from data.data_chart_host import chart_host_data
 

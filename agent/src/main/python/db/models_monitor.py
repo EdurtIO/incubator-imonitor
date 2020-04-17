@@ -4,9 +4,9 @@
 # @Desc    : 实体类
 # @File    : models_monitor.py
 import datetime
-from sqlalchemy.dialects.mysql import DOUBLE
-
 from application_config import db
+from sqlalchemy.dialects.mysql import DOUBLE
+from sqlalchemy.orm import class_mapper
 
 
 class MonitorMemory(db.Model):
@@ -34,6 +34,22 @@ class MonitorCpu(db.Model):
     idle = db.Column(db.String(20), nullable=False, comment='计算空闲时间')
     rate = db.Column(DOUBLE(10, 4), nullable=False, comment='利用率')
     create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
+
+
+class MonitorNetworkIO(db.Model):
+
+    __tablename__ = 'monitor_network_io'
+    __table_args__ = {"extend_existing": True}
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), nullable=False, comment='网卡名称')
+    receive = db.Column(DOUBLE(10, 4), nullable=False, comment='接受速度(单位KB/s)')
+    transmit = db.Column(DOUBLE(10, 4), nullable=False, comment='发送速度(单位KB/s)')
+    create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
+
+    def as_dict(obj):
+        # return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        # 上面的有缺陷，表字段和属性不一致会有问题
+        return dict((col.name, getattr(obj, col.name)) for col in class_mapper(obj.__class__).mapped_table.c)
 
 
 db.create_all()
