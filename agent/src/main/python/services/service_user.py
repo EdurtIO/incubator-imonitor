@@ -4,13 +4,13 @@
 # @Desc    : host数据服务
 # @File    : service_host.py
 
-from application_config import db
-from application_config import logger
+import datetime
+from application_config import db, logger
 from db.models import User
 from flask import flash
 from sqlalchemy import text
 
-logger_type = 'user_service'
+logger_type = 'user'
 
 
 class UserService:
@@ -62,4 +62,19 @@ class UserService:
         except Exception as ex:
             logger.info('execute update %s starting primary key <%s> error, reason <%s>', logger_type, user.id, ex)
             flash('更新数据失败, 错误如下: \r\n{}'.format(ex))
+            return False
+
+    def update_last_login_time(self, user=User):
+        try:
+            logger.info('execute update %s starting primary key <%s>', logger_type, user.id)
+            user.last_login_time = datetime.datetime.now()
+            sql = 'update user set last_login_time = :last_login_time where id = :id'
+            db.engine.execute(
+                text(sql),
+                {'last_login_time': user.last_login_time, 'id': user.id}
+            )
+            logger.info('execute update %s starting primary key <%s> success', logger_type, user.id)
+            return True
+        except Exception as ex:
+            logger.info('execute update %s starting primary key <%s> error, reason <%s>', logger_type, user.id, ex)
             return False

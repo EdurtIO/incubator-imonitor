@@ -33,6 +33,7 @@ def signin():
             user = UserService().find_by_email(email=email)
             if user and user.check_password(password=password):
                 login_user(user)
+                UserService().update_last_login_time(user)
                 next_page = request.args.get('next')
                 return redirect(next_page or url_for('dashboard_view.index'))
         flash('无效的账号/密码')
