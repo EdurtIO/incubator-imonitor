@@ -34,3 +34,7 @@
 .mt10 {
     margin-top: 10px;
 }
+
+.btn-xs-custom {
+    padding: 1px 0px;
+}

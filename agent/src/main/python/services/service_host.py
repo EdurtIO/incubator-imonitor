@@ -4,11 +4,10 @@
 # @Desc    : host数据服务
 # @File    : service_host.py
 
-from flask import flash
-from sqlalchemy import desc, text
-
 from application_config import db, logger
 from db.models import Host, User
+from flask import flash
+from sqlalchemy import desc, text
 
 logger_type = 'host_service'
 
@@ -24,6 +23,9 @@ class HostService:
 
     def find_one(self, id=int):
         return Host().query.filter_by(id=id).first()
+
+    def find_by_email(self, email):
+        return Host().query.filter_by(email=email).first()
 
     def find_all_order_by_create_time_desc(self):
         return Host().query.order_by(desc(Host.create_time)).all()

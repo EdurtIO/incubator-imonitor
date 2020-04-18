@@ -49,8 +49,9 @@
                     {% if logging.status %}
                     <td>登录成功</td>
                     {% else %}
-                    <td>
-                        <span data-toggle="tooltip" data-placement="top" title="{{ logging.reason }}">登录失败</span>
+                    <td class="danger">
+                        <span data-toggle="tooltip" data-placement="top" title="{{ logging.reason }}">登录失败 <i
+                                class="fas fa-exclamation-triangle"></i></span>
                     </td>
                     {% endif %}
                 </tr>

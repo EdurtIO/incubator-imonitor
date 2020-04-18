@@ -6,13 +6,14 @@
 
 from db.models import User
 from flask_wtf import FlaskForm
+from imforms.validators.validator_repeat import ValidatorEmailRepeat
 from wtforms import StringField, SubmitField, TextAreaField, PasswordField
 from wtforms.validators import DataRequired, Length, EqualTo
 
 
 class SettingsProfileForm(FlaskForm):
     username = StringField(u'名称')
-    email = StringField(u'电子邮件')
+    email = StringField(u'电子邮件', validators=[ValidatorEmailRepeat()])
     description = TextAreaField(u'描述信息')
     website = StringField(u'网址')
     position = StringField(u'位置')
