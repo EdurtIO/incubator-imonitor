@@ -4,27 +4,31 @@
 # @Desc    : web程序入口脚本
 # @File    : Application.py
 import datetime
-from flask import render_template
-from flask_apscheduler import APScheduler
-
 from ImonitorService import MonitorService
 from application_config import app, codes
+from flask import render_template
+from flask_apscheduler import APScheduler
 # 注册自定义视图
 from views.view_auth import auth_view
 from views.view_chart import chart_view
 from views.view_dashboard import dashboard_view
 from views.view_host import host_view
 from views.view_terminal import terminal_view
+from views.view_settings import settings_view
 
 app.register_blueprint(host_view, url_prefix='/host')
 app.register_blueprint(auth_view, url_prefix='/auth')
 app.register_blueprint(dashboard_view, url_prefix='/dashboard')
 app.register_blueprint(terminal_view, url_prefix='/terminal')
 app.register_blueprint(chart_view, url_prefix='/chart')
+app.register_blueprint(settings_view, url_prefix='/settings')
 
 from api.api_chart import chart_api
+from api.api_monitor import monitor_api
 
 app.register_blueprint(chart_api, url_prefix='/api/chart')
+app.register_blueprint(monitor_api, url_prefix='/api/monitor')
+
 
 from data.data_chart_host import chart_host_data
 
@@ -39,7 +43,7 @@ from tornado.wsgi import WSGIContainer
 
 app_wsgi = WSGIContainer(app)
 handlers = [
-    (r"/websocket/(.*)", SshTerminalHandler, {}),  # {'term_manager': term_manager}),
+    (r"/websocket/(.*)/(.*)", SshTerminalHandler, {}),  # {'term_manager': term_manager}),
     (r"/(.*)", FallbackHandler, dict(fallback=app_wsgi))
 ]
 
@@ -53,7 +57,7 @@ class SchedulerConfig(object):
             'func': '__main__:monitor_service_heartbeat',
             # 'args': (1, 2),
             'trigger': 'interval',
-            'seconds': 60,
+            'seconds': 300,
             'max_instances': 1
         }
     ]

@@ -3,14 +3,16 @@
 # @Time    : 2020-04-08 16:40:20
 # @Desc    : 授权配置
 # @File    : view_auth.py
-from flask import redirect, render_template, flash, Blueprint, request, url_for
-from flask_login import login_user, current_user, logout_user
-
 from application_config import app
 from application_config import login_manager
 from bin.assets import compile_auth_assets
+from db.model_logging_login import LoginLogging
 from db.models import User
+from flask import redirect, render_template, flash, Blueprint, url_for
+from flask import request
+from flask_login import login_user, current_user, logout_user
 from form.form_auth import AuthSignin, AuthSignup
+from services.service_logging_login import LoginLoggingService
 from services.service_user import UserService
 
 auth_view = Blueprint('auth_view', __name__, template_folder='templates', static_folder='static')
@@ -23,8 +25,13 @@ def signin():
     """
     登录视图
     """
+    logging_login = LoginLogging()
+    logging_login.ip = request.remote_addr
     if current_user.is_authenticated:
-        return redirect(url_for('host_view.list'))
+        logging_login.status = True
+        logging_login.reason = '用户已登录'
+        LoginLoggingService().add(model=logging_login, user_id=current_user.id)
+        return redirect(url_for('dashboard_view.index'))
     login_form = AuthSignin()
     if request.method == 'POST':
         if login_form.validate_on_submit():
@@ -33,9 +40,15 @@ def signin():
             user = UserService().find_by_email(email=email)
             if user and user.check_password(password=password):
                 login_user(user)
+                UserService().update_last_login_time(user)
                 next_page = request.args.get('next')
+                logging_login.status = True
+                LoginLoggingService().add(model=logging_login, user_id=current_user.id)
                 return redirect(next_page or url_for('dashboard_view.index'))
-        flash('无效的账号/密码')
+        flash('输入的密码错误')
+        logging_login.status = False
+        logging_login.reason = '输入的密码错误'
+        LoginLoggingService().add(model=logging_login, user_id=user.id)
         return redirect(url_for('auth_view.signin'))
     return render_template('auth/signin.html', form=login_form, title='用户登录')
 

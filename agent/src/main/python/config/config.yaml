@@ -6,3 +6,5 @@ server:
     uri: mysql+pymysql://root:123456@localhost:3306/test
     print-sql: False
     track: True
+config:
+  avatar: /Users/shicheng/Documents/Code/EdurtIO/incubator-imonitor/agent/src/main/python/static/imgs/avatar/

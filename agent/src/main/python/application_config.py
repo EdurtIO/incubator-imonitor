@@ -4,7 +4,6 @@
 # @Desc    : app配置
 # @File    : application_config.py
 import os
-import sys
 
 import yaml
 from flask import Flask
@@ -37,9 +36,16 @@ bootstrap = Bootstrap(app)
 moment = Moment(app)
 db = SQLAlchemy(app)
 
-## 启用权限框架
+# 启用权限框架
 from flask_login import LoginManager
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+# 日志
+import logging
+
+FORMAT = '%(asctime)-15s - %(name)s - %(filename)s - [line:%(lineno)d] - %(levelname)s - %(message)s'
+logging.basicConfig(format=FORMAT)
+logger = logging.getLogger('iMonitor')
+logger.setLevel(logging.DEBUG)

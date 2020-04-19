@@ -4,10 +4,12 @@
 # @Desc    : host数据服务
 # @File    : service_host.py
 
+from application_config import db, logger
+from db.models import Host, User
+from flask import flash
 from sqlalchemy import desc, text
 
-from application_config import db
-from db.models import Host, User
+logger_type = 'host_service'
 
 
 class HostService:
@@ -21,6 +23,9 @@ class HostService:
 
     def find_one(self, id=int):
         return Host().query.filter_by(id=id).first()
+
+    def find_by_email(self, email):
+        return Host().query.filter_by(email=email).first()
 
     def find_all_order_by_create_time_desc(self):
         return Host().query.order_by(desc(Host.create_time)).all()
@@ -60,20 +65,24 @@ class HostService:
 
     def update_one(self, host=Host):
         try:
-            sql = 'update `host` set hostname = :hostname, username = :username, password = :password,' \
-                  'server_name = :server_name, server_type = :server_type, server = :server, command = :command,' \
+            logger.info('execute update %s starting primary key <%s>', logger_type, host.id)
+            sql = 'update `host` set hostname = :hostname, username = :username, password = :password, `key` = :key, ' \
+                  'server_name = :server_name, server_type = :server_type, server = :server, command = :command, ' \
                   'command_start = :command_start, command_stop = :command_stop, command_restart = :command_restart,' \
                   'message = :message, ssh_port = :ssh_port where id = :id'
             db.engine.execute(
                 text(sql), {'hostname': host.hostname, 'username': host.username, 'password': host.password,
-                            'server_name': host.server_name,
+                            'key': host.key, 'server_name': host.server_name,
                             'server_type': host.server_type, 'server': host.server, 'command': host.command,
                             'command_start': host.command_start,
                             'command_stop': host.command_stop, 'command_restart': host.command_restart,
-                            'message': host.message, 'id': host.id, 'ssh_port': host.ssh_port}
+                            'message': host.message, 'ssh_port': host.ssh_port, 'id': host.id}
             )
+            logger.info('execute update %s starting primary key <%s> success', logger_type, host.id)
             return True
         except Exception as ex:
+            logger.info('execute update %s starting primary key <%s> error, reason <%s>', logger_type, host.id, ex)
+            flash('更新数据失败, 错误如下: \r\n{}'.format(ex))
             return False
 
     def delete_one(self, id=int):

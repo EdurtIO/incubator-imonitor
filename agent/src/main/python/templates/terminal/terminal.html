@@ -56,7 +56,8 @@
     options = {
         id: 'terminal-container',
         show_banner: true,
-        data: {{server_id}}
+        data: {{server_id}},
+        user: {{current_user.id}}
     }
     TerminalEditor.init(options);
 

@@ -5,8 +5,9 @@
 # @File    : monitor.py
 
 import re
+from application_config import logger
+from db.models_monitor import MonitorMemory, MonitorCpu, MonitorNetworkIO
 
-from db.models_monitor import MonitorMemory, MonitorCpu
 from .utils import CommandUtils
 
 
@@ -20,7 +21,6 @@ class MonitorUtils:
         try:
             memory = MonitorMemory()
             child = CommandUtils().command_ssh_remote_password(username, hostname, password, "cat /proc/meminfo")
-            # child.expect(pexpect.EOF)
             memory_values = re.findall("(\d+)\ kB", str(child.before))
             memory_total = memory_values[0]
             memory_free = memory_values[1]
@@ -29,7 +29,6 @@ class MonitorUtils:
             memory_swap_cached = memory_values[4]
             memory_swap_total = memory_values[13]
             memory_swap_free = memory_values[14]
-
             memory.total = memory_total
             memory.free = memory_free
             memory.buffers = memory_buffers
@@ -37,26 +36,15 @@ class MonitorUtils:
             memory.swap_cached = memory_swap_cached
             memory.swap_total = memory_swap_total
             memory.swap_free = memory_swap_free
-            # print( '******************************内存监控*********************************')
-            # print( "*******************时间：", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), "******************")
-            # print ("总内存：", memory_total)
-            # print ("空闲内存：", memory_free)
-            # print ("给文件的缓冲大小:", memory_buffers)
-            # print ("高速缓冲存储器使用的大小:", memory_cached)
-            # print ("被高速缓冲存储用的交换空间大小:", memory_swap_cached)
-            # print ("给文件的缓冲大小:", memory_buffers)
             if 0 == int(memory_swap_total):
-                # print( u"交换内存总共为：0")
                 memory.swap_rate = 0
             else:
                 memory_swap_rate = 100 - 100 * int(memory_swap_free) / float(memory_swap_total)
-                # print(u"交换内存利用率：", memory_swap_rate)
                 memory.swap_rate = memory_swap_rate
             memory_free_temp = int(memory_free) + int(memory_buffers) + int(memory_cached)
             memory_used_temp = int(memory_total) - memory_free_temp
             memory_rate = memory_used_temp / float(memory_total)
             memory.rate = round(memory_rate, 4)
-            # print(u"内存利用率：", str("%.2f" % memory_rate), "%")
             return memory
         except Exception as ex:
             print (ex)
@@ -88,5 +76,28 @@ class MonitorUtils:
             cpu.rate = round((Tol - Idle) / Tol, 4)
             return cpu
         except Exception as ex:
-            print (ex)
+            print(ex)
+            return None
+
+    def network_io(self, username, hostname, password):
+        """
+        统计当前节点服务器网络IO信息
+        :return: 网络IO信息
+        """
+        try:
+            logger.info('connect <%s> from <%s>', hostname, username)
+            child = CommandUtils().command_ssh_remote_password(username, hostname, password, "cat /proc/net/dev")
+            logger.info('from <%s> by <%s> connected', hostname, username)
+            temp = child.before.decode().strip().split('\n')
+            nios = []
+            for line in temp[2:]:
+                network_io = MonitorNetworkIO()
+                line = line.split(":")
+                network_io.name = line[0].strip()
+                network_io.receive = round(float(line[1].split()[0]) / (1024.0 * 1024.0), 2)
+                network_io.transmit = round(float(line[1].split()[8]) / (1024.0 * 1024.0), 2)
+                nios.append(network_io)
+            return nios
+        except Exception as ex:
+            logger.error('connect <%s> from <%s> failure, reason <%s>', hostname, username, ex)
             return None

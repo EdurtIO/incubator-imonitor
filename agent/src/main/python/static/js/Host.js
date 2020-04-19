@@ -15,36 +15,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-.up {
-    color: green;
+
+function security_show_hide(value) {
+    switch (value) {
+        case '1':
+            $('#security-password').show()
+            $('#security-key').hide()
+            break
+        case '0':
+            $('#security-password').hide()
+            $('#security-key').show()
+            break
+    }
 }
 
-.down {
-    color: red;
-}
-
-.down_background {
-    background-color: aquamarine;
-}
-
-.right {
-    float: right;
-}
-
-.mt10 {
-    margin-top: 10px;
-}
-
-.btn-xs-custom {
-    padding: 1px 0px;
-}
-
-.img-w200 {
-    width: 200px;
-    height: 200px;
-}
-
-.avatar-w20 {
-    width: 20px;
-    height: 18px;
-}
+// 初始化判断主机登录模式
+security_show_hide($('input[name="security"]:checked').val())
+// 绑定登录模式事件
+$('input[name="security"]').change(function () {
+    security_show_hide($(this).val())
+});

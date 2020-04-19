@@ -4,10 +4,9 @@
 # @Desc    : host数据服务
 # @File    : service_host.py
 
-from sqlalchemy import desc, text
-
 from application_config import db
 from db.models_monitor import MonitorMemory
+from sqlalchemy import desc, text
 
 
 class MonitorMemoryService:
@@ -47,8 +46,7 @@ class MonitorMemoryService:
             result = db.engine.execute(
                 text(sql), {'host_id': host_id}
             )
-            names = [row for row in result]
-            return names
+            return [dict(row) for row in result]
         except Exception as ex:
             return None
 

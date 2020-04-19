@@ -19,3 +19,4 @@ pom.xml.versionsBackup
 venv
 .webassets-cache/
 
+agent/src/main/python/static/imgs/avatar

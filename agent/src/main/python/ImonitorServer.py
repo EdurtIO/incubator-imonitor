@@ -113,27 +113,6 @@ class MonitorServer:
         print ("分子是正在运行的进程数,分母为总进程数：", loadavgs[3])
         print ("最近运行的进程id：", loadavgs[4])
 
-    def network_io(self):
-        """
-        统计当前节点服务器网络IO信息
-        :return: 网络IO信息
-        """
-        child = RemoteCommand.command_ssh_remote(self.username, self.hostname, self.password, "cat /proc/net/dev")
-        child.expect(pexpect.EOF)
-        network_data = child.before
-        li = network_data.strip().split('\n')
-        print ('************************获取网络接口的输入和输出监控****************************')
-        print ("*******************时间：", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), "******************")
-        net = {}
-        for line in li[2:]:
-            line = line.split(":")
-            eth_name = line[0].strip()
-            network_io = {}
-            network_io['Receive'] = round(float(line[1].split()[0]) / (1024.0 * 1024.0), 2)
-            network_io['Transmit'] = round(float(line[1].split()[8]) / (1024.0 * 1024.0), 2)
-            net[eth_name] = network_io
-        print (net)
-
     def port(self):
         """
         统计当前节点服务器端口信息

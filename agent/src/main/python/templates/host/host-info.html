@@ -1,0 +1,111 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+{% extends "host/base.html" %}
+
+{% block page_styles %}
+<script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+{% endblock %}
+
+{% block alert %}
+{% for message in get_flashed_messages() %}
+<div class="alert alert-{{alert_type}}">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block settings_right_content %}
+<div class="panel panel-default" style="margin-bottom: 0px; border: 0px;">
+    <div class="panel-heading">基本信息</div>
+    <div class="panel-body">
+        <div class="col-lg-12 col-12 conternt-main offset">
+            <div class="col-lg-6 col-12 conternt-main offset">
+                <div class="col-lg-3 col-12 conternt-main offset">
+                    主机名
+                </div>
+                <div class="col-lg-9 col-12 conternt-main offset">
+                    {{host.hostname}}
+                </div>
+            </div>
+            <div class="col-lg-6 col-12 conternt-main offset">
+                <div class="col-lg-3 col-12 conternt-main offset">
+                    端口
+                </div>
+                <div class="col-lg-9 col-12 conternt-main offset">
+                    {{host.ssh_port}}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-12 conternt-main offset" style="margin-top: 10px;">
+            <div class="col-lg-6 col-12 conternt-main offset">
+                <div class="col-lg-3 col-12 conternt-main offset">
+                    用户名
+                </div>
+                <div class="col-lg-9 col-12 conternt-main offset">
+                    {{host.username}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default" style="margin-bottom: 0px; border: 0px;">
+    <div class="panel-heading">监控图表</div>
+    <div class="panel-body">
+        <div class="col-lg-12 col-12 conternt-main offset">
+            <div class="col-lg-6 col-12 conternt-main offset">
+                <div id="memory_line" class="row" style="height: 300px;"></div>
+                <script>
+                    $(
+                        function () {
+                            var chart = echarts.init(document.getElementById('memory_line'), 'white', {renderer: 'canvas'});
+                            $.ajax({
+                                type: "GET",
+                                url: "/data/chart/host/{{host_id}}/memory/rate",
+                                dataType: 'json',
+                                success: function (result) {
+                                    chart.setOption(result);
+                                }
+                            });
+                        }
+                    )
+                </script>
+            </div>
+            <div class="col-lg-6 col-12 conternt-main offset">
+                <div id="cpu_line" class="row" style="height: 300px;"></div>
+                <script>
+                    $(
+                        function () {
+                            var chart = echarts.init(document.getElementById('cpu_line'), 'white', {renderer: 'canvas'});
+                            $.ajax({
+                                type: "GET",
+                                url: "/data/chart/host/{{host_id}}/cpu/rate",
+                                dataType: 'json',
+                                success: function (result) {
+                                    chart.setOption(result);
+                                }
+                            });
+                        }
+                    )
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

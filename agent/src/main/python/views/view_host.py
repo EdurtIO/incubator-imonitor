@@ -4,24 +4,30 @@
 # @Desc    : 主机视图脚本
 # @File    : view_host.py
 
+from application_config import logger
+from common.ssh import Ssh
+from common.utils import StringUtils
+from db.models import Host
 from flask import Blueprint, render_template, redirect, request, url_for, flash
 from flask_login import current_user
 from flask_login import login_required
-
-from common.utils import CommandUtils
-from db.models import Host
-from form.form_host import host_create_form
+from form.form_host import HostForm, BuildModelToFrom
+from services.service_command_execute import CommandExecuteService
 from services.service_host import HostService
+from services.service_host_connection import HostConnectionService
 
 host_view = Blueprint('host_view', __name__, template_folder='templates')
+
+logger_type = 'host_view'
 
 
 @host_view.route('/', methods=['GET'])
 @host_view.route('/list', methods=['GET'])
 @login_required
-def list():
+def index():
     return render_template('host/host-list.html',
-                           hosts=HostService().find_all_order_by_create_time_desc_and_user(current_user))
+                           hosts=HostService().find_all_order_by_create_time_desc_and_user(current_user),
+                           active_menu='host')
 
 
 @host_view.route('/cmcd/', defaults={'host_id': 0}, methods=['GET', 'POST', 'PUT'])
@@ -30,51 +36,84 @@ def list():
 def create_modfiy_copy_delete(host_id=int):
     type = request.args.get('type')
     method = request.args.get('method')
-    form = host_create_form()
+    form = HostForm()
     host = HostService().find_one(id=host_id)
     if (host_id <= 0) or host is None:
         title = '新建主机'
     else:
-        # # 重新渲染表单支持select标签回显数据
-        form.server.default = host.server
-        # form.process(form)
+        # 回显表单数据
+        BuildModelToFrom(host=host, form=form)
         if (host_id > 0 and type is None):
             title = '修改主机'
         else:
             title = '复制主机'
     if form.validate_on_submit():
         host = Host()
-        host.hostname = form.hostname.data
+        host.hostname = request.form.get('hostname')
         host.active = True
-        host.username = form.username.data
-        host.password = form.password.data
-        host.command = form.command.data
-        host.command_start = form.command_start.data
-        host.command_stop = form.command_stop.data
-        host.command_restart = form.command_restart.data
-        host.server_name = form.server_name.data
-        host.server_type = form.server_type.data
-        host.server = form.server.data
+        host.username = request.form.get('username')
+        host.password = request.form.get('security_password')
+        host.command = request.form.get('command')
+        host.command_start = request.form.get('command_start')
+        host.command_stop = request.form.get('command_stop')
+        host.command_restart = request.form.get('command_restart')
+        host.server_name = request.form.get('server_name')
+        host.server_type = request.form.get('server_type')
+        host.server = request.form.get('server')
         host.users = [current_user]
-        host.ssh_port = form.ssh_port.data
+        host.ssh_port = request.form.get('ssh_port')
+        host.key = form.security_key.data
         if form.submit.data:
             if method == 'PUT':
-                host.id = form.id.data
+                host.id = host_id
+                if request.form.get('security') == '1':
+                    host.key = None
+                else:
+                    host.password = None
+                logger.info('execute update operation type <%s> primary key <%s>', logger_type, host_id)
                 if HostService().update_one(host):
-                    return redirect('/host')
+                    return redirect(url_for('host_view.index'))
             elif request.method == 'POST':
                 if HostService().add(host):
-                    return redirect('/host')
+                    return redirect(url_for('host_view.index'))
         if form.test_connection.data:
-            buffer = CommandUtils().command_ssh_remote(form.username, form.hostname, form.password, form.command)
-            flash('用户 <{}> 连接主机 <{}> 失败，错误如下\n：{}'.format(form.hostname.data, form.username.data,
-                                                          buffer.before))
-            return redirect(url_for('host_view.create_modfiy_copy_delete'))
-    return render_template('host/host.html', form=form, host=host, title=title)
+            ssh_connect = Ssh(hostname=host.hostname, port=host.ssh_port, username=host.username,
+                              password=host.password,
+                              private_key=host.key)
+            if ssh_connect.check_connect() is False:
+                flash('用户 <{}> 连接主机 <{}> 失败，错误如下：\r\n{}'.format(host.hostname, host.username, ssh_connect.get_message()))
+            else:
+                flash('用户 <{}> 连接主机 <{}> 成功！'.format(host.hostname, host.username))
+                if StringUtils().is_not_empty(method):
+                    return redirect(url_for('host_view.create_modfiy_copy_delete', host_id=host_id, method=method))
+                else:
+                    return redirect(url_for('host_view.create_modfiy_copy_delete', host_id=host_id))
+    return render_template('host/host.html', form=form, host=host, title=title, active_menu='host')
 
 
 @host_view.route('/delete/<int:host_id>', methods=['GET'])
 @login_required
 def delete(host_id=int):
     HostService().delete_one(host_id)
-    return redirect(url_for('host_view.list'))
+    return redirect(url_for('host_view.index', active_menu='host'))
+
+
+@host_view.route('/info/<int:host_id>', methods=['GET'])
+def info(host_id=int):
+    host = HostService().find_one(id=host_id)
+    return render_template('host/host-info.html', title='基本信息', active_menu='info', host=host, host_id=host_id)
+
+
+@host_view.route('/connection/<int:host_id>', methods=['GET'])
+def connection(host_id=int):
+    connections = HostConnectionService().find_all_by_host_create_time_desc(host_id=host_id)
+    return render_template('host/host-connection.html', title='连接历史', active_menu='connection', host_id=host_id,
+                           connections=connections)
+
+
+@host_view.route('/command/<int:host_id>', methods=['GET'])
+@login_required
+def command(host_id=int):
+    commands = CommandExecuteService().find_all_by_host_create_time_desc(host_id=host_id)
+    return render_template('host/host-command.html', title='命令历史', active_menu='command', host_id=host_id,
+                           commands=commands)

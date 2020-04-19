@@ -26,12 +26,13 @@ class MonitorService:
         :return: 服务信息
         """
         heartbeats = []
-        for host in datas:
-            if host.command is None or host.command == '':
-                command = ConfigUtils().get_command(service_name=host.server, service_type=host.server_type,
-                                                    cluster_name=host.server_name)
-                if command is not None:
-                    host.command = command.command
+        try:
+            for host in datas:
+                if host.command is None or host.command == '':
+                    command = ConfigUtils().get_command(service_name=host.server, service_type=host.server_type,
+                                                        cluster_name=host.server_name)
+                    if command is not None:
+                        host.command = command.command
             if host is not None and host.command is not None:
                 buffer = CommandUtils().command_ssh_remote(user=host.username,
                                                            host=host.hostname,
@@ -61,6 +62,8 @@ class MonitorService:
                     heartbeat['service_username'] = '-'
                 heartbeat['service_status'] = service_status
                 heartbeats.append(heartbeat)
+        except Exception as ex:
+            pass
 
         # 读取配置文件
         # for monitor in self.config:

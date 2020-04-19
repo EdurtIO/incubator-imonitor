@@ -104,6 +104,24 @@ class CommandUtils:
             pass
         return buffer
 
+class StringUtils:
+
+    def is_empty(self, source):
+        """
+        字符串是否为空
+        :param source: 源字符串
+        :return: 空｜非空
+        """
+        if source is None or source == '':
+            return True
+        else:
+            return False
+
+    def is_not_empty(self, source):
+        if self.is_empty(source=source):
+            return False
+        else:
+            return True
 
 if __name__ == '__main__':
     CommandUtils().command_ssh_remote_password('root', '127.0.0.1', '123456', 'ls -l')

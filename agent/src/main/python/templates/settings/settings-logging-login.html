@@ -1,0 +1,68 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+{% extends "settings/base.html" %}
+
+{% block alert %}
+{% for message in get_flashed_messages() %}
+<div class="alert alert-{{alert_type}}">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block settings_right_content %}
+<div class="panel panel-default" style="margin-bottom: 0px; border: 0px;">
+    <div class="panel-heading">登录日志</div>
+    <div class="panel-body">
+        <div class="col-lg-9 col-12 conternt-main offset">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>登录时间</th>
+                    <th>登录IP</th>
+                    <th>登录状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for logging in loggings %}
+                <tr>
+                    <th scope="row">{{ logging.id }}</th>
+                    <td>{{ logging.login_time }}</td>
+                    <td>{{ logging.ip }}</td>
+                    {% if logging.status %}
+                    <td>登录成功</td>
+                    {% else %}
+                    <td class="danger">
+                        <span data-toggle="tooltip" data-placement="top" title="{{ logging.reason }}">登录失败 <i
+                                class="fas fa-exclamation-triangle"></i></span>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_styles %}
+<script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+{% endblock %}

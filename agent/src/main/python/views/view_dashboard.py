@@ -15,4 +15,4 @@ dashboard_view = Blueprint('dashboard_view', __name__, template_folder='template
 @login_required
 def index():
     count = HostService().count_by_user(current_user)
-    return render_template('dashboard/dashboard-index.html', title='仪表盘', count=count)
+    return render_template('dashboard/dashboard-index.html', title='仪表盘', count=count, active_menu='dashboard')
