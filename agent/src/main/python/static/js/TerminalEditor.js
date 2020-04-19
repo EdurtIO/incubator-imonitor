@@ -31,7 +31,7 @@ var TerminalEditor = function () {
             rows: rows
         }),
             protocol = (location.protocol === 'https:') ? 'wss://' : 'ws://',
-            socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + "/websocket/" + options.data;
+            socketURL = protocol + location.hostname + ((location.port) ? (':' + location.port) : '') + "/websocket/" + options.data + '/' + options.user;
         SOCKRT = new WebSocket(socketURL);
 
         if (options.show_banner) {

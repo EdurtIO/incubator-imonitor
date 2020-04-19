@@ -43,7 +43,7 @@ from tornado.wsgi import WSGIContainer
 
 app_wsgi = WSGIContainer(app)
 handlers = [
-    (r"/websocket/(.*)", SshTerminalHandler, {}),  # {'term_manager': term_manager}),
+    (r"/websocket/(.*)/(.*)", SshTerminalHandler, {}),  # {'term_manager': term_manager}),
     (r"/(.*)", FallbackHandler, dict(fallback=app_wsgi))
 ]
 

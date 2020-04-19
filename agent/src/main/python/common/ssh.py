@@ -4,9 +4,8 @@
 # @Desc    : 远程连接脚本
 # @File    : ssh.py
 
-import paramiko
-
 import io
+import paramiko
 from application_config import logger
 
 StringIO = io.StringIO
@@ -101,11 +100,12 @@ class Ssh(object):
         else:
             logger.error('not connected from <%s> by <%s>', self.hostname, self.username)
 
-    def send(self, msg):
-        self._chanel.send(msg)
+    def send(self, message):
+        self._chanel.send(message)
 
     def read(self):
-        return self._chanel.recv(10000)
+        context = self._chanel.recv(10000)
+        return context
 
     def get_connect(self):
         return self._ssh
