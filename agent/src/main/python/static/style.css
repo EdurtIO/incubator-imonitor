@@ -38,3 +38,13 @@
 .btn-xs-custom {
     padding: 1px 0px;
 }
+
+.img-w200 {
+    width: 200px;
+    height: 200px;
+}
+
+.avatar-w20 {
+    width: 20px;
+    height: 20px;
+}

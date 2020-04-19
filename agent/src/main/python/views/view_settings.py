@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @Time    : 2020-04-17 00:03:03
-# @Desc    : 设置脚本
+# @Desc    : 用户设置脚本
 # @File    : view_settings.py
-from application_config import logger
+import os
+import time
+from application_config import logger, codes
 from db.models import User
 from flask import render_template, request, Blueprint, flash, redirect, url_for
 from flask_login import login_required, current_user
-from form.form_settings import SettingsProfileForm, BuildModelToFrom, SettingsSecurityForm
+from form.form_settings import SettingsProfileForm, BuildModelToFrom, SettingsSecurityForm, SettingsAvatarForm
 from services.service_logging_login import LoginLoggingService
 from services.service_user import UserService
 
@@ -21,7 +23,19 @@ settings_view = Blueprint('settings_view', __name__, template_folder='templates'
 @login_required
 def profile(user_id=int):
     form_profile = SettingsProfileForm()
+    form_avatar = SettingsAvatarForm()
     user = UserService().find_one(id=current_user.id)
+    if form_avatar.validate_on_submit():
+        avatar = request.files['avatar']
+        path = '{}/{}'.format(codes['config']['avatar'], current_user.id)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        avatar_path = os.path.join(codes['config']['avatar'], '{}/{}.png'.format(current_user.id, int(time.time())))
+        avatar.save(avatar_path)
+        user.avatar = '{}/{}.png'.format(current_user.id, int(time.time()))
+        if UserService().update_avatar(user=user):
+            flash('数据更新成功！')
+        return redirect(url_for('settings_view.profile', alert_type='success'))
     BuildModelToFrom(user, form_profile)
     if form_profile.validate_on_submit():
         user = User()
@@ -41,8 +55,7 @@ def profile(user_id=int):
     else:
         alter_type = request.args.get('alert_type')
     return render_template('settings/settings-profile.html', user_id=user_id, title='个人资料', form_profile=form_profile,
-                           active_menu='profile', user=user, alert_type=alter_type)
-
+                           active_menu='profile', user=user, alert_type=alter_type, avatar_form=form_avatar)
 
 @settings_view.route('/security', methods=['GET', 'POST'])
 @login_required

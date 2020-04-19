@@ -69,6 +69,7 @@ class User(UserMixin, db.Model):
     website = db.Column(db.String(200), primary_key=False, unique=False, nullable=True)
     description = db.Column(db.Text, nullable=True)
     position = db.Column(db.Text, nullable=True)
+    avatar = db.Column(db.String(200), primary_key=False, unique=False, nullable=True)
     create_time = db.Column(db.DateTime, index=False, unique=False, nullable=True, default=datetime.datetime.now)
     last_login_time = db.Column(db.DateTime, index=False, unique=False, nullable=True)
     hosts = db.relationship('Host', secondary='user_host_relation',

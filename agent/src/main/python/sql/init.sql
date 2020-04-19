@@ -16,3 +16,5 @@ create table `user_logging_login_relation` (
     `user_id` int comment '主机ID',
     `logging_login_id` int comment '登录日志ID'
 ) comment = '用户与登录日志关系表';
+
+alter table user add column avatar varchar(200) after website;

@@ -64,6 +64,21 @@ class UserService:
             flash('更新数据失败, 错误如下: \r\n{}'.format(ex))
             return False
 
+    def update_avatar(self, user=User):
+        try:
+            logger.info('execute update %s starting primary key <%s>', logger_type, user.id)
+            sql = 'update user set avatar = :avatar where id = :id'
+            db.engine.execute(
+                text(sql),
+                {'avatar': user.avatar, 'id': user.id}
+            )
+            logger.info('execute update %s starting primary key <%s> success', logger_type, user.id)
+            return True
+        except Exception as ex:
+            logger.info('execute update %s starting primary key <%s> error, reason <%s>', logger_type, user.id, ex)
+            flash('更新数据失败, 错误如下: \r\n{}'.format(ex))
+            return False
+
     def update_last_login_time(self, user=User):
         try:
             logger.info('execute update %s starting primary key <%s>', logger_type, user.id)
