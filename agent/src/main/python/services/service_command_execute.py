@@ -23,7 +23,7 @@ class CommandExecuteService:
     def find_all_by_host_create_time_desc(self, host_id=int):
         try:
             logger.info('execute select %s starting primary key <%s>', logger_type, host_id)
-            sql = 'select ce.command, ce.final_state, ce.start_time, ce.end_time, ce.elapsed_time, ce.reason, h.hostname, u.name ' \
+            sql = 'select ce.id, ce.command, ce.final_state, ce.start_time, ce.end_time, ce.elapsed_time, ce.reason, h.hostname, h.username ' \
                   'from command_execute as ce ' \
                   'left join user_host_command_execute_relation as uhcer on ce.id = uhcer.command_execute_id ' \
                   'left join user as u on uhcer.user_id = u.id ' \

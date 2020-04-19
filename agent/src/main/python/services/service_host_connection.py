@@ -23,7 +23,7 @@ class HostConnectionService:
     def find_all_by_host_create_time_desc(self, host_id=int):
         try:
             logger.info('execute select %s starting primary key <%s>', logger_type, host_id)
-            sql = 'select hc.name, hc.type, hc.start_time, hc.end_time, hc.elapsed_time, hc.reason, h.hostname, h.username ' \
+            sql = 'select hc.id, hc.name, hc.type, hc.start_time, hc.end_time, hc.elapsed_time, hc.reason, h.hostname, h.username ' \
                   'from host_connection as hc ' \
                   'left join user_host_connection as uhc on hc.id = uhc.connection_id ' \
                   'left join user as u on uhc.user_id = u.id ' \

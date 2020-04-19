@@ -38,6 +38,8 @@
                        class="list-group-item {% if active_menu == 'info' %} active {% endif %}">基本信息</a>
                     <a href="{{ url_for('host_view.connection', host_id=host_id) }}"
                        class="list-group-item {% if active_menu == 'connection' %} active {% endif %}">连接历史</a>
+                    <a href="{{ url_for('host_view.command', host_id=host_id) }}"
+                       class="list-group-item {% if active_menu == 'command' %} active {% endif %}">命令历史</a>
                 </div>
             </div>
         </div>

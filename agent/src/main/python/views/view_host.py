@@ -8,7 +8,7 @@ from application_config import logger
 from common.ssh import Ssh
 from common.utils import StringUtils
 from db.models import Host
-from flask import Blueprint, render_template, redirect, request, url_for, flash, jsonify
+from flask import Blueprint, render_template, redirect, request, url_for, flash
 from flask_login import current_user
 from flask_login import login_required
 from form.form_host import HostForm, BuildModelToFrom
@@ -114,5 +114,6 @@ def connection(host_id=int):
 @host_view.route('/command/<int:host_id>', methods=['GET'])
 @login_required
 def command(host_id=int):
-    history = CommandExecuteService().find_all_by_host_create_time_desc(host_id=host_id)
-    return jsonify({'result': history})
+    commands = CommandExecuteService().find_all_by_host_create_time_desc(host_id=host_id)
+    return render_template('host/host-command.html', title='命令历史', active_menu='command', host_id=host_id,
+                           commands=commands)
