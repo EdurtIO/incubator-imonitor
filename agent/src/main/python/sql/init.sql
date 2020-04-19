@@ -24,3 +24,10 @@ create table `user_host_command_execute_relation` (
     `host_id` int comment '主机ID',
     `command_execute_id` int comment '命令历史ID'
 ) comment = '用户主机执行命令关系表';
+
+
+create table `user_host_connection` (
+    `user_id` int comment '用户ID',
+    `host_id` int comment '主机ID',
+    `connection_id` int comment '连接ID'
+) comment = '用户主机连接关系表';

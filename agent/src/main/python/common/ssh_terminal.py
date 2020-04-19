@@ -9,9 +9,10 @@ import datetime
 import threading
 from application_config import logger
 from db.model_command_execute import CommandExecute
+from db.model_host import HostConnection
 from services.service_command_execute import CommandExecuteService
 from services.service_host import HostService
-from services.service_user import UserService
+from services.service_host_connection import HostConnectionService
 from tornado.websocket import WebSocketHandler
 
 from .ssh import Ssh
@@ -33,7 +34,7 @@ class SshTerminalHandler(WebSocketHandler):
             self.host = HostService().find_one(id=server_id)
             self.command = ''
             self.persistence = False
-            self.user = UserService().find_one(id=user_id)
+            # self.user = UserService().find_one(id=user_id)
             self.user_id = user_id
             self.host_id = server_id
             self.end_time = datetime.datetime.now()
@@ -42,6 +43,7 @@ class SshTerminalHandler(WebSocketHandler):
             logger.info('connected from <%s> by <%s> start', self.host.hostname, self.host.username)
             self.ssh = Ssh(hostname=self.host.hostname, port=self.host.ssh_port, username=self.host.username,
                            password=self.host.password, private_key=self.host.key)
+            self.start_connection_time = datetime.datetime.now()
             t = threading.Thread(target=self._reading)
             t.setDaemon(True)
             t.start()
@@ -100,5 +102,22 @@ class SshTerminalHandler(WebSocketHandler):
         execute.reason = self.reason
         return execute
 
+    def build_connection(self):
+        connection = HostConnection()
+        connection.name = '{}-{}'.format(self.host.hostname, self.user_id)
+        if self.host.password:
+            connection.type = 'PASSWORD'
+        elif self.host.key:
+            connection.type = 'KEY'
+        else:
+            connection.type = ''
+        connection.start_time = self.start_connection_time
+        return connection
+
     def on_close(self):
         logger.info('socket closed from <%s> by <%s>', self.ssh.hostname, self.ssh.username)
+        connection = self.build_connection()
+        end_time = datetime.datetime.now()
+        connection.end_time = end_time
+        connection.elapsed_time = (end_time - self.start_connection_time).microseconds
+        HostConnectionService().add(model=connection, user_id=self.user_id, host_id=self.host_id)

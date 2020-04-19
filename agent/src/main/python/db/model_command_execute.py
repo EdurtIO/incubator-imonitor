@@ -16,7 +16,7 @@ class CommandExecute(db.Model):
     final_state = db.Column(db.Boolean, nullable=True, default=False, comment='最终执行状态')
     start_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now, comment='执行开始时间')
     end_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now, comment='执行结束时间')
-    elapsed_time = db.Column(db.BigInteger, nullable=False, default=datetime.datetime.now, comment='执行耗时')
+    elapsed_time = db.Column(db.BigInteger, nullable=False, default=0, comment='执行耗时')
     reason = db.Column(db.String(100), nullable=True, comment='失败原因')
     create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now, comment='创建时间')
 
