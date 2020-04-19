@@ -15,7 +15,6 @@ from form.form_host import HostForm, BuildModelToFrom
 from services.service_command_execute import CommandExecuteService
 from services.service_host import HostService
 from services.service_host_connection import HostConnectionService
-from services.service_monitor_memory import MonitorMemoryService
 
 host_view = Blueprint('host_view', __name__, template_folder='templates')
 
@@ -102,14 +101,14 @@ def delete(host_id=int):
 @host_view.route('/info/<int:host_id>', methods=['GET'])
 def info(host_id=int):
     host = HostService().find_one(id=host_id)
-    connections = MonitorMemoryService().find_top_15(host_id)
     return render_template('host/host-info.html', title='基本信息', active_menu='info', host=host, host_id=host_id)
 
 
 @host_view.route('/connection/<int:host_id>', methods=['GET'])
 def connection(host_id=int):
     connections = HostConnectionService().find_all_by_host_create_time_desc(host_id=host_id)
-    return jsonify({'result': connections})
+    return render_template('host/host-connection.html', title='连接历史', active_menu='connection', host_id=host_id,
+                           connections=connections)
 
 
 @host_view.route('/command/<int:host_id>', methods=['GET'])
