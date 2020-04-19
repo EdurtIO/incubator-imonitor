@@ -4,19 +4,23 @@
 # @Desc    : 主机视图脚本
 # @File    : view_host.py
 
+from application_config import logger
 from common.ssh import Ssh
 from common.utils import StringUtils
 from db.models import Host
-from flask import Blueprint, render_template, redirect, request, url_for, flash
+from flask import Blueprint, render_template, redirect, request, url_for, flash, jsonify
 from flask_login import current_user
 from flask_login import login_required
 from form.form_host import HostForm, BuildModelToFrom
+from services.service_command_execute import CommandExecuteService
 from services.service_host import HostService
-from application_config import logger
+from services.service_host_connection import HostConnectionService
+from services.service_monitor_memory import MonitorMemoryService
 
 host_view = Blueprint('host_view', __name__, template_folder='templates')
 
 logger_type = 'host_view'
+
 
 @host_view.route('/', methods=['GET'])
 @host_view.route('/list', methods=['GET'])
@@ -93,3 +97,23 @@ def create_modfiy_copy_delete(host_id=int):
 def delete(host_id=int):
     HostService().delete_one(host_id)
     return redirect(url_for('host_view.index', active_menu='host'))
+
+
+@host_view.route('/info/<int:host_id>', methods=['GET'])
+def info(host_id=int):
+    host = HostService().find_one(id=host_id)
+    connections = MonitorMemoryService().find_top_15(host_id)
+    return render_template('host/host-info.html', title='基本信息', active_menu='info', host=host, host_id=host_id)
+
+
+@host_view.route('/connection/<int:host_id>', methods=['GET'])
+def connection(host_id=int):
+    connections = HostConnectionService().find_all_by_host_create_time_desc(host_id=host_id)
+    return jsonify({'result': connections})
+
+
+@host_view.route('/command/<int:host_id>', methods=['GET'])
+@login_required
+def command(host_id=int):
+    history = CommandExecuteService().find_all_by_host_create_time_desc(host_id=host_id)
+    return jsonify({'result': history})

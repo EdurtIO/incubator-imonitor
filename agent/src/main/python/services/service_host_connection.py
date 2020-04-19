@@ -29,7 +29,7 @@ class HostConnectionService:
                   'left join user as u on uhc.user_id = u.id ' \
                   'left join host as h on uhc.host_id = h.id ' \
                   'where h.id = :host_id ' \
-                  'order by ce.create_time desc '
+                  'order by hc.create_time desc '
             result = db.engine.execute(
                 text(sql), {'host_id': host_id}
             )

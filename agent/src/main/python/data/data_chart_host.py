@@ -31,7 +31,8 @@ def report_memory(host_id=int):
         yaxis_opts=opts.AxisOpts(
             max_=100
         ),
-        legend_opts=opts.LegendOpts(is_show=False)
+        legend_opts=opts.LegendOpts(is_show=False),
+        title_opts=opts.TitleOpts(title='内存使用率(%)')
     )
     return line.dump_options_with_quotes()
 
@@ -53,6 +54,7 @@ def report_cpu(host_id=int):
         yaxis_opts=opts.AxisOpts(
             max_=100
         ),
-        legend_opts=opts.LegendOpts(is_show=False)
+        legend_opts=opts.LegendOpts(is_show=False),
+        title_opts=opts.TitleOpts(title='CPU使用率(%)')
     )
     return line.dump_options_with_quotes()
