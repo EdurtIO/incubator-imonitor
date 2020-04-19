@@ -34,8 +34,18 @@ class UserService:
     def update_one(self, user=User):
         try:
             logger.info('execute update %s starting primary key <%s>', logger_type, user.id)
-            sql = 'update user set name = :name, email = :email, position = :position, description = :description, ' \
-                  'website = :website where id = :id'
+            sql = 'update user set '
+            if user.name:
+                sql += 'name = :name'
+            if user.email:
+                sql += ', email =:email'
+            if user.position:
+                sql += ', position = :position'
+            if user.description:
+                sql += ', description = :description'
+            if user.website:
+                sql += ', website = :website'
+            sql += ' where id = :id'
             db.engine.execute(
                 text(sql),
                 {'name': user.name, 'email': user.email, 'position': user.position, 'description': user.description,

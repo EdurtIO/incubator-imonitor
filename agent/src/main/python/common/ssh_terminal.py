@@ -36,6 +36,7 @@ class SshTerminalHandler(WebSocketHandler):
         if args:
             server_id = int(args[0])
             host = HostService().find_one(server_id)
+            logger.info('connected from <%s> by <%s> start', host.hostname, host.username)
             self.ssh = Ssh(hostname=host.hostname, port=host.ssh_port, username=host.username, password=host.password,
                            private_key=host.key)
             t = threading.Thread(target=self._reading)

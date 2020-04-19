@@ -49,7 +49,7 @@
 
                 <div class="form-group {% if form_profile.email.errors %} has-error {% endif %}">
                     {{ form_profile.email.label(class='control-label') }}
-                    {{ form_profile.email(class='form-control') }}
+                    {{ form_profile.email(class='form-control', disabled="disabled") }}
                     {% if form_profile.email.errors %}
                     <ul class="errors">
                         {% for error in form_profile.email.errors %}
