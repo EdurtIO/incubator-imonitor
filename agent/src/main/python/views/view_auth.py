@@ -45,16 +45,17 @@ def signin():
                 logging_login.status = True
                 LoginLoggingService().add(model=logging_login, user_id=current_user.id)
                 return redirect(next_page or url_for('dashboard_view.index'))
-        flash('输入的密码错误')
-        logging_login.status = False
-        logging_login.reason = '输入的密码错误'
-        # 匿名用户登录不做存储
-        try:
-            LoginLoggingService().add(model=logging_login, user_id=current_user.id)
-        except Exception as ex:
-            flash('无效的账号信息')
-            logger.error('not found <%s> user', login_form.email.data)
-        return redirect(url_for('auth_view.signin'))
+            else:
+                logging_login.status = False
+                logging_login.reason = '输入的密码错误'
+                # 匿名用户登录不做存储
+                try:
+                    LoginLoggingService().add(model=logging_login, user_id=user.id)
+                    flash('输入的密码错误')
+                except Exception as ex:
+                    flash('无效的账号信息')
+                    logger.error('not found <%s> user', login_form.email.data)
+                return redirect(url_for('auth_view.signin'))
     return render_template('auth/signin.html', form=login_form, title='用户登录')
 
 
