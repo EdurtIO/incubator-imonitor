@@ -74,7 +74,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">
                         <img src="{% if current_user.avatar %} {{ url_for('static', filename = 'imgs/avatar/' + current_user.avatar) }} {% else %} {{ url_for('static', filename = 'imgs/default/avatar.jpg') }} {% endif %}"
-                             alt="{{current_user.name}}" class="img-circle avatar-w20"/>
+                             alt="{{current_user.name}}" class="img-circle avatar-w20"/> {{current_user.name}}
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>

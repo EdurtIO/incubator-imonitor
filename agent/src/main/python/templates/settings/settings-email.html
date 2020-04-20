@@ -28,19 +28,31 @@
 
 {% block settings_right_content %}
 <div class="panel panel-default" style="margin-bottom: 0px; border: 0px;">
-    <div class="panel-heading">更改密码</div>
+    <div class="panel-heading">{{title}}</div>
     <div class="panel-body">
         <div class="col-lg-12 col-12 conternt-main offset">
             <form method="POST">
 
                 {{ form.csrf_token }}
 
-                <div class="form-group {% if form.old_password.errors %} has-error {% endif %}">
-                    {{ form.old_password.label(class='control-label') }}
-                    {{ form.old_password(class='form-control') }}
-                    {% if form.old_password.errors %}
+                <div class="form-group {% if form.email.errors %} has-error {% endif %}">
+                    {{ form.email.label(class='control-label') }}
+                    {{ form.email(class='form-control', disabled="disabled") }}
+                    {% if form.email.errors %}
                     <ul class="errors">
-                        {% for error in form.old_password.errors %}
+                        {% for error in form.email.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+
+                <div class="form-group {% if form.new_email.errors %} has-error {% endif %}">
+                    {{ form.new_email.label(class='control-label') }}
+                    {{ form.new_email(class='form-control') }}
+                    {% if form.new_email.errors %}
+                    <ul class="errors">
+                        {% for error in form.new_email.errors %}
                         <li>{{ error }}</li>
                         {% endfor %}
                     </ul>
@@ -53,18 +65,6 @@
                     {% if form.password.errors %}
                     <ul class="errors">
                         {% for error in form.password.errors %}
-                        <li>{{ error }}</li>
-                        {% endfor %}
-                    </ul>
-                    {% endif %}
-                </div>
-
-                <div class="form-group {% if form.confirm_password.errors %} has-error {% endif %}">
-                    {{ form.confirm_password.label(class='control-label') }}
-                    {{ form.confirm_password(class='form-control') }}
-                    {% if form.confirm_password.errors %}
-                    <ul class="errors">
-                        {% for error in form.confirm_password.errors %}
                         <li>{{ error }}</li>
                         {% endfor %}
                     </ul>

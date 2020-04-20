@@ -6,6 +6,7 @@
 
 from db.models import User
 from flask_wtf import FlaskForm
+from imforms.validators.validator_repeat import ValidatorEmailRepeat
 from wtforms import StringField, SubmitField, TextAreaField, PasswordField, FileField
 from wtforms.validators import DataRequired, Length, EqualTo
 
@@ -39,3 +40,10 @@ class SettingsSecurityForm(FlaskForm):
 class SettingsAvatarForm(FlaskForm):
     avatar = FileField(u'请选择头像', validators=[DataRequired(u'文件未选择！')])
     submit = SubmitField(u'更新头像')
+
+
+class SettingsEmailForm(FlaskForm):
+    email = StringField(u'电子邮件')
+    new_email = StringField(u'新电子邮件', validators=[DataRequired(), ValidatorEmailRepeat()])
+    password = PasswordField('密码', validators=[DataRequired(), Length(min=6, message='请输入有效的密码至少6位及以上')])
+    submit = SubmitField(u'更新邮箱', render_kw={'class': 'btn btn-success', 'size': 'mini'})
