@@ -60,6 +60,14 @@ class SshTerminalHandler(WebSocketHandler):
                     self.finalState = True
                     execute = self.build()
                     if CommandExecuteService().add(model=execute, user_id=self.user_id, host_id=self.host_id):
+                        if self.command == 'exit':
+                            connection = self.build_connection()
+                            end_time = datetime.datetime.now()
+                            connection.end_time = end_time
+                            connection.reason = '用户主动执行退出命令(exit, quit)'
+                            connection.elapsed_time = (end_time - self.start_connection_time).microseconds
+                            HostConnectionService().add(model=connection, user_id=self.user_id, host_id=self.host_id)
+                            raise Exception('connected closed')
                         self.command = ''
                 self.write_message(context)
             else:

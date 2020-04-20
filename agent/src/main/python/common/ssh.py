@@ -121,6 +121,11 @@ class Ssh(object):
         else:
             return False
 
+    def close(self):
+        if self.connected:
+            self._chanel.close()
+            self._ssh.close()
+
 
 if __name__ == '__main__':
     print(Ssh(hostname='localhost', port=22, username='root', password='123456', private_key=None))
