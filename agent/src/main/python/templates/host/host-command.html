@@ -58,12 +58,12 @@
                     <td>{{ command.command }}</td>
                     <td>{{ command.start_time }}</td>
                     <td>{{ command.end_time }}</td>
-                    <td>{{ command.elapsed_time /1000/1000 }}</td>
+                    <td>{{ (command.elapsed_time /1000/1000) | round(4, 'floor') }}</td>
                     {% if command.final_state %}
                     <td>执行成功</td>
                     {% else %}
                     <td class="danger">
-                        <span data-toggle="tooltip" data-placement="top" title="{{ logging.reason }}">执行失败 <i
+                        <span data-toggle="tooltip" data-placement="top" title="{{ command.reason }}">执行失败 <i
                                 class="fas fa-exclamation-triangle"></i></span>
                     </td>
                     {% endif %}

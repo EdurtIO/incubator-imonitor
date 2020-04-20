@@ -63,14 +63,15 @@ class SshTerminalHandler(WebSocketHandler):
                         self.command = ''
                 self.write_message(context)
             else:
-                reason = 'connected from <%s> by <%s> failure'.format(self.ssh.hostname, self.ssh.username)
+                reason = 'connected from <{}> by <{}> failure'.format(self.ssh.hostname, self.ssh.username)
                 logger.error(reason)
                 self.finalState = False
                 self.reason = reason
                 self.end_time = datetime.datetime.now()
                 execute = self.build()
-                if CommandExecuteService().add(model=execute, user_id=self.user_id, host_id=self.host_id):
-                    self.command = ''
+                if self.command is not '':
+                    if CommandExecuteService().add(model=execute, user_id=self.user_id, host_id=self.host_id):
+                        self.command = ''
                 break
 
 
@@ -90,6 +91,12 @@ class SshTerminalHandler(WebSocketHandler):
                 self.ssh.send(message)
             else:
                 logger.error('not connected from <%s> by <%s>', self.ssh.hostname, self.ssh.username)
+                connection = self.build_connection()
+                connection.reason = 'not connected from <{}> by <{}>'.format(self.ssh.hostname, self.ssh.username)
+                end_time = datetime.datetime.now()
+                connection.end_time = end_time
+                connection.elapsed_time = (end_time - self.start_connection_time).microseconds
+                HostConnectionService().add(model=connection, user_id=self.user_id, host_id=self.host_id)
                 raise Exception('connected closed')
 
     def build(self):
@@ -116,8 +123,9 @@ class SshTerminalHandler(WebSocketHandler):
 
     def on_close(self):
         logger.info('socket closed from <%s> by <%s>', self.ssh.hostname, self.ssh.username)
-        connection = self.build_connection()
-        end_time = datetime.datetime.now()
-        connection.end_time = end_time
-        connection.elapsed_time = (end_time - self.start_connection_time).microseconds
-        HostConnectionService().add(model=connection, user_id=self.user_id, host_id=self.host_id)
+        if self.ssh.connected:
+            connection = self.build_connection()
+            end_time = datetime.datetime.now()
+            connection.end_time = end_time
+            connection.elapsed_time = (end_time - self.start_connection_time).microseconds
+            HostConnectionService().add(model=connection, user_id=self.user_id, host_id=self.host_id)

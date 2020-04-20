@@ -59,9 +59,16 @@
                     <td>{{ connection.username }}</td>
                     <td>{{ connection.start_time }}</td>
                     <td>{{ connection.end_time }}</td>
-                    <td>{{ connection.elapsed_time /1000/1000 }}</td>
+                    <td>{{ (connection.elapsed_time /1000/1000) | round(4, 'floor') }}</td>
                     <td>{{ connection.type }}</td>
-                    <td>{{ connection.reason }}</td>
+                    {% if connection.reason %}
+                    <td class="danger">
+                        <span data-toggle="tooltip" data-placement="top" title="{{ connection.reason }}">连接失败 <i
+                                class="fas fa-exclamation-triangle"></i></span>
+                    </td>
+                    {% else %}
+                    <td>连接成功</td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
                 </tbody>
