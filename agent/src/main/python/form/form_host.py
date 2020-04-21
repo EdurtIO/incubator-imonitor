@@ -29,7 +29,7 @@ class HostForm(FlaskForm):
     ssh_port = IntegerField(u'SSH端口', validators=[Required(message=u'无效的SSH端口,只能是数值类型')],
                             render_kw={'placeholder': '请输入主机SSH端口', 'size': 'mini'})
     username = StringField(u'主机账号', validators=[Required(message=u'主机账号不能为空')],
-                           render_kw={'placeholder': '请输入主机账号', 'size': 'mini', 'value': 'root'})
+                           render_kw={'placeholder': '请输入主机账号', 'size': 'mini'})
     security = RadioField(u'登录模式', choices=[('1', '密码'), ('0', '私钥')], default='1', validators=[Required()])
     security_password = PasswordField(u'主机密码', render_kw={'placeholder': '请输入主机密码，可为空', 'size': 'mini'})
     security_key = TextAreaField(u'主机私钥', render_kw={'placeholder': '请输入主机私钥'})
