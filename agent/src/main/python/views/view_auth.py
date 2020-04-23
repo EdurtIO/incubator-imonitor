@@ -3,6 +3,7 @@
 # @Time    : 2020-04-08 16:40:20
 # @Desc    : 授权配置
 # @File    : view_auth.py
+import re
 from application_config import app, logger
 from application_config import login_manager
 from bin.assets import compile_auth_assets
@@ -35,9 +36,14 @@ def signin():
     login_form = AuthSignin()
     if request.method == 'POST':
         if login_form.validate_on_submit():
-            email = login_form.email.data
+            name = login_form.name.data
             password = login_form.password.data
-            user = UserService().find_by_email(email=email)
+
+            login_type = re.match(r'([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)', name)
+            if login_type is None:
+                user = UserService().find_by_username(name=name)
+            else:
+                user = UserService().find_by_email(email=name)
             if user and user.check_password(password=password):
                 login_user(user)
                 UserService().update_last_login_time(user)
@@ -54,7 +60,7 @@ def signin():
                     flash('输入的密码错误')
                 except Exception as ex:
                     flash('无效的账号信息')
-                    logger.error('not found <%s> user', login_form.email.data)
+                    logger.error('not found <%s> user', login_form.name.data)
                 return redirect(url_for('auth_view.signin'))
     return render_template('auth/signin.html', form=login_form, title='用户登录')
 

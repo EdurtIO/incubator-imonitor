@@ -13,7 +13,7 @@ class AuthSignin(FlaskForm):
     """
     登录表单
     """
-    email = StringField('邮箱', validators=[DataRequired(), Email(message='请输入有效的邮箱地址')])
+    name = StringField('账号', validators=[DataRequired()])
     password = PasswordField('密码', validators=[DataRequired()])
     submit = SubmitField('登录')
 

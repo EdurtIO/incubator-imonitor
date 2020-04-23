@@ -18,6 +18,9 @@ class UserService:
     def find_by_email(self, email):
         return User().query.filter_by(email=email).first()
 
+    def find_by_username(self, name):
+        return User().query.filter_by(name=name).first()
+
     def find_one(self, id=int):
         return User().query.filter_by(id=id).first()
 
