@@ -1,0 +1,12 @@
+server:
+  port: 5000
+  secret: iMonitor
+  debug: True
+database:
+  url: mysql+pymysql://root:123456@localhost:3306/test
+  print-sql: False
+  track: True
+config:
+  avatar: /Users/shicheng/Documents/Code/EdurtIO/incubator-imonitor/agent/src/main/python/static/imgs/avatar/
+resources:
+  dest: /Users/shicheng/Desktop/git/cache # git source clone local address, absolute path

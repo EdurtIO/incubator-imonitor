@@ -4,7 +4,7 @@
 # @Desc    : 授权配置
 # @File    : view_auth.py
 import re
-from application_config import app, logger
+from application_config import application, logger
 from application_config import login_manager
 from bin.assets import compile_auth_assets
 from db.model_logging_login import LoginLogging
@@ -18,7 +18,7 @@ from services.service_user import UserService
 
 auth_view = Blueprint('auth_view', __name__, template_folder='templates', static_folder='static')
 
-compile_auth_assets(app)
+compile_auth_assets(application)
 
 
 @auth_view.route('/signin', methods=['GET', 'POST'])

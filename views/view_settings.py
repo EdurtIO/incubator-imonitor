@@ -5,7 +5,7 @@
 # @File    : view_settings.py
 import os
 import time
-from application_config import logger, codes
+from application_config import logger, configuration
 from db.models import User
 from flask import render_template, request, Blueprint, flash, redirect, url_for
 from flask_login import login_required, current_user
@@ -28,10 +28,10 @@ def profile(user_id=int):
     user = UserService().find_one(id=current_user.id)
     if form_avatar.validate_on_submit():
         avatar = request.files['avatar']
-        path = '{}/{}'.format(codes['config']['avatar'], current_user.id)
+        path = '{}/{}'.format(configuration['config']['avatar'], current_user.id)
         if not os.path.exists(path):
             os.makedirs(path)
-        avatar_path = os.path.join(codes['config']['avatar'], '{}/{}.png'.format(current_user.id, int(time.time())))
+        avatar_path = os.path.join(configuration['config']['avatar'], '{}/{}.png'.format(current_user.id, int(time.time())))
         avatar.save(avatar_path)
         user.avatar = '{}/{}.png'.format(current_user.id, int(time.time()))
         if UserService().update_avatar(user=user):

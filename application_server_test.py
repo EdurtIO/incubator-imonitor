@@ -3,14 +3,14 @@
 # @Time    : 2020-04-13 17:11:16
 
 import os
-from application_config import app
+from application_config import application
 from common.ssh_terminal import SshTerminalHandler
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
 from tornado.web import FallbackHandler, Application
 from tornado.wsgi import WSGIContainer
 
-app = WSGIContainer(app)
+app = WSGIContainer(application)
 handlers = [
     (r"/websocket/(.*)", SshTerminalHandler, {}),  # {'term_manager': term_manager}),
     (r"/(.*)", FallbackHandler, dict(fallback=app))
