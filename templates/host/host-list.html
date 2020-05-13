@@ -92,6 +92,14 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="{{ url_for('host_view.services', host_id=host.id) }}" target="_blank">
+                                    <span class="fa-stack">
+                                      <i class="fas fa-square fa-stack-2x"></i>
+                                      <i class="fas fa fa-info fa-stack-1x fa-inverse"></i>
+                                    </span> Service Management
+                                </a>
+                            </li>
+                            <li>
                                 <a href="{{ url_for('chart_view.report', host_id=host.id) }}" target="_blank"
                                    data-toggle="tooltip" data-placement="top" title="监控报表"
                                    style="text-decoration:none; color: #17a2b8;">

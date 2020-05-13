@@ -4,14 +4,15 @@
 # @Desc    : 主机视图脚本
 # @File    : view_host.py
 
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import current_user
+from flask_login import login_required
+
 from application_config import logger
 from common.ssh import Ssh
 from common.utils import StringUtils
 from db.models import Host
-from flask import Blueprint, render_template, redirect, request, url_for, flash
-from flask_login import current_user
-from flask_login import login_required
-from form.form_host import HostForm, BuildModelToFrom
+from form.form_host import BuildModelToFrom, HostForm
 from services.service_command_execute import CommandExecuteService
 from services.service_host import HostService
 from services.service_host_connection import HostConnectionService
@@ -117,3 +118,10 @@ def command(host_id=int):
     commands = CommandExecuteService().find_all_by_host_create_time_desc(host_id=host_id)
     return render_template('host/host-command.html', title='命令历史', active_menu='command', host_id=host_id,
                            commands=commands)
+
+
+@host_view.route('/services/<int:host_id>', methods=['GET'])
+@login_required
+def services(host_id=int):
+    return render_template('host/host-services.html', title='Service Management', active_menu='services',
+                           host_id=host_id)
