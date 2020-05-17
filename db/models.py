@@ -5,6 +5,8 @@
 # @File    : Models.py
 import datetime
 
+from sqlalchemy.orm import class_mapper
+
 from application_config import db
 
 
@@ -49,8 +51,10 @@ class Host(db.Model):
     users = db.relationship('User', secondary='user_host_relation',
                             backref=db.backref('users', lazy='dynamic'), lazy='dynamic',
                             passive_deletes=True)
-    # active = db.Column(db.Boolean, nullable=False, server_default=True, comment='激活状态，默认为激活（True）')
 
+    # active = db.Column(db.Boolean, nullable=False, server_default=True, comment='激活状态，默认为激活（True）')
+    def as_dict(obj):
+        return dict((col.name, getattr(obj, col.name)) for col in class_mapper(obj.__class__).mapped_table.c)
 
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash

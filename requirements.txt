@@ -14,3 +14,4 @@ flask-assets
 tornado
 paramiko
 pyecharts
+flask-jsglue

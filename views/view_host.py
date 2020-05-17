@@ -26,7 +26,7 @@ logger_type = 'host_view'
 @host_view.route('/list', methods=['GET'])
 @login_required
 def index():
-    return render_template('host/host-list.html',
+    return render_template('host/list.html',
                            hosts=HostService().find_all_order_by_create_time_desc_and_user(current_user),
                            active_menu='host')
 

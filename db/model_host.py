@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import datetime
 
+from sqlalchemy.orm import class_mapper
+
 from application_config import db
 
 
@@ -17,5 +19,7 @@ class HostConnection(db.Model):
     reason = db.Column(db.String(100), nullable=True, comment='失败原因')
     create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now, comment='数据创建时间')
 
+    def as_dict(obj):
+        return dict((col.name, getattr(obj, col.name)) for col in class_mapper(obj.__class__).mapped_table.c)
 
 db.create_all()

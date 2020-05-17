@@ -9,6 +9,7 @@ import os
 import yaml
 from flask import Flask
 from flask_bootstrap import Bootstrap
+from flask_jsglue import JSGlue
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 
@@ -56,3 +57,10 @@ logger.info('configuration security framework start ...')
 login_manager = LoginManager()
 login_manager.init_app(application)
 logger.info('configuration security framework end ...')
+
+# custom template config, replace {{}} to [[]]
+# application.jinja_env.variable_start_string = '{{'
+# application.jinja_env.variable_end_string = '}}'
+
+jsglue = JSGlue()
+jsglue.init_app(application)

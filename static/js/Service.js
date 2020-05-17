@@ -15,6 +15,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-function stop(id) {
+let Service = function () {
 
-}
+    var init = function () {
+        console.log('init Service')
+        initDom()
+    }
+
+    var initDom = function () {
+        console.log('init dom ...')
+        initCompileWay($('input[name="compile_way"]:checked').val())
+        initEvent()
+    }
+
+    var initEvent = function () {
+        $('input[name="compile_way"]').change(function () {
+            initCompileWay($(this).val())
+        });
+    }
+
+    var initCompileWay = function (value) {
+        switch (value) {
+            case '0':
+                $('#source_git').show()
+                $('#source_git_username').show()
+                $('#source_git_password').show()
+                $('#download').hide()
+                break
+            case '1':
+                $('#source_git').hide()
+                $('#source_git_username').hide()
+                $('#source_git_password').hide()
+                $('#download').show()
+                break
+        }
+    }
+
+    return {
+        init: init,
+    }
+
+}()
+
+Service.init()
