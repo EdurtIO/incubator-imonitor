@@ -30,7 +30,24 @@ let Service = function () {
 
     var initEvent = function () {
         $('input[name="compile_way"]').change(function () {
-            initCompileWay($(this).val())
+            initCompileWay($(this).val());
+        });
+        initValidator();
+    }
+
+    var initValidator = function () {
+        $('#form').bootstrapValidator({
+            live: 'enabled',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {}
+        }).on('success.form.bv', function (e) {
+            e.preventDefault();
+            alert(1);
+            // $.ajax( ... );
         });
     }
 

@@ -6,19 +6,19 @@
 
 from flask import Blueprint, render_template
 
-common = Blueprint('common', __name__, template_folder='templates')
+CommonView = Blueprint('CommonView', __name__, template_folder='templates')
 
 
-@common.route('/', methods=['GET', 'POST'])
+@CommonView.route('/', methods=['GET', 'POST'])
 def index():
   return render_template('index.html', heartbeats=[])
 
 
-@common.errorhandler(404)
+@CommonView.errorhandler(404)
 def handle_404_error(err_msg):
   return render_template('404.html', error=err_msg)
 
 
-@common.errorhandler(500)
+@CommonView.errorhandler(500)
 def handle_404_error(err_msg):
   return render_template('500.html', error=err_msg)

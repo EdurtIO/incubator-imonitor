@@ -8,9 +8,9 @@ import datetime
 from flask_apscheduler import APScheduler
 
 from application_config import application, configuration
-from views.view_common import common
+from views.view_common import CommonView
 
-application.register_blueprint(common, url_prefix='/')
+application.register_blueprint(CommonView, url_prefix='/')
 
 ## 启用websocket服务
 from common.ssh_terminal import SshTerminalHandler
