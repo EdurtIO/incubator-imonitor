@@ -6,6 +6,7 @@
 import json
 
 from flask import Blueprint
+from flask_login import login_required
 from flask_restful import request
 
 from model.model_service import ServiceModel

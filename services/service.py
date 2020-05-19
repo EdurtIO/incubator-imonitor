@@ -5,6 +5,8 @@
 from application_config import db, logger
 from model.model_service import ServiceModel
 
+import traceback
+
 logger_type = 'service'
 
 
@@ -24,5 +26,6 @@ class Service:
             logger.info('execute update %s starting primary key <%s> success', logger_type, user_id)
             return True
         except Exception as ex:
-            logger.info('execute update %s starting primary key <%s> error, reason <%s>', logger_type, user_id, ex)
+            traceback.print_exc()
+            logger.error('execute update %s starting primary key <%s> error, reason <%s>', logger_type, user_id, ex)
             return False

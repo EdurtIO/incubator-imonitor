@@ -24,5 +24,4 @@ class ServiceModel(db.Model, BaseModel):
     install_password = db.Column(db.String(220), nullable=True, comment='binary download address')
     create_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now, comment='create time')
 
-
 db.create_all()
