@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2020-04-02 23:25:25
 # @Desc    : 主机视图脚本
-# @File    : view_host.py
+# @File    : host.py
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user
@@ -10,20 +10,20 @@ from flask_login import login_required
 
 from application_config import logger
 from common.ssh import Ssh
-from common.utils import StringUtils
 from db.models import Host
 from form.form_host import BuildModelToFrom, HostForm
 from services.service_command_execute import CommandExecuteService
 from services.service_host import HostService
 from services.service_host_connection import HostConnectionService
+from utils.string import StringUtils
 
-host_view = Blueprint('host_view', __name__, template_folder='templates')
+HostView = Blueprint('HostView', __name__, template_folder='templates')
 
 logger_type = 'host_view'
 
 
-@host_view.route('/', methods=['GET'])
-@host_view.route('/list', methods=['GET'])
+@HostView.route('/', methods=['GET'])
+@HostView.route('/list', methods=['GET'])
 @login_required
 def index():
     return render_template('host/list.html',
@@ -31,8 +31,8 @@ def index():
                            active_menu='host')
 
 
-@host_view.route('/cmcd/', defaults={'host_id': 0}, methods=['GET', 'POST', 'PUT'])
-@host_view.route('/cmcd/<int:host_id>', methods=['GET', 'POST', 'PUT'])
+@HostView.route('/cmcd/', defaults={'host_id': 0}, methods=['GET', 'POST', 'PUT'])
+@HostView.route('/cmcd/<int:host_id>', methods=['GET', 'POST', 'PUT'])
 @login_required
 def create_modfiy_copy_delete(host_id=int):
     type = request.args.get('type')
@@ -73,10 +73,10 @@ def create_modfiy_copy_delete(host_id=int):
                     host.password = None
                 logger.info('execute update operation type <%s> primary key <%s>', logger_type, host_id)
                 if HostService().update_one(host):
-                    return redirect(url_for('host_view.index'))
+                    return redirect(url_for('HostView.index'))
             elif request.method == 'POST':
                 if HostService().add(host):
-                    return redirect(url_for('host_view.index'))
+                    return redirect(url_for('HostView.index'))
         if form.test_connection.data:
             ssh_connect = Ssh(hostname=host.hostname, port=host.ssh_port, username=host.username,
                               password=host.password,
@@ -86,33 +86,33 @@ def create_modfiy_copy_delete(host_id=int):
             else:
                 flash('用户 <{}> 连接主机 <{}> 成功！'.format(host.hostname, host.username))
                 if StringUtils().is_not_empty(method):
-                    return redirect(url_for('host_view.create_modfiy_copy_delete', host_id=host_id, method=method))
+                    return redirect(url_for('HostView.create_modfiy_copy_delete', host_id=host_id, method=method))
                 else:
-                    return redirect(url_for('host_view.create_modfiy_copy_delete', host_id=host_id))
+                    return redirect(url_for('HostView.create_modfiy_copy_delete', host_id=host_id))
     return render_template('host/host.html', form=form, host=host, title=title, active_menu='host')
 
 
-@host_view.route('/delete/<int:host_id>', methods=['GET'])
+@HostView.route('/delete/<int:host_id>', methods=['GET'])
 @login_required
 def delete(host_id=int):
     HostService().delete_one(host_id)
-    return redirect(url_for('host_view.index', active_menu='host'))
+    return redirect(url_for('HostView.index', active_menu='host'))
 
 
-@host_view.route('/info/<int:host_id>', methods=['GET'])
+@HostView.route('/info/<int:host_id>', methods=['GET'])
 def info(host_id=int):
     host = HostService().find_one(id=host_id)
     return render_template('host/host-info.html', title='基本信息', active_menu='info', host=host, host_id=host_id)
 
 
-@host_view.route('/connection/<int:host_id>', methods=['GET'])
+@HostView.route('/connection/<int:host_id>', methods=['GET'])
 def connection(host_id=int):
     connections = HostConnectionService().find_all_by_host_create_time_desc(host_id=host_id)
     return render_template('host/host-connection.html', title='连接历史', active_menu='connection', host_id=host_id,
                            connections=connections)
 
 
-@host_view.route('/command/<int:host_id>', methods=['GET'])
+@HostView.route('/command/<int:host_id>', methods=['GET'])
 @login_required
 def command(host_id=int):
     commands = CommandExecuteService().find_all_by_host_create_time_desc(host_id=host_id)
@@ -120,7 +120,7 @@ def command(host_id=int):
                            commands=commands)
 
 
-@host_view.route('/services/<int:host_id>', methods=['GET'])
+@HostView.route('/services/<int:host_id>', methods=['GET'])
 @login_required
 def services(host_id=int):
     return render_template('host/host-services.html', title='Service Management', active_menu='services',

@@ -34,13 +34,13 @@
                 <div class="panel-heading">主机信息</div>
                 <div class="panel-body" style="padding: 0px;">
                     <div class="list-group" style="margin-bottom: 0px;">
-                        <a href="{{ url_for('host_view.info', host_id=host_id) }}"
+                        <a href="{{ url_for('HostView.info', host_id=host_id) }}"
                            class="list-group-item {% if active_menu == 'info' %} active {% endif %}">基本信息</a>
-                        <a href="{{ url_for('host_view.connection', host_id=host_id) }}"
+                        <a href="{{ url_for('HostView.connection', host_id=host_id) }}"
                            class="list-group-item {% if active_menu == 'connection' %} active {% endif %}">连接历史</a>
-                        <a href="{{ url_for('host_view.command', host_id=host_id) }}"
+                        <a href="{{ url_for('HostView.command', host_id=host_id) }}"
                            class="list-group-item {% if active_menu == 'command' %} active {% endif %}">命令历史</a>
-                        <a href="{{ url_for('host_view.services', host_id=host_id) }}"
+                        <a href="{{ url_for('HostView.services', host_id=host_id) }}"
                            class="list-group-item {% if active_menu == 'services' %} active {% endif %}">Service
                             Management</a>
                     </div>

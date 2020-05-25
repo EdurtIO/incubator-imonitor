@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @User    : shicheng
 # @Date    : 2020-05-14 22:41
-# @File    : view_service.py
+# @File    : service.py
 from flask import Blueprint, render_template
 from flask_login import login_required
 
@@ -10,7 +10,7 @@ from form.form_service import ServiceCreateForm
 
 ServiceView = Blueprint('ServiceView', __name__, template_folder='templates')
 
-logger_type = 'serviceView'
+logger_type = 'ServiceView'
 
 
 @ServiceView.route('/', methods=['GET'])

@@ -50,7 +50,7 @@
                         <td>{{ host.create_time }}</td>
                         <td>
                             <a class="btn btn-link btn-xs btn-xs-custom"
-                               href="{{ url_for('host_view.create_modfiy_copy_delete', host_id=host.id, method='PUT') }}"
+                               href="{{ url_for('HostView.create_modfiy_copy_delete', host_id=host.id, method='PUT') }}"
                                data-toggle="tooltip" data-placement="top" title="修改主机"
                                style="text-decoration:none; color:Mediumslateblue;">
                         <span class="fa-stack">
@@ -59,7 +59,7 @@
                         </span>
                             </a>
                             <a class="btn btn-link btn-xs btn-xs-custom"
-                               href="{{ url_for('host_view.create_modfiy_copy_delete', host_id=host.id, type='') }}"
+                               href="{{ url_for('HostView.create_modfiy_copy_delete', host_id=host.id, type='') }}"
                                data-toggle="tooltip" data-placement="top" title="复制主机"
                                style="text-decoration:none; color:Dodgerblue;">
                         <span class="fa-stack">
@@ -68,7 +68,7 @@
                         </span>
                             </a>
                             <a class="btn btn-link btn-xs btn-xs-custom"
-                               href="{{ url_for('host_view.delete', host_id=host.id) }}" data-toggle="tooltip"
+                               href="{{ url_for('HostView.delete', host_id=host.id) }}" data-toggle="tooltip"
                                data-placement="top" title="删除主机" style="text-decoration:none; color:Tomato;">
                         <span class="fa-stack">
                           <i class="fas fa-square fa-stack-2x"></i>
@@ -84,7 +84,7 @@
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
-                                        <a href="{{ url_for('host_view.info', host_id=host.id) }}" target="_blank">
+                                        <a href="{{ url_for('HostView.info', host_id=host.id) }}" target="_blank">
                                     <span class="fa-stack">
                                       <i class="fas fa-square fa-stack-2x"></i>
                                       <i class="fas fa fa-info fa-stack-1x fa-inverse"></i>
@@ -92,7 +92,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{ url_for('host_view.services', host_id=host.id) }}" target="_blank">
+                                        <a href="{{ url_for('HostView.services', host_id=host.id) }}" target="_blank">
                                     <span class="fa-stack">
                                       <i class="fas fa-square fa-stack-2x"></i>
                                       <i class="fas fa fa-info fa-stack-1x fa-inverse"></i>

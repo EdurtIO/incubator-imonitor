@@ -1,16 +1,16 @@
 from application_config import application, logger
 
 logger.info('load views from view module start ...')
-from views.view_auth import auth_view
+from views.user import UserView
 from views.view_chart import chart_view
 from views.view_dashboard import dashboard_view
-from views.view_host import host_view
+from views.host import HostView
 from views.view_settings import settings_view
 from views.view_terminal import terminal_view
-from views.view_service import ServiceView
+from views.service import ServiceView
 
-application.register_blueprint(host_view, url_prefix='/host')
-application.register_blueprint(auth_view, url_prefix='/auth')
+application.register_blueprint(HostView, url_prefix='/host')
+application.register_blueprint(UserView, url_prefix='/auth')
 application.register_blueprint(dashboard_view, url_prefix='/dashboard')
 application.register_blueprint(terminal_view, url_prefix='/terminal')
 application.register_blueprint(chart_view, url_prefix='/chart')

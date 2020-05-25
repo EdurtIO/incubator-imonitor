@@ -9,7 +9,7 @@ import paramiko
 from application_config import logger
 
 StringIO = io.StringIO
-from common.utils import StringUtils
+from utils.string import StringUtils
 
 
 class Ssh(object):

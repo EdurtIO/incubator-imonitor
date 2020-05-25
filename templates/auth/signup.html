@@ -95,14 +95,14 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-default">注 册</button>
+                    {{ form.submit(class='btn btn-default') }}
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <label>
-                        <span>已经拥有账号？<a href="{{ url_for('auth_view.signin') }}">登 录</a></span>
+                        <span>已经拥有账号？<a href="{{ url_for('UserView.signin') }}">登 录</a></span>
                     </label>
                 </div>
             </div>
@@ -111,7 +111,7 @@
     </div>
 </div>
 
-{#<p>{{ moment(current_time).format('LLL') }}</p>#}
-{#<p>{{ moment(current_time).fromNow(refresh=True) }}</p>#}
+    {#<p>{{ moment(current_time).format('LLL') }}</p>#}
+    {#<p>{{ moment(current_time).fromNow(refresh=True) }}</p>#}
 
 {% endblock %}
