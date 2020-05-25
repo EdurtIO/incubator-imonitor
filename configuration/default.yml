@@ -9,4 +9,4 @@ database:
 config:
   avatar: /Users/shicheng/Documents/Code/EdurtIO/incubator-imonitor/agent/src/main/python/static/imgs/avatar/
 resources:
-  dest: /Users/shicheng/Desktop/git/cache # git source clone local address, absolute path
+  target: /Users/shicheng/Desktop/git/cache # git source clone local address, absolute path

@@ -4,27 +4,36 @@
 # @Date    : 2020-05-13 22:31
 # @File    : git.py
 
-from application_config import configuration, logger
+from exception.null_pointer import NullPointerException
+from utils.command import CommandUtils
+from utils.string import StringUtils
 
-from utils.common import Common
+
+class GitModel:
+
+  def __init__(self, url=None, username=None, password=None, target=None):
+    if not CommandUtils.run_command(command='git --version'):
+      raise NullPointerException('git not found')
+    if StringUtils.is_empty(source=url):
+      raise NullPointerException('url must not null')
+    if StringUtils.is_empty(source=target):
+      raise NullPointerException('target folder must not null')
+    self.url = url
+    self.username = username
+    self.password = password
+    self.target = target
 
 
 class Git:
 
-  def __init__(self, dest, url):
-    if dest is None or dest == '':
-      self.dest = configuration['resources']['dest']
-    else:
-      self.dest = dest
-    if url is None:
-      self.url = url
-      logger.error('remote git address is not null')
+  def __init__(self, model=GitModel):
+    self.model = model
 
   def clone(self):
-    Common().create_folder(dest=self.dest)
     pass
 
 
 if __name__ == '__main__':
-  git = Git(dest=None, url='https://github.com/meanstrong/pydelo');
+  model = GitModel(url='https://github.com/meanstrong/pydelo', target='/Users/shicheng/Documents')
+  git = Git(model=model)
   git.clone()
