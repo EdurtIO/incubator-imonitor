@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @User    : shicheng
 # @Date    : 2020-05-25 22:24
-# @File    : string.py
+# @File    : istring.py
 class StringUtils:
 
   @staticmethod

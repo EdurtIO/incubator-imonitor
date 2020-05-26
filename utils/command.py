@@ -3,9 +3,11 @@
 # @User    : shicheng
 # @Date    : 2020-05-25 22:57
 # @File    : command.py
+import os
 import subprocess
 
-from utils.string import StringUtils
+from utils.precondition import Preconditions
+from utils.istring import StringUtils
 
 
 class CommandUtils:
@@ -20,6 +22,21 @@ class CommandUtils:
         return True
     return False
 
+  @staticmethod
+  def run_command_on_system(command=None):
+    Preconditions.check_not_null(property='command', source=command)
+    if os.system(command) == 0:
+      return True
+    else:
+      return False
+
+  @staticmethod
+  def run_command_response_to_file(command=str, loggerFile=str):
+    Preconditions.check_not_null(property='command', source=command)
+    Preconditions.check_not_null(property='logger file', source=loggerFile)
+    os.system('''{} >> {}'''.format(command, loggerFile))
+
 
 if __name__ == '__main__':
-  print(CommandUtils.run_command(command='git --version'))
+  # print(CommandUtils.run_command(command='git --version'))
+  CommandUtils.run_command_response_to_file(command='ls -l -a', loggerFile='/Users/shicheng/Documents/a.log')

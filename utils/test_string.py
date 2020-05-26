@@ -5,7 +5,7 @@
 # @File    : test_string.py
 import unittest
 
-from utils.string import StringUtils
+from utils.istring import StringUtils
 
 
 class TestStringUtils(unittest.TestCase):
