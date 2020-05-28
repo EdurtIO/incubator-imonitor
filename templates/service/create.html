@@ -63,17 +63,17 @@
                     </div>
                 </div>
 
-                <div class="form-group {% if form.compile_way.errors %} has-error {% endif %}">
-                    {{ form.compile_way.label(class='col-sm-3 control-label') }}
+                <div class="form-group {% if form.compileWay.errors %} has-error {% endif %}">
+                    {{ form.compileWay.label(class='col-sm-3 control-label') }}
                     <div class="col-sm-9">
-                        {% for s in form.compile_way %}
+                        {% for s in form.compileWay %}
                             <label class="radio-inline">
                                 {{ s(id='compile_way') }} {{ s.label }}
                             </label>
                         {% endfor %}
-                        {% if form.compile_way.errors %}
+                        {% if form.compileWay.errors %}
                             <ul class="errors">
-                                {% for error in form.compile_way.errors %}
+                                {% for error in form.compileWay.errors %}
                                     <li>{{ error }}</li>
                                 {% endfor %}
                             </ul>
@@ -81,13 +81,13 @@
                     </div>
                 </div>
 
-                <div id="source_git" class="form-group {% if form.source_git.errors %} has-error {% endif %}">
-                    {{ form.source_git.label(class='col-sm-3 control-label') }}
+                <div id="gitRemote" class="form-group {% if form.gitRemote.errors %} has-error {% endif %}">
+                    {{ form.gitRemote.label(class='col-sm-3 control-label') }}
                     <div class="col-sm-9">
-                        {{ form.source_git(class='form-control') }}
-                        {% if form.source_git.errors %}
+                        {{ form.gitRemote(class='form-control') }}
+                        {% if form.gitRemote.errors %}
                             <ul class="errors">
-                                {% for error in form.source_git.errors %}
+                                {% for error in form.gitRemote.errors %}
                                     <li>{{ error }}</li>
                                 {% endfor %}
                             </ul>
@@ -95,13 +95,13 @@
                     </div>
                 </div>
 
-                <div id="source_git_username" class="form-group {% if form.source_git_username.errors %} has-error {% endif %}">
-                    {{ form.source_git_username.label(class='col-sm-3 control-label') }}
+                <div id="gitUsername" class="form-group {% if form.gitUsername.errors %} has-error {% endif %}">
+                    {{ form.gitUsername.label(class='col-sm-3 control-label') }}
                     <div class="col-sm-9">
-                        {{ form.source_git_username(class='form-control') }}
-                        {% if form.source_git_username.errors %}
+                        {{ form.gitUsername(class='form-control') }}
+                        {% if form.gitUsername.errors %}
                             <ul class="errors">
-                                {% for error in form.source_git_username.errors %}
+                                {% for error in form.gitUsername.errors %}
                                     <li>{{ error }}</li>
                                 {% endfor %}
                             </ul>
@@ -109,13 +109,13 @@
                     </div>
                 </div>
 
-                <div id="source_git_password" class="form-group {% if form.source_git_password.errors %} has-error {% endif %}">
-                    {{ form.source_git_password.label(class='col-sm-3 control-label') }}
+                <div id="gitPassword" class="form-group {% if form.gitPassword.errors %} has-error {% endif %}">
+                    {{ form.gitPassword.label(class='col-sm-3 control-label') }}
                     <div class="col-sm-9">
-                        {{ form.source_git_password(class='form-control') }}
-                        {% if form.source_git_password.errors %}
+                        {{ form.gitPassword(class='form-control') }}
+                        {% if form.gitPassword.errors %}
                             <ul class="errors">
-                                {% for error in form.source_git_password.errors %}
+                                {% for error in form.gitPassword.errors %}
                                     <li>{{ error }}</li>
                                 {% endfor %}
                             </ul>
@@ -137,41 +137,13 @@
                     </div>
                 </div>
 
-                <div class="form-group {% if form.install_root.errors %} has-error {% endif %}">
-                    {{ form.install_root.label(class='col-sm-3 control-label') }}
+                <div class="form-group {% if form.sourceRoot.errors %} has-error {% endif %}">
+                    {{ form.sourceRoot.label(class='col-sm-3 control-label') }}
                     <div class="col-sm-9">
-                        {{ form.install_root(class='form-control') }}
-                        {% if form.install_root.errors %}
+                        {{ form.sourceRoot(class='form-control') }}
+                        {% if form.sourceRoot.errors %}
                             <ul class="errors">
-                                {% for error in form.install_root.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="form-group {% if form.install_username.errors %} has-error {% endif %}">
-                    {{ form.install_username.label(class='col-sm-3 control-label') }}
-                    <div class="col-sm-9">
-                        {{ form.install_username(class='form-control') }}
-                        {% if form.install_username.errors %}
-                            <ul class="errors">
-                                {% for error in form.install_username.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="form-group {% if form.install_password.errors %} has-error {% endif %}">
-                    {{ form.install_password.label(class='col-sm-3 control-label') }}
-                    <div class="col-sm-9">
-                        {{ form.install_password(class='form-control') }}
-                        {% if form.install_password.errors %}
-                            <ul class="errors">
-                                {% for error in form.install_password.errors %}
+                                {% for error in form.sourceRoot.errors %}
                                     <li>{{ error }}</li>
                                 {% endfor %}
                             </ul>

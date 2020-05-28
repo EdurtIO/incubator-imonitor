@@ -6,7 +6,7 @@
 import datetime
 
 from application_config import db
-from model.model_base import BaseModel
+from model.base import BaseModel
 
 
 class HostModel(db.Model, BaseModel):

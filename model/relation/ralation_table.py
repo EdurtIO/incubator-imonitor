@@ -8,7 +8,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
 from model.model_host import HostModel
-from model.model_service import ServiceModel
+from model.service import ServiceModel
 
 Base = declarative_base()
 

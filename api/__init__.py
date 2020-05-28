@@ -5,7 +5,9 @@
 # @File    : __init__.py
 from api.api_host import ApiHost
 from api.api_service import ServiceApi
+from api.test import TestApi
 from application_config import application
 
 application.register_blueprint(ApiHost, url_prefix='/api/host')
 application.register_blueprint(ServiceApi, url_prefix='/api/service')
+application.register_blueprint(TestApi, url_prefix='/api/test')

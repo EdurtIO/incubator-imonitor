@@ -12,21 +12,19 @@ from utils.precondition import Preconditions
 
 def async_clone(model=None):
   CommandUtils.run_command_on_system(
-    command='''echo '====== start clone code ======' >> {}'''.format(model.loggerFile))
-  CommandUtils.run_command_on_system(
     command='''echo 'execute command ||{}||' >> {}'''.format(model.command, model.loggerFile))
   flag = CommandUtils.run_command_on_system(command=model.command)
   if flag:
     CommandUtils.run_command_on_system(command='''echo 'clone status: SUCCESS' >> {}'''.format(model.loggerFile))
   else:
     CommandUtils.run_command_on_system(command='''echo 'clone status: FAILURE' >> {}'''.format(model.loggerFile))
-  return flag
-
+  CommandUtils.run_command_on_system(
+    command='''echo '====== end clone code ======' >> {}'''.format(model.loggerFile))
 
 class GitModel:
 
   def __init__(self, url=None, username=None, password=None, target=None, loggerFile=None):
-    if not CommandUtils.run_command(command='git --version'):
+    if not CommandUtils.run_command(command='git --version >> /dev/null'):
       raise NullPointerException('git not found')
     Preconditions.check_not_null(property='url', source=url)
     Preconditions.check_not_null(property='target folder', source=target)
@@ -37,7 +35,6 @@ class GitModel:
     self.target = target
     self.loggerFile = loggerFile
 
-
 class Git:
 
   def __init__(self, model=GitModel):
@@ -45,17 +42,13 @@ class Git:
     self.model = model
 
   def clone(self):
+    CommandUtils.run_command_on_system(
+      command='''echo '====== start clone code ======' >> {}'''.format(self.model.loggerFile))
     command = '''git clone --progress {} 2> {} {}'''.format(self.model.url, self.model.loggerFile, self.model.target)
     self.model.command = command
     thread = Thread(target=async_clone, args=(self.model,))
     thread.setDaemon(True)
     thread.start()
-    pass
-
-  def a(self):
-    print(1)
-    CommandUtils.run_command_on_system(
-      command='''echo '====== end clone code ======' >> {}'''.format(self.model.loggerFile))
 
 
 if __name__ == '__main__':

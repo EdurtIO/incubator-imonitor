@@ -3,7 +3,7 @@
 # @Time    : 2020-04-02 23:25:25
 # @Desc    : 主机表单脚本
 # @File    : from_host.py
-from utils.string import StringUtils
+from utils.istring import StringUtils
 from db.models import Host
 from flask_wtf import FlaskForm
 from imforms.widgets.password_field import PasswordField

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @User    : shicheng
 # @Date    : 2020-05-19 22:21
-# @File    : model_base.py
+# @File    : base.py
 from sqlalchemy.orm import class_mapper
 
 

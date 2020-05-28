@@ -15,7 +15,7 @@ from form.form_host import BuildModelToFrom, HostForm
 from services.service_command_execute import CommandExecuteService
 from services.service_host import HostService
 from services.service_host_connection import HostConnectionService
-from utils.string import StringUtils
+from utils.istring import StringUtils
 
 HostView = Blueprint('HostView', __name__, template_folder='templates')
 

@@ -1,16 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @File    : service_command_execute.py
-
-from application_config import db, logger
-from model.model_service import ServiceModel
-
 import traceback
 
-logger_type = 'service'
+from flask_login import current_user
+
+from application_config import db, logger
+from model.service import ServiceModel
+
+loggerType = 'service'
 
 
 class Service:
+
+    def __init__(self):
+        self.userId = current_user.id
 
     def find_all(self):
         return ServiceModel().query.all()
@@ -18,14 +22,14 @@ class Service:
     def find_one(self, id=int):
         return ServiceModel().query.filter_by(id=id).first()
 
-    def save(self, model=ServiceModel, user_id=None):
+    def save(self, model=ServiceModel):
         try:
-            logger.info('execute update %s starting primary key <%s>', logger_type, user_id)
+            logger.info('execute %s starting primary key <%s>', loggerType, self.userId)
             db.session.add(model)
             db.session.commit()
-            logger.info('execute update %s starting primary key <%s> success', logger_type, user_id)
+            logger.info('execute %s starting primary key <%s> success', loggerType, self.userId)
             return True
         except Exception as ex:
             traceback.print_exc()
-            logger.error('execute update %s starting primary key <%s> error, reason <%s>', logger_type, user_id, ex)
+            logger.error('execute %s starting primary key <%s> error, reason <%s>', loggerType, self.userId, ex)
             return False

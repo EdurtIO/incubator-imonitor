@@ -9,7 +9,7 @@ from flask import Blueprint
 from flask_login import login_required
 from flask_restful import request
 
-from model.model_service import ServiceModel
+from model.service import ServiceModel
 from services.service import Service
 from utils.utils_parameter import Parameter
 from utils.utils_response import Response

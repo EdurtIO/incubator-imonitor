@@ -12,7 +12,7 @@ from views.view_common import CommonView
 
 application.register_blueprint(CommonView, url_prefix='/')
 
-## 启用websocket服务
+## enable websocket service
 from common.ssh_terminal import SshTerminalHandler
 from tornado.web import FallbackHandler, Application
 from tornado.httpserver import HTTPServer

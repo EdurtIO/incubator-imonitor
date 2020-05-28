@@ -24,15 +24,15 @@ let Service = function () {
 
     var initDom = function () {
         console.log('init dom ...')
-        initCompileWay($('input[name="compile_way"]:checked').val())
+        initCompileWay($('input[name="compileWay"]:checked').val())
         initEvent()
     }
 
     var initEvent = function () {
-        $('input[name="compile_way"]').change(function () {
+        $('input[name="compileWay"]').change(function () {
             initCompileWay($(this).val());
         });
-        initValidator();
+        // initValidator();
     }
 
     var initValidator = function () {
@@ -54,15 +54,15 @@ let Service = function () {
     var initCompileWay = function (value) {
         switch (value) {
             case '0':
-                $('#source_git').show()
-                $('#source_git_username').show()
-                $('#source_git_password').show()
+                $('#gitRemote').show()
+                $('#gitUsername').show()
+                $('#gitPassword').show()
                 $('#download').hide()
                 break
             case '1':
-                $('#source_git').hide()
-                $('#source_git_username').hide()
-                $('#source_git_password').hide()
+                $('#gitRemote').hide()
+                $('#gitUsername').hide()
+                $('#gitPassword').hide()
                 $('#download').show()
                 break
         }

@@ -31,97 +31,17 @@
                 <thead>
                 <tr>
                     <th>No</th>
-                    <th>Host</th>
-                    <th>SSH Port</th>
-                    <th>UserName</th>
-                    <th>Service</th>
+                    <th>Name</th>
                     <th>Create Time</th>
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for host in hosts %}
+                {% for model in models %}
                     <tr>
-                        <td>{{ host.id }}</td>
-                        <td>{{ host.hostname }}</td>
-                        <td>{{ host.ssh_port }}</td>
-                        <td>{{ host.username }}</td>
-                        <td>{{ host.server }}</td>
-                        <td>{{ host.create_time }}</td>
-                        <td>
-                            <a class="btn btn-link btn-xs btn-xs-custom"
-                               href="{{ url_for('host_view.create_modfiy_copy_delete', host_id=host.id, method='PUT') }}"
-                               data-toggle="tooltip" data-placement="top" title="Modfiy Host"
-                               style="text-decoration:none; color:Mediumslateblue;">
-                        <span class="fa-stack">
-                          <i class="fas fa-square fa-stack-2x"></i>
-                          <i class="fas fa-edit fa-stack-1x fa-inverse"></i>
-                        </span>
-                            </a>
-                            <a class="btn btn-link btn-xs btn-xs-custom"
-                               href="{{ url_for('host_view.create_modfiy_copy_delete', host_id=host.id, type='') }}"
-                               data-toggle="tooltip" data-placement="top" title="Copy Host"
-                               style="text-decoration:none; color:Dodgerblue;">
-                        <span class="fa-stack">
-                          <i class="fas fa-square fa-stack-2x"></i>
-                          <i class="fas fa-copy fa-stack-1x fa-inverse"></i>
-                        </span>
-                            </a>
-                            <a class="btn btn-link btn-xs btn-xs-custom"
-                               href="{{ url_for('host_view.delete', host_id=host.id) }}" data-toggle="tooltip"
-                               data-placement="top" title="Delete Host" style="text-decoration:none; color:Tomato;">
-                        <span class="fa-stack">
-                          <i class="fas fa-square fa-stack-2x"></i>
-                          <i class="fas fa-trash-alt fa-stack-1x fa-inverse"></i>
-                        </span>
-                            </a>
-                            <div class="btn-group" data-toggle="tooltip" data-placement="top" title="More Settings">
-                                <a class="btn btn-link btn-xs btn-xs-custom" data-toggle="dropdown">
-                            <span class="fa-stack">
-                                <i class="fas fa-square fa-stack-2x"></i>
-                                <i class="fas fa fa-cog fa-stack-1x fa-inverse"></i>
-                            </span>
-                                </a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a href="{{ url_for('host_view.info', host_id=host.id) }}" target="_blank">
-                                    <span class="fa-stack">
-                                      <i class="fas fa-square fa-stack-2x"></i>
-                                      <i class="fas fa fa-info fa-stack-1x fa-inverse"></i>
-                                    </span> Detail
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url_for('host_view.services', host_id=host.id) }}" target="_blank">
-                                    <span class="fa-stack">
-                                      <i class="fas fa-square fa-stack-2x"></i>
-                                      <i class="fas fa fa-info fa-stack-1x fa-inverse"></i>
-                                    </span> Service Management
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url_for('chart_view.report', host_id=host.id) }}" target="_blank"
-                                           data-toggle="tooltip" data-placement="top" title="Monitor Report"
-                                           style="text-decoration:none; color: #17a2b8;">
-                                    <span class="fa-stack">
-                                      <i class="fas fa-square fa-stack-2x"></i>
-                                      <i class="fas fa fa-chart-line fa-stack-1x fa-inverse"></i>
-                                    </span> Monitor Report
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url_for('terminal_view.index', host_id=host.id) }}" target="_blank"
-                                           data-toggle="tooltip" data-placement="top"
-                                           title="Terminal" style="text-decoration:none; color:black;">
-                                    <span class="fa-stack">
-                                      <i class="fas fa-square fa-stack-2x"></i>
-                                      <i class="fas fa-terminal fa-stack-1x fa-inverse"></i>
-                                    </span> Terminal
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
+                        <td>{{ model.id }}</td>
+                        <td>{{ model.name }}</td>
+                        <td>{{ model.createTime }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

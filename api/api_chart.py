@@ -16,3 +16,4 @@ chart_api = Blueprint('chart_api', __name__, template_folder='templates')
 def host_memory(host_id=int):
     charts = MonitorMemoryService().find_top_15(host_id)
     return jsonify({'result': [dict(row) for row in charts]})
+
