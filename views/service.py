@@ -3,12 +3,15 @@
 # @User    : shicheng
 # @Date    : 2020-05-14 22:41
 # @File    : service.py
+import os
+
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_required
 
 from form.service import BuildModelToFrom, ServiceForm
 from model.service import ServiceModel
 from services.service import Service
+from utils.git import Git, GitModel
 
 ServiceView = Blueprint('ServiceView', __name__, template_folder='templates')
 
@@ -71,3 +74,19 @@ def home(id=int):
       flash('''Update <{}> Service Success!'''.format(model.name))
       return redirect(url_for('ServiceView.index'))
   return render_template('service/index.html', active_menu='service', form=form)
+
+
+@ServiceView.route('reload/<int:id>', methods=['GET'])
+@login_required
+def reload(id=int):
+  model = Service().find_one(id=id)
+
+  if model.compileWay is '0':
+    loggerFile = os.path.join(model.sourceRoot, '''{}.log'''.format(model.name))
+    gitModel = GitModel(url=model.gitRemote, username=model.gitUsername, password=model.gitPassword,
+                        target=os.path.join(model.sourceRoot, model.name), loggerFile=loggerFile)
+    git = Git(model=gitModel)
+    git.clone()
+  else:
+    pass
+  return redirect(url_for('ServiceView.index'))

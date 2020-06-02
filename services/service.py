@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @File    : service_command_execute.py
+# @File    : service.py
 import traceback
 
 from flask_login import current_user

@@ -51,6 +51,14 @@
                                   <i class="fas fa-edit fa-stack-1x fa-inverse"></i>
                                 </span>
                             </a>
+                            <a class="btn btn-link btn-xs btn-xs-custom"
+                               href="{{ url_for('ServiceView.reload', id=model.id) }}"
+                               data-toggle="tooltip" data-placement="top" title="Reload">
+                                <span class="fa-stack">
+                                  <i class="fas fa-square fa-stack-2x"></i>
+                                  <i class="fas fa-redo fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}
