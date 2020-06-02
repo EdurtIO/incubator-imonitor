@@ -1,0 +1,169 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %} {{ title }} {% endblock %}
+
+{% block alert %}
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-{{ alert_type }}">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form method="POST" class="form-horizontal" id="form">
+
+                {{ form.csrf_token }}
+
+                {% for message in get_flashed_messages() %}
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+                <h3>{{ title }}</h3>
+                <hr/>
+
+                {% if host %}
+                    {{ form.id(class='form-control', value=host.id) }}
+                {% endif %}
+
+                <div class="form-group {% if form.name.errors %} has-error {% endif %}">
+                    {{ form.name.label(class='col-sm-3 control-label') }}
+                    <div class="col-sm-9">
+                        {{ form.name(class='form-control') }}
+                        {% if form.name.errors %}
+                            <ul class="errors">
+                                {% for error in form.name.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group {% if form.compileWay.errors %} has-error {% endif %}">
+                    {{ form.compileWay.label(class='col-sm-3 control-label') }}
+                    <div class="col-sm-9">
+                        {% for s in form.compileWay %}
+                            <label class="radio-inline">
+                                {{ s(id='compile_way') }} {{ s.label }}
+                            </label>
+                        {% endfor %}
+                        {% if form.compileWay.errors %}
+                            <ul class="errors">
+                                {% for error in form.compileWay.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div id="gitRemote" class="form-group {% if form.gitRemote.errors %} has-error {% endif %}">
+                    {{ form.gitRemote.label(class='col-sm-3 control-label') }}
+                    <div class="col-sm-9">
+                        {{ form.gitRemote(class='form-control') }}
+                        {% if form.gitRemote.errors %}
+                            <ul class="errors">
+                                {% for error in form.gitRemote.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div id="gitUsername" class="form-group {% if form.gitUsername.errors %} has-error {% endif %}">
+                    {{ form.gitUsername.label(class='col-sm-3 control-label') }}
+                    <div class="col-sm-9">
+                        {{ form.gitUsername(class='form-control') }}
+                        {% if form.gitUsername.errors %}
+                            <ul class="errors">
+                                {% for error in form.gitUsername.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div id="gitPassword" class="form-group {% if form.gitPassword.errors %} has-error {% endif %}">
+                    {{ form.gitPassword.label(class='col-sm-3 control-label') }}
+                    <div class="col-sm-9">
+                        {{ form.gitPassword(class='form-control') }}
+                        {% if form.gitPassword.errors %}
+                            <ul class="errors">
+                                {% for error in form.gitPassword.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div id="download" class="form-group {% if form.download.errors %} has-error {% endif %}">
+                    {{ form.download.label(class='col-sm-3 control-label') }}
+                    <div class="col-sm-9">
+                        {{ form.download(class='form-control') }}
+                        {% if form.download.errors %}
+                            <ul class="errors">
+                                {% for error in form.download.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group {% if form.sourceRoot.errors %} has-error {% endif %}">
+                    {{ form.sourceRoot.label(class='col-sm-3 control-label') }}
+                    <div class="col-sm-9">
+                        {{ form.sourceRoot(class='form-control') }}
+                        {% if form.sourceRoot.errors %}
+                            <ul class="errors">
+                                {% for error in form.sourceRoot.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        {{ form.submit }}
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='vendor/bootstrap/css/bootstrapValidator.min.css') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrapValidator.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/Service.js') }}"></script>
+{% endblock %}

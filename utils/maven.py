@@ -37,7 +37,13 @@ class Maven:
           shutil.copy2(src=source, dst=target)
       except Exception as ex:
         logger.error('copy file error %s, retry copy dir', ex)
-        shutil.copytree(src=source, dst=os.path.join(target, f))
+        if not os.path.exists(source):
+          shutil.copytree(src=source, dst=os.path.join(target, f))
+
+  def clone(self):
+    os.chdir(self.model.location)
+    CommandUtils.run_command_response_to_file(command='./mvnw clean package -DskipTests -X',
+                                              loggerFile=self.model.loggerFile)
 
 
 if __name__ == '__main__':
@@ -45,3 +51,4 @@ if __name__ == '__main__':
                      loggerFile='/Users/shicheng/Documents/a.log')
   maven = Maven(model=model)
   maven.copy()
+  maven.clone()

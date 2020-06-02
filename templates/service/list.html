@@ -42,6 +42,16 @@
                         <td>{{ model.id }}</td>
                         <td>{{ model.name }}</td>
                         <td>{{ model.createTime }}</td>
+                        <td>
+                            <a class="btn btn-link btn-xs btn-xs-custom"
+                               href="{{ url_for('ServiceView.home', id=model.id) }}"
+                               data-toggle="tooltip" data-placement="top" title="Modfiy">
+                                <span class="fa-stack">
+                                  <i class="fas fa-square fa-stack-2x"></i>
+                                  <i class="fas fa-edit fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -51,6 +61,6 @@
 {% endblock %}
 
 {% block scripts %}
-    {#    {{ super() }}#}
+    {{ super() }}
     <script src="{{ url_for('static', filename='js/Service.js') }}"></script>
 {% endblock %}

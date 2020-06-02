@@ -18,7 +18,7 @@ class ServiceModel(db.Model, BaseModel):
     gitRemote = db.Column('git_remote', db.String(220), nullable=True, comment='git remote')
     gitUsername = db.Column('git_username', db.String(220), nullable=True, comment='git username')
     gitPassword = db.Column('git_password', db.String(220), nullable=True, comment='git password')
-    binary = db.Column(db.String(220), nullable=True, comment='binary download address')
+    download = db.Column('download', db.String(220), nullable=True, comment='binary download address')
     sourceRoot = db.Column('source_root', db.String(220), nullable=True, comment='binary download address')
     createTime = db.Column('create_time', db.DateTime, nullable=False, default=datetime.datetime.now,
                            comment='create time')
