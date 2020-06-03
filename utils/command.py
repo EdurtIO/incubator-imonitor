@@ -6,8 +6,15 @@
 import os
 import subprocess
 
-from utils.precondition import Preconditions
 from utils.istring import StringUtils
+from utils.precondition import Preconditions
+
+
+class CommandModel:
+
+  def __init__(self, state=None, message=None):
+    self.state = state
+    self.message = message
 
 
 class CommandUtils:

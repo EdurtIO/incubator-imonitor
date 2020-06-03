@@ -15,7 +15,10 @@ loggerType = 'service'
 class Service:
 
     def __init__(self):
-        self.userId = current_user.id
+        if current_user:
+            self.userName = current_user.name
+        else:
+            self.userName = 'Thread'
 
     def find_all(self):
         return ServiceModel().query.all()
@@ -25,19 +28,19 @@ class Service:
 
     def save(self, model=ServiceModel):
         try:
-            logger.info('execute %s starting primary key <%s>', loggerType, self.userId)
+            logger.info('execute %s starting by <%s>', loggerType, self.userName)
             db.session.add(model)
             db.session.commit()
-            logger.info('execute %s starting primary key <%s> success', loggerType, self.userId)
+            logger.info('execute %s starting by <%s> success', loggerType, self.userName)
             return True
         except Exception as ex:
             traceback.print_exc()
-            logger.error('execute %s starting primary key <%s> error, reason <%s>', loggerType, self.userId, ex)
+            logger.error('execute %s starting by <%s> error, reason <%s>', loggerType, self.userName, ex)
             return False
 
     def update(self, model=ServiceModel):
         try:
-            logger.info('execute %s starting primary key <%s>', loggerType, self.userId)
+            logger.info('execute %s starting by <%s>', loggerType, self.userName)
             sql = 'update `service` set '
             if model.name:
                 sql += 'name = :name '
@@ -53,16 +56,21 @@ class Service:
                 sql += ', git_password = :gitPassword'
             if model.compileWay:
                 sql += ', compile_way = :compileWay '
+            if model.state:
+                sql += ', state = :state '
+            if model.message:
+                sql += ', message = :message '
             sql += 'where id = :id'
             db.engine.execute(
                 text(sql), {'name': model.name, 'sourceRoot': model.sourceRoot, 'download': model.download,
-                            'gitRemote': model.gitRemote, 'gitUsername': model.gitUsername,
-                            'gitPassword': model.gitPassword, 'compileWay': model.compileWay, 'id': model.id}
+                            'gitRemote': model.gitRemote, 'gitUsername': model.gitUsername, 'state': model.state,
+                            'gitPassword': model.gitPassword,
+                            'compileWay': model.compileWay, 'message': model.message, 'id': model.id}
             )
             db.session.commit()
-            logger.info('execute %s starting primary key <%s> success', loggerType, self.userId)
+            logger.info('execute %s starting by <%s> success', loggerType, self.userName)
             return True
         except Exception as ex:
             traceback.print_exc()
-            logger.error('execute %s starting primary key <%s> error, reason <%s>', loggerType, self.userId, ex)
+            logger.error('execute %s starting by <%s> error, reason <%s>', loggerType, self.userName, ex)
             return False

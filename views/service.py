@@ -8,6 +8,7 @@ import os
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_required
 
+from common.state import State
 from form.service import BuildModelToFrom, ServiceForm
 from model.service import ServiceModel
 from services.service import Service
@@ -33,6 +34,7 @@ def create():
     model = ServiceModel()
     model.name = request.form.get('name')
     model.compileWay = request.form.get('compileWay')
+    model.state = State.INITED.name
     if model.compileWay is '0':
       model.gitRemote = request.form.get('gitRemote')
       model.gitUsername = request.form.get('gitUsername')
@@ -80,11 +82,10 @@ def home(id=int):
 @login_required
 def reload(id=int):
   model = Service().find_one(id=id)
-
   if model.compileWay is '0':
     loggerFile = os.path.join(model.sourceRoot, '''{}.log'''.format(model.name))
     gitModel = GitModel(url=model.gitRemote, username=model.gitUsername, password=model.gitPassword,
-                        target=os.path.join(model.sourceRoot, model.name), loggerFile=loggerFile)
+                        target=os.path.join(model.sourceRoot, model.name), loggerFile=loggerFile, id=model.id)
     git = Git(model=gitModel)
     git.clone()
   else:

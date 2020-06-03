@@ -20,6 +20,8 @@ class ServiceModel(db.Model, BaseModel):
     gitPassword = db.Column('git_password', db.String(220), nullable=True, comment='git password')
     download = db.Column('download', db.String(220), nullable=True, comment='binary download address')
     sourceRoot = db.Column('source_root', db.String(220), nullable=True, comment='binary download address')
+    state = db.Column(db.String(220), nullable=True)
+    message = db.Column(db.Text, nullable=True)
     createTime = db.Column('create_time', db.DateTime, nullable=False, default=datetime.datetime.now,
                            comment='create time')
 

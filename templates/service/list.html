@@ -33,6 +33,7 @@
                     <th>No</th>
                     <th>Name</th>
                     <th>Create Time</th>
+                    <th>State</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -42,6 +43,7 @@
                         <td>{{ model.id }}</td>
                         <td>{{ model.name }}</td>
                         <td>{{ model.createTime }}</td>
+                        <td>{{ model.state }}</td>
                         <td>
                             <a class="btn btn-link btn-xs btn-xs-custom"
                                href="{{ url_for('ServiceView.home', id=model.id) }}"
