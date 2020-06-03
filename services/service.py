@@ -60,11 +60,13 @@ class Service:
                 sql += ', state = :state '
             if model.message:
                 sql += ', message = :message '
+            if model.loggerFile:
+                sql += ', logger_file = :loggerFile '
             sql += 'where id = :id'
             db.engine.execute(
                 text(sql), {'name': model.name, 'sourceRoot': model.sourceRoot, 'download': model.download,
                             'gitRemote': model.gitRemote, 'gitUsername': model.gitUsername, 'state': model.state,
-                            'gitPassword': model.gitPassword,
+                            'gitPassword': model.gitPassword, 'loggerFile': model.loggerFile,
                             'compileWay': model.compileWay, 'message': model.message, 'id': model.id}
             )
             db.session.commit()

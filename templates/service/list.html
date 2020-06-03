@@ -21,6 +21,13 @@
 
 {% block page_content %}
 
+    {% for message in get_flashed_messages() %}
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <div class="card mt10">
         <h5 class="card-header">
             <a href="{{ url_for('ServiceView.create') }}" class="btn btn-sm btn-primary right" type="button">Add
@@ -51,6 +58,14 @@
                                 <span class="fa-stack">
                                   <i class="fas fa-square fa-stack-2x"></i>
                                   <i class="fas fa-edit fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                            <a class="btn btn-link btn-xs btn-xs-custom"
+                               href="{{ url_for('ServiceView.logger', id=model.id) }}"
+                               data-toggle="tooltip" data-placement="top" title="Logger">
+                                <span class="fa-stack">
+                                  <i class="fas fa-square fa-stack-2x"></i>
+                                  <i class="fas fa-file fa-stack-1x fa-inverse"></i>
                                 </span>
                             </a>
                             <a class="btn btn-link btn-xs btn-xs-custom"

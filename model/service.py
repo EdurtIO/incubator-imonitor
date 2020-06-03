@@ -22,6 +22,7 @@ class ServiceModel(db.Model, BaseModel):
     sourceRoot = db.Column('source_root', db.String(220), nullable=True, comment='binary download address')
     state = db.Column(db.String(220), nullable=True)
     message = db.Column(db.Text, nullable=True)
+    loggerFile = db.Column('logger_file', db.String(220), nullable=True, comment='logger file')
     createTime = db.Column('create_time', db.DateTime, nullable=False, default=datetime.datetime.now,
                            comment='create time')
 

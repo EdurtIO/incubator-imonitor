@@ -5,7 +5,7 @@
 # @File    : service.py
 import os
 
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for, make_response
 from flask_login import login_required
 
 from common.state import State
@@ -84,6 +84,8 @@ def reload(id=int):
   model = Service().find_one(id=id)
   if model.compileWay is '0':
     loggerFile = os.path.join(model.sourceRoot, '''{}.log'''.format(model.name))
+    model.loggerFile = loggerFile
+    Service().update(model=model)
     gitModel = GitModel(url=model.gitRemote, username=model.gitUsername, password=model.gitPassword,
                         target=os.path.join(model.sourceRoot, model.name), loggerFile=loggerFile, id=model.id)
     git = Git(model=gitModel)
@@ -91,3 +93,17 @@ def reload(id=int):
   else:
     pass
   return redirect(url_for('ServiceView.index'))
+
+
+@ServiceView.route('logger/<int:id>', methods=['GET'])
+@login_required
+def logger(id=int):
+  model = Service().find_one(id=id)
+  if model.loggerFile:
+    response = make_response(open(model.loggerFile).read())
+    response.headers["Content-type"]="text/plan;charset=UTF-8"
+    return response
+  else:
+    flash('Not Found Logger!')
+  return redirect(url_for('ServiceView.index'))
+
